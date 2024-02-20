@@ -16,6 +16,7 @@
       width: 430px;
       height: 926px;
       margin: 50px auto;
+      padding: 15px;
       background-color: #fafaf9;
       position: relative;
     }
@@ -32,7 +33,7 @@
       font-size: 20px;
     }
 
-    .choice-box {
+    .category-box {
       width: 100%;
       height: 100%;
       margin-top: 200px;
@@ -40,14 +41,22 @@
   </style>
   <body>
     <form class="layout">
+      <div>
+      <input type="radio" name="money">지출
+      <input type="radio" name="money">수입
+      </div>
       <div class="input-box">
         금액
         <input />
         원
       </div>
-      <div class="choice-box">
+      <div class="category-box">
         <div>
-          <label for="category">카테고리<br>
+          날짜
+          <input type="date" id="currentDate">
+        </div>
+        <div>
+          <p>카테고리</p>
           <input type="radio" name="category"/>식비
           <input type="radio" name="category"/>교통비
           <input type="radio" name="category"/>공과금
@@ -56,11 +65,15 @@
           <input type="radio" name="category"/>쇼핑
         </div>
         <div>
-          <label for="memo">메모</label>
-          <input name="memo" />
+          메모
+          <input name="memo" placeholder="메모를 입력하세요."/>
         </div>
       <div>
         <button type="submit">저장</button>
       </form>
+      <script>
+        document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
+
+      </script>
   </body>
 </html>

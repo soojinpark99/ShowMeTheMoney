@@ -21,16 +21,7 @@
       position: relative;
     }
 
-    .month {
-      margin: 20px;
-      text-align: center;
-    }
-
-    .total-div > div {
-      margin-bottom: 5px;
-    }
-
-    .calender {
+    .calendar {
       width: 400px;
       margin: 10px auto;
 
@@ -38,16 +29,29 @@
       grid-template-columns: repeat(7, 1fr);
     }
 
+    .calendar-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .total-div > div {
+      margin-bottom: 5px;
+    }
+
     .day {
       text-align: center;
       margin-bottom: 10px;
     }
-    .calender-item {
+    .date,
+    .empty {
       aspect-ratio: 1;
+    }
+
+    .date {
       cursor: pointer;
     }
 
-    .calender-item:hover {
+    .date:hover {
       background-color: #e6e6e6;
     }
 
@@ -69,57 +73,94 @@
   </style>
   <body>
     <div class="layout">
-      <div class="month">2월</div>
-      <div class="total-div">
-        <div class="income">수입</div>
-        <div class="expense">지출</div>
-        <div class="total">합계</div>
-      </div>
-      <div class="calender">
-        <div class="day">일</div>
-        <div class="day">월</div>
-        <div class="day">화</div>
-        <div class="day">수</div>
-        <div class="day">목</div>
-        <div class="day">금</div>
-        <div class="day">토</div>
-        <div class="calender-item"><div class="date"></div></div>
-        <div class="calender-item"><div class="date"></div></div>
-        <div class="calender-item"><div class="date"></div></div>
-        <div class="calender-item"><div class="date"></div></div>
-        <div class="calender-item"><div class="date">1</div></div>
-        <div class="calender-item"><div class="date">2</div></div>
-        <div class="calender-item"><div class="date">3</div></div>
-        <div class="calender-item"><div class="date">4</div></div>
-        <div class="calender-item"><div class="date">5</div></div>
-        <div class="calender-item"><div class="date">6</div></div>
-        <div class="calender-item"><div class="date">7</div></div>
-        <div class="calender-item"><div class="date">8</div></div>
-        <div class="calender-item"><div class="date">9</div></div>
-        <div class="calender-item"><div class="date">10</div></div>
-        <div class="calender-item"><div class="date">11</div></div>
-        <div class="calender-item"><div class="date">12</div></div>
-        <div class="calender-item"><div class="date">13</div></div>
-        <div class="calender-item"><div class="date">14</div></div>
-        <div class="calender-item"><div class="date">15</div></div>
-        <div class="calender-item"><div class="date">16</div></div>
-        <div class="calender-item"><div class="date">17</div></div>
-        <div class="calender-item"><div class="date">18</div></div>
-        <div class="calender-item"><div class="date">19</div></div>
-        <div class="calender-item"><div class="date">20</div></div>
-        <div class="calender-item"><div class="date">21</div></div>
-        <div class="calender-item"><div class="date">22</div></div>
-        <div class="calender-item"><div class="date">23</div></div>
-        <div class="calender-item"><div class="date">24</div></div>
-        <div class="calender-item"><div class="date">25</div></div>
-        <div class="calender-item"><div class="date">26</div></div>
-        <div class="calender-item"><div class="date">27</div></div>
-        <div class="calender-item"><div class="date">28</div></div>
-        <div class="calender-item"><div class="date">29</div></div>
-        <div class="calender-item"><div class="date"></div></div>
-        <div class="calender-item"><div class="date"></div></div>
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button id="prevBtn">이전</button>
+          <h2 id="currentMonth"></h2>
+          <button id="nextBtn">다음</button>
+        </div>
+        <div class="total-div">
+          <div class="income">수입</div>
+          <div class="expense">지출</div>
+          <div class="total">합계</div>
+        </div>
+        <div class="calendar days">
+          <div class="day">일</div>
+          <div class="day">월</div>
+          <div class="day">화</div>
+          <div class="day">수</div>
+          <div class="day">목</div>
+          <div class="day">금</div>
+          <div class="day">토</div>
+        </div>
+        <div class="calendar dates" id="calendarDates"></div>
       </div>
       <a class="write-btn" href="./write.html">글쓰기</a>
     </div>
+    <script>
+      // 달력 동적 생성
+      function renderCalendar() {
+        const calendarDates = document.getElementById("calendarDates");
+        const currentMonthElement = document.getElementById("currentMonth");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        const today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+
+        function renderDates() {
+          const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+          const daysInMonth = new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+          ).getDate();
+
+          const startDayOfWeek = firstDayOfMonth.getDay();
+
+          currentMonthElement.textContent = `${currentYear}년 ${
+            currentMonth + 1
+          }월`;
+
+          calendarDates.innerHTML = "";
+
+          for (let i = 0; i < startDayOfWeek; i++) {
+            const emptyDate = document.createElement("div");
+            emptyDate.classList.add("empty");
+            calendarDates.appendChild(emptyDate);
+          }
+
+          for (let i = 1; i <= daysInMonth; i++) {
+            const dateElement = document.createElement("div");
+            dateElement.classList.add("date");
+            dateElement.textContent = i;
+            calendarDates.appendChild(dateElement);
+          }
+        }
+
+        renderDates();
+
+        prevBtn.addEventListener("click", () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          renderDates();
+        });
+
+        nextBtn.addEventListener("click", () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          renderDates();
+        });
+      }
+
+      renderCalendar();
+    </script>
   </body>
 </html>

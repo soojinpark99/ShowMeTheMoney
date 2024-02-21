@@ -18,62 +18,65 @@
       margin: 50px auto;
       padding: 15px;
       background-color: #fafaf9;
-      position: relative;
-    }
-
-    .input-box {
-      width: 200px;
-      margin: 0 auto;
-      margin-top: 100px;
-    }
-
-    .input-box > input {
-      width: 150px;
-      height: 40px;
-      font-size: 20px;
-    }
-
-    .category-box {
-      width: 100%;
-      height: 100%;
-      margin-top: 200px;
     }
   </style>
   <body>
-    <form class="layout">
-      <div>
-      <input type="radio" name="money">지출
-      <input type="radio" name="money">수입
-      </div>
-      <div class="input-box">
-        금액
-        <input />
-        원
-      </div>
-      <div class="category-box">
-        <div>
+    <div class="layout">
+      <a href="./main.html">돌아가기</a>
+      <form class="form">
+        <div class="division">
+          <input type="radio" name="division" value="expense" />지출
+          <input type="radio" name="division" value="income" />수입
+        </div>
+        <div class="money">금액<input type="number" name="money" />원</div>
+        <div class="date">
           날짜
-          <input type="date" id="currentDate">
+          <input type="date" name="date" />
         </div>
-        <div>
+        <div class="category">
           <p>카테고리</p>
-          <input type="radio" name="category"/>식비
-          <input type="radio" name="category"/>교통비
-          <input type="radio" name="category"/>공과금
-          <input type="radio" name="category"/>의료비
-          <input type="radio" name="category"/>문화생활
-          <input type="radio" name="category"/>쇼핑
+          <input type="radio" name="category" value="food" />식비
+          <input type="radio" name="category" value="transportation" />교통비
+          <input type="radio" name="category" value="dues" />공과금
+          <input type="radio" name="category" value="medical" />의료비
+          <input type="radio" name="category" value="culture" />문화생활
+          <input type="radio" name="category" value="shopping" />쇼핑
         </div>
-        <div>
-          메모
-          <input name="memo" placeholder="메모를 입력하세요."/>
+        <div class="memo">
+          메모<input name="memo" placeholder="메모를 입력하세요." />
         </div>
-      <div>
-        <button type="submit">저장</button>
+        <button class="submit-btn" type="submit">저장</button>
       </form>
-      <script>
-        document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);
+    </div>
+    <script>
+      document.querySelector(".date > input").value = new Date()
+        .toISOString()
+        .substring(0, 10);
 
-      </script>
+      const form = document.querySelector(".form");
+
+      async function handleSubmitForm(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        for (let [name, value] of formData) {
+          console.log(`${name} = ${value}`);
+        }
+        /* try {
+          const res = await fetch("/items", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          if (data === "200") window.location.pathname = "/";
+        } catch(error) {
+          console.log(error);
+        }
+        
+        */
+      }
+
+      form.addEventListener("submit", handleSubmitForm);
+    </script>
   </body>
 </html>

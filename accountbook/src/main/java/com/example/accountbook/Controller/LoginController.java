@@ -25,6 +25,8 @@ public class LoginController {
     @GetMapping("/login")
     public String loginPage() {return "login";}
 
+    @GetMapping("/join")
+    public String joinPage() {return "join";}
 
     /*
     public String login(@RequestBody LoginRequest loginRequest, HttpSession session) {

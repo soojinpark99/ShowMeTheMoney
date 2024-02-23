@@ -73,18 +73,24 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: absolute;
-      right: 20px;
-      bottom: 20px;
 
-      background-color: black;
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 25px;
+      color: black;
+      text-decoration: none;
+
       cursor: pointer;
     }
 
+    .write-btn:hover {
+      background-color: #f0f3f4;
+    }
+
+    .transaction-div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .write-btn,
     .transaction-div {
       background-color: white;
       width: 100%;
@@ -93,10 +99,6 @@
       margin-bottom: 5px;
       border: 1.3px solid #e6e6e6;
       border-radius: 10px;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     .transaction-category {
@@ -113,8 +115,7 @@
         <div class="calendar-header">
           <div class="prev btn">◀</div>
           <h2 id="currentMonth"></h2>
-          <a th:href="@{/write}">새 내역 추가하기</a>
-          <button id="nextBtn">다음</button>
+          <div class="next btn">▶</div>
         </div>
         <div class="sum-div">
           <div class="income">수입</div>
@@ -132,8 +133,8 @@
         </div>
         <div class="calendar dates" id="calendarDates"></div>
       </div>
+      <a class="write-btn" href="./write.html">+ 새로운 거래 추가하기</a>
       <div class="transactions"></div>
-      <a class="write-btn" href="./write.html">글쓰기</a>
     </div>
     <script>
       const today = new Date();

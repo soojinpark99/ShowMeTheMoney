@@ -20,45 +20,85 @@
       background-color: #fafaf9;
     }
 
+    .uturn-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .uturn-btn:hover {
+      background-color: #e6e6e6;
+    }
+
     .form {
-      background-color: white;
       width: 350px;
-      margin: 0 auto;
+      margin: 40px auto;
     }
 
     .form > div {
       margin: 10px;
+      height: 50px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .select-division,
-    input,
-    select {
+    .division,
+    .money,
+    .date,
+    .category,
+    .memo {
       width: 250px;
       height: 50px;
-      padding: 3px;
       font-size: 16px;
     }
 
-    .select-division {
+    .division {
       display: flex;
+      justify-content: space-evenly;
+      align-items: center;
     }
 
-    .select-division > label {
+    .money,
+    .date,
+    .category,
+    .memo {
+      height: 30px;
+      padding: 3px;
+      border: 2px solid #c9cacb;
+      border-width: 0 0 2px;
+      background-color: transparent;
+    }
+
+    .division > label {
       display: flex;
       justify-content: center;
       align-items: center;
 
-      border: 1px solid black;
-      width: 50%;
-
+      width: 90px;
+      height: 40px;
+      border: 1.5px solid #c9cacb;
       cursor: pointer;
+    }
+
+    .money {
+      font-size: 25px;
+    }
+
+    .income.category {
+      display: none;
     }
 
     input[type="radio"] {
       display: none;
+    }
+
+    input:checked + label {
+      background-color: #c9cacb;
     }
 
     input::-webkit-inner-spin-button {
@@ -73,17 +113,27 @@
     }
 
     .submit-btn {
-      width: 100px;
-      height: 30px;
+      width: 100%;
+      height: 50px;
+      background-color: #c9cacb;
+      color: black;
+      border: none;
+      font-size: 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
     }
   </style>
   <body>
     <div class="layout">
-      <a th:href="@{/main}">돌아가기</a>
+      <a class="uturn-btn" th:href="@{/main}">✕</a>
       <form class="form">
-        <div class="division">
+        <div>
           분류
-          <div class="select-division">
+          <div class="division">
             <input
               type="radio"
               name="division"
@@ -96,36 +146,72 @@
             <label for="income">수입</label>
           </div>
         </div>
-        <div class="money">
+        <div>
           금액
-          <input type="number" name="money" />
+          <input class="money" type="number" name="money" />
         </div>
-        <div class="date">
+        <div>
           날짜
-          <input type="date" name="date" id="date" />
+          <input class="date" type="date" name="date" />
         </div>
-        <div class="category">
+        <div>
           카테고리
-          <select name="category">
+          <select class="expense category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
             <option value="food">식비</option>
-            <option value="transportation">교통비</option>
-            <option value="dues">공과금</option>
-            <option value="medical">의료비</option>
+            <option value="cafe">카페</option>
+            <option value="mart">마트/생필품</option>
             <option value="culture">문화생활</option>
+            <option value="medical">의료비</option>
+            <option value="dues">공과금</option>
+            <option value="transportation">교통비</option>
+            <option value="communication">통신비</option>
+            <option value="subscription">구독료</option>
+            <option value="hobby">취미</option>
             <option value="shopping">쇼핑</option>
+            <option value="beauty">미용</option>
+            <option value="gift">경조사/선물</option>
+            <option value="travel">여행</option>
+            <option value="etc">기타</option>
+          </select>
+          <select class="income category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
+            <option value="salary">급여</option>
+            <option value="additional">부수입</option>
+            <option value="allowance">용돈</option>
+            <option value="etc">기타</option>
           </select>
         </div>
-        <div class="memo">
+        <div>
           내용
-          <input name="memo" placeholder="내용을 입력하세요." />
+          <input
+            class="memo"
+            name="memo"
+            autocomplete="off"
+            placeholder="내용을 입력하세요."
+          />
         </div>
         <button class="submit-btn" type="submit">저장</button>
       </form>
     </div>
     <script>
-      document.querySelector("#date").value = new Date()
+      document.querySelector(".date").value = new Date()
         .toISOString()
         .substring(0, 10);
+
+      const division = document.querySelector(".division");
+      const incomeCategory = document.querySelector(".income.category");
+      const expenseCategory = document.querySelector(".expense.category");
+
+      division.addEventListener("click", (event) => {
+        if (event.target.value === "income") {
+          incomeCategory.style.display = "block";
+          expenseCategory.style.display = "none";
+        } else {
+          incomeCategory.style.display = "none";
+          expenseCategory.style.display = "block";
+        }
+      });
 
       const form = document.querySelector(".form");
 
@@ -146,7 +232,7 @@
         } catch(error) {
           console.log(error);
         }
-        
+
         */
       }
 

@@ -32,9 +32,21 @@
     .calendar-header {
       display: flex;
       justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      margin-top: 50px;
     }
 
-    .total-div > div {
+    .btn {
+      cursor: pointer;
+    }
+
+    .sum-div {
+      margin: 10px 0;
+    }
+
+    .sum-div > div {
       margin-bottom: 5px;
     }
 
@@ -49,10 +61,12 @@
 
     .date {
       cursor: pointer;
+      padding: 3px;
     }
 
     .date:hover {
       background-color: #e6e6e6;
+      border-radius: 7px;
     }
 
     .write-btn {
@@ -71,13 +85,25 @@
       cursor: pointer;
     }
 
-    .detail-div {
+    .transaction-div {
       background-color: white;
       width: 100%;
       height: 80px;
+      padding: 15px 15px;
+      margin-bottom: 5px;
+      border: 1.3px solid #e6e6e6;
+      border-radius: 10px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .money {
+    .transaction-category {
+      margin-bottom: 5px;
+    }
+
+    .transaction-money {
       font-size: 30px;
     }
   </style>
@@ -85,11 +111,11 @@
     <div class="layout">
       <div class="calendar-container">
         <div class="calendar-header">
-          <button id="prevBtn">이전</button>
+          <div class="prev btn">◀</div>
           <h2 id="currentMonth"></h2>
-          <button id="nextBtn">다음</button>
+          <div class="next btn">▶</div>
         </div>
-        <div class="total-div">
+        <div class="sum-div">
           <div class="income">수입</div>
           <div class="expense">지출</div>
           <div class="total">합계</div>
@@ -105,7 +131,7 @@
         </div>
         <div class="calendar dates" id="calendarDates"></div>
       </div>
-      <div class="details"></div>
+      <div class="transactions"></div>
       <a class="write-btn" href="./write.html">글쓰기</a>
     </div>
     <script>
@@ -140,6 +166,13 @@
           category: "culture",
           memo: "영화",
         },
+        {
+          division: "income",
+          money: "10000",
+          date: "2024-02-23",
+          category: "culture",
+          memo: "당근마켓",
+        },
       ];
 
       // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
@@ -153,21 +186,34 @@
           );
         });
 
-        const details = document.querySelector(".details");
-        details.innerHTML = "";
+        const transactions = document.querySelector(".transactions");
+        transactions.innerHTML = "";
 
-        filteredData.forEach((data) => {
-          const div = document.createElement("div");
-          div.classList.add("detail-div");
+        filteredData.reverse().forEach((data) => {
+          const transactionDiv = document.createElement("div");
+          transactionDiv.classList.add("transaction-div");
 
           const money = document.createElement("div");
-          money.textContent = data.money;
-          money.classList.add("money");
+          if (data.division === "income") {
+            money.textContent = +data.money;
+            money.classList.add("transaction-money");
+            money.style.color = "#5fbb82";
+          } else {
+            money.textContent = -data.money;
+            money.classList.add("transaction-money");
+            money.style.color = "#e16f63";
+          }
+          const div = document.createElement("div");
+          const category = document.createElement("div");
+          const memo = document.createElement("div");
+          category.textContent = data.category;
+          memo.textContent = data.memo;
 
-          details.append(div);
-          div.append(money);
-          div.append(data.category);
-          div.append(data.memo);
+          transactions.append(transactionDiv);
+          div.append(category);
+          div.append(memo);
+          transactionDiv.append(div);
+          transactionDiv.append(money);
         });
       }
 
@@ -175,9 +221,9 @@
       function renderCalendar() {
         const calendarDates = document.getElementById("calendarDates");
         const currentMonthElement = document.getElementById("currentMonth");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const details = document.querySelector(".details");
+        const prevBtn = document.querySelector(".prev.btn");
+        const nextBtn = document.querySelector(".next.btn");
+        const transactions = document.querySelector(".transactions");
 
         function renderDates() {
           const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -218,7 +264,7 @@
             currentYear--;
           }
           renderDates();
-          details.innerHTML = "";
+          transactions.innerHTML = "";
           renderData();
         });
 
@@ -229,7 +275,7 @@
             currentYear++;
           }
           renderDates();
-          details.innerHTML = "";
+          transactions.innerHTML = "";
           renderData();
         });
       }

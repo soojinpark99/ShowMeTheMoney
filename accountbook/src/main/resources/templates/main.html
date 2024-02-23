@@ -35,7 +35,7 @@
       align-items: center;
       gap: 10px;
 
-      margin-top: 50px;
+      margin-top: 30px;
     }
 
     .btn {
@@ -50,9 +50,23 @@
       margin-bottom: 5px;
     }
 
+    .income,
+    .expense,
+    .total {
+      margin-left: 10px;
+    }
+
+    .income {
+      color: #5fbb82;
+    }
+
+    .expense {
+      color: #e16f63;
+    }
+
     .day {
       text-align: center;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
     .date,
     .empty {
@@ -64,7 +78,8 @@
       padding: 3px;
     }
 
-    .date:hover {
+    .date:hover,
+    .selected-date {
       background-color: #e6e6e6;
       border-radius: 7px;
     }
@@ -105,6 +120,10 @@
       margin-bottom: 5px;
     }
 
+    .transaction-memo {
+      color: #a0a1a6;
+    }
+
     .transaction-money {
       font-size: 30px;
     }
@@ -118,9 +137,18 @@
           <div class="next btn">▶</div>
         </div>
         <div class="sum-div">
-          <div class="income">수입</div>
-          <div class="expense">지출</div>
-          <div class="total">합계</div>
+          <div>
+            수입
+            <span class="income">+600000</span>
+          </div>
+          <div>
+            지출
+            <span class="expense">-500000</span>
+          </div>
+          <div>
+            합계
+            <span class="total">+100000</span>
+          </div>
         </div>
         <div class="calendar days">
           <div class="day">일</div>
@@ -141,10 +169,11 @@
       let currentMonth = today.getMonth();
       let currentYear = today.getFullYear();
 
-      // --- 데이터 받아오기 ---
+      const host = window.location.host;
+      const pathname = window.location.pathname.split("/");
+      const username = pathname[pathname.length - 1];
 
-      // const res = await fetch('/datas');
-      // const datas = res.json();
+      // --- 데이터 받아오기 ---
 
       const datas = [
         {
@@ -166,19 +195,21 @@
           money: "18000",
           date: "2024-02-23",
           category: "culture",
-          memo: "영화",
         },
         {
           division: "income",
           money: "10000",
           date: "2024-02-23",
-          category: "culture",
+          category: "additional",
           memo: "당근마켓",
         },
       ];
 
       // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
       function renderData(currentDate = new Date().getDate()) {
+        // const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
+        // const filteredData = res.json();
+
         const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
@@ -187,6 +218,13 @@
             dataDate.getDate() === currentDate
           );
         });
+
+        const dates = [...document.querySelectorAll(".date")];
+        const selectedDate = dates.find((date) => {
+          return date.textContent == currentDate;
+        });
+        dates.forEach((date) => date.classList.remove("selected-date"));
+        selectedDate.classList.add("selected-date");
 
         const transactions = document.querySelector(".transactions");
         transactions.innerHTML = "";
@@ -197,7 +235,7 @@
 
           const money = document.createElement("div");
           if (data.division === "income") {
-            money.textContent = +data.money;
+            money.textContent = "+" + data.money;
             money.classList.add("transaction-money");
             money.style.color = "#5fbb82";
           } else {
@@ -208,8 +246,32 @@
           const div = document.createElement("div");
           const category = document.createElement("div");
           const memo = document.createElement("div");
-          category.textContent = data.category;
+
+          const categoryList = {
+            food: "식비",
+            cafe: "카페",
+            mart: "마트/생필품",
+            culture: "문화생활",
+            medical: "의료비",
+            dues: "공과금",
+            transportation: "교통비",
+            communication: "통신비",
+            subscription: "구독료",
+            hobby: "취미",
+            shopping: "쇼핑",
+            beauty: "미용",
+            gift: "경조사/선물",
+            travel: "여행",
+            etc: "기타",
+            salary: "급여",
+            additional: "부수입",
+            allowance: "용돈",
+          };
+
+          category.textContent = categoryList[data.category];
+          category.classList.add("transaction-category");
           memo.textContent = data.memo;
+          memo.classList.add("transaction-memo");
 
           transactions.append(transactionDiv);
           div.append(category);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -87,6 +87,7 @@
         <div class="calendar-header">
           <button id="prevBtn">이전</button>
           <h2 id="currentMonth"></h2>
+          <a th:href="@{/write}">새 내역 추가하기</a>
           <button id="nextBtn">다음</button>
         </div>
         <div class="total-div">

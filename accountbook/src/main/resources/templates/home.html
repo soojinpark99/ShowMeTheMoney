@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-시작 페이지입니다.
-<a th:href="@{/login}">로그인</a>
-<a th:href="@{/join}">회원가입</a>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .layout {
+      width: 430px;
+      height: 926px;
+      margin: 50px auto;
+      padding: 15px;
+      background-color: #fafaf9;
+    }
+
+    .info {
+      text-align: center;
+      margin-top: 100px;
+      margin-bottom: 40px;
+    }
+
+    .btns {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 50%;
+      height: 50px;
+      background-color: black;
+      text-decoration: none;
+      color: white;
+
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <div class="layout">
+      <p class="info">시작 페이지입니다.</p>
+      <div class="btns">
+        <a class="login btn" th:href="@{/login}">로그인</a>
+        <a class="join btn" th:href="@{/join}">회원가입</a>
+      </div>
+    </div>
+  </body>
 </html>

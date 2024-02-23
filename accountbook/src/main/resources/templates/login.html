@@ -1,16 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-이 페이지에 접근하려면 로그인이 필요합니다.
-<form action="/loginProc" method="post" name="loginForm">
-    <input id="username" type="text" name="username" placeholder="아이디를 입력하세요."/>
-    <input id="password" type="password" name="password" placeholder="비밀번호를 입력하세요."/>
-    <input type="submit" value="login"/>
+  <head>
+    <meta charset="UTF-8" />
+    <title>로그인</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-</form>
-</body>
+    .layout {
+      width: 430px;
+      height: 926px;
+      margin: 50px auto;
+      padding: 15px;
+      background-color: #fafaf9;
+    }
+
+    .join-form {
+      width: 350px;
+      margin: 100px auto;
+    }
+
+    .info {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .input-div {
+      width: 100%;
+      height: 50px;
+      margin: 10px 0;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      padding: 0 5px;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+    }
+  </style>
+  <body>
+    <div class="layout">
+      <form
+        class="join-form"
+        action="/loginProc"
+        method="post"
+        name="loginForm"
+      >
+        <p class="info">이 페이지에 접근하려면 로그인이 필요합니다.</p>
+        <div class="username input-div">
+          <label for="username" />아이디
+          <input
+            id="username"
+            type="text"
+            name="username"
+            placeholder="아이디를 입력하세요."
+          />
+        </div>
+        <div class="password input-div">
+          <label for="password" />비밀번호
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력하세요."
+          />
+        </div>
+        <input type="submit" value="login" />
+      </form>
+    </div>
+  </body>
 </html>

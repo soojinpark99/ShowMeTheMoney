@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -113,7 +113,8 @@
         <div class="calendar-header">
           <div class="prev btn">◀</div>
           <h2 id="currentMonth"></h2>
-          <div class="next btn">▶</div>
+          <a th:href="@{/write}">새 내역 추가하기</a>
+          <button id="nextBtn">다음</button>
         </div>
         <div class="sum-div">
           <div class="income">수입</div>

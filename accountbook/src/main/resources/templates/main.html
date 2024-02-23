@@ -136,11 +136,40 @@
         {
           division: "expense",
           money: "18000",
-          date: "2024-02-21",
+          date: "2024-02-23",
           category: "culture",
           memo: "영화",
         },
       ];
+
+      // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
+      function renderData(currentDate = new Date().getDate()) {
+        const filteredData = datas.filter((data) => {
+          const dataDate = new Date(data.date);
+          return (
+            dataDate.getFullYear() === currentYear &&
+            dataDate.getMonth() === currentMonth &&
+            dataDate.getDate() === currentDate
+          );
+        });
+
+        const details = document.querySelector(".details");
+        details.innerHTML = "";
+
+        filteredData.forEach((data) => {
+          const div = document.createElement("div");
+          div.classList.add("detail-div");
+
+          const money = document.createElement("div");
+          money.textContent = data.money;
+          money.classList.add("money");
+
+          details.append(div);
+          div.append(money);
+          div.append(data.category);
+          div.append(data.memo);
+        });
+      }
 
       // --- 달력 동적 생성 ---
       function renderCalendar() {
@@ -190,6 +219,7 @@
           }
           renderDates();
           details.innerHTML = "";
+          renderData();
         });
 
         nextBtn.addEventListener("click", () => {
@@ -200,41 +230,12 @@
           }
           renderDates();
           details.innerHTML = "";
-        });
-      }
-
-      // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
-      function renderData(currentDate = new Date().getDate()) {
-        const filteredData = datas.filter((data) => {
-          const dataDate = new Date(data.date);
-          return (
-            dataDate.getFullYear() === currentYear &&
-            dataDate.getMonth() === currentMonth &&
-            dataDate.getDate() === currentDate
-          );
-        });
-
-        const details = document.querySelector(".details");
-        details.innerHTML = "";
-
-        filteredData.forEach((data) => {
-          const div = document.createElement("div");
-          div.classList.add("detail-div");
-
-          const money = document.createElement("div");
-          money.textContent = data.money;
-          money.classList.add("money");
-
-          details.append(div);
-          div.append(money);
-          div.append(data.category);
-          div.append(data.memo);
+          renderData();
         });
       }
 
       renderCalendar();
       renderData();
-      // 특정 날짜 클릭 시 해당 날짜의 데이터 렌더링
       document
         .getElementById("calendarDates")
         .addEventListener("click", (event) => {

@@ -8,6 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class LoginController {
+    @GetMapping("/")
+    public String homePage() {
+        return "home";
+    }
+
     @GetMapping("/login")
     public String loginPage() {return "login";}
+
+    @GetMapping( "/main")
+    public String mainPage() {
+        return "main";
+    }
 }

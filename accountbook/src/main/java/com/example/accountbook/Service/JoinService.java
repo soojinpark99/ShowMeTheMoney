@@ -12,11 +12,15 @@ import org.springframework.stereotype.Service;
 public class JoinService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    //회원가입 로직
     public void joinProcess(JoinDTO joinDTO) {
+
+        boolean isDuplicate = userRepository.existsByUsername(joinDTO.getUsername());
+        if(isDuplicate) {return;}
+
         UserEntity data = new UserEntity();
 
         data.setUsername(joinDTO.getUsername());

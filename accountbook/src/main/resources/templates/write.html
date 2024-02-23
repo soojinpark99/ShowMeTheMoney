@@ -19,37 +19,111 @@
       padding: 15px;
       background-color: #fafaf9;
     }
+
+    .form {
+      background-color: white;
+      width: 350px;
+      margin: 0 auto;
+    }
+
+    .form > div {
+      margin: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .select-division,
+    input,
+    select {
+      width: 250px;
+      height: 50px;
+      padding: 3px;
+      font-size: 16px;
+    }
+
+    .select-division {
+      display: flex;
+    }
+
+    .select-division > label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border: 1px solid black;
+      width: 50%;
+
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input::-webkit-inner-spin-button {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+    }
+
+    .submit-btn {
+      width: 100px;
+      height: 30px;
+    }
   </style>
   <body>
     <div class="layout">
-      <a href="./main.html">돌아가기</a>
+      <a th:href="@{/main}">돌아가기</a>
       <form class="form">
         <div class="division">
-          <input type="radio" name="division" value="expense" />지출
-          <input type="radio" name="division" value="income" />수입
+          분류
+          <div class="select-division">
+            <input
+              type="radio"
+              name="division"
+              value="expense"
+              id="expense"
+              checked="checked"
+            />
+            <label for="expense">지출</label>
+            <input type="radio" name="division" value="income" id="income" />
+            <label for="income">수입</label>
+          </div>
         </div>
-        <div class="money">금액<input type="number" name="money" />원</div>
+        <div class="money">
+          금액
+          <input type="number" name="money" />
+        </div>
         <div class="date">
           날짜
-          <input type="date" name="date" />
+          <input type="date" name="date" id="date" />
         </div>
         <div class="category">
-          <p>카테고리</p>
-          <input type="radio" name="category" value="food" />식비
-          <input type="radio" name="category" value="transportation" />교통비
-          <input type="radio" name="category" value="dues" />공과금
-          <input type="radio" name="category" value="medical" />의료비
-          <input type="radio" name="category" value="culture" />문화생활
-          <input type="radio" name="category" value="shopping" />쇼핑
+          카테고리
+          <select name="category">
+            <option value="food">식비</option>
+            <option value="transportation">교통비</option>
+            <option value="dues">공과금</option>
+            <option value="medical">의료비</option>
+            <option value="culture">문화생활</option>
+            <option value="shopping">쇼핑</option>
+          </select>
         </div>
         <div class="memo">
-          메모<input name="memo" placeholder="메모를 입력하세요." />
+          내용
+          <input name="memo" placeholder="내용을 입력하세요." />
         </div>
         <button class="submit-btn" type="submit">저장</button>
       </form>
     </div>
     <script>
-      document.querySelector(".date > input").value = new Date()
+      document.querySelector("#date").value = new Date()
         .toISOString()
         .substring(0, 10);
 

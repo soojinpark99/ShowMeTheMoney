@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 @Entity
 public class Calendar {
     @Id
-    private int id;
+    private int calid;
 
     private int income;
     private int spended;

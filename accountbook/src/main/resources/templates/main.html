@@ -208,12 +208,13 @@
       ];*/
 
       // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
-      function renderData() {
+      async function renderData() {
         // 특정 날짜에 해당하는 데이터 불러오기
 
         const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
+        //const res = await fetch(`/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
         const filteredData = res.json();
-        const filteredData = datas.filter((data) => {
+        /*const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
             dataDate.getFullYear() == currentYear &&
@@ -221,6 +222,8 @@
             dataDate.getDate() == currentDate
           );
         });
+
+         */
 
         // 거래 내역 동적 생성
         const transactions = document.querySelector(".transactions");

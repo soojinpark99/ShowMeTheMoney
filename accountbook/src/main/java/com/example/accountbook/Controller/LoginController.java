@@ -28,9 +28,6 @@ public class LoginController {
                 .build();
     }
 
-    @Autowired
-    private HttpServletRequest request;
-
     @GetMapping( "/main/username/{username}")
     public String mainPage(@PathVariable String username) {
       //url 보안검증방식과 세션 관리 방식 중 url 보안검증 채택

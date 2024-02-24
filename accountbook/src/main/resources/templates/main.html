@@ -35,7 +35,7 @@
       align-items: center;
       gap: 10px;
 
-      margin-top: 50px;
+      margin-top: 30px;
     }
 
     .btn {
@@ -50,9 +50,23 @@
       margin-bottom: 5px;
     }
 
+    .income,
+    .expense,
+    .total {
+      margin-left: 10px;
+    }
+
+    .income {
+      color: #5fbb82;
+    }
+
+    .expense {
+      color: #e16f63;
+    }
+
     .day {
       text-align: center;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
     .date,
     .empty {
@@ -65,8 +79,11 @@
     }
 
     .date:hover {
-      background-color: #e6e6e6;
-      border-radius: 7px;
+      border: 1px solid #bebfc0;
+    }
+
+    .selected-date {
+      background-color: #bebfc0;
     }
 
     .write-btn {
@@ -105,6 +122,10 @@
       margin-bottom: 5px;
     }
 
+    .transaction-memo {
+      color: #a0a1a6;
+    }
+
     .transaction-money {
       font-size: 30px;
     }
@@ -118,9 +139,18 @@
           <div class="next btn">▶</div>
         </div>
         <div class="sum-div">
-          <div class="income">수입</div>
-          <div class="expense">지출</div>
-          <div class="total">합계</div>
+          <div>
+            수입
+            <span class="income">+600000</span>
+          </div>
+          <div>
+            지출
+            <span class="expense">-500000</span>
+          </div>
+          <div>
+            합계
+            <span class="total">+100000</span>
+          </div>
         </div>
         <div class="calendar days">
           <div class="day">일</div>
@@ -140,24 +170,25 @@
       const today = new Date();
       let currentMonth = today.getMonth();
       let currentYear = today.getFullYear();
+      let currentDate = today.getDate();
 
-      // --- 데이터 받아오기 ---
+      const host = window.location.host;
+      const pathname = window.location.pathname.split("/");
+      const username = pathname[pathname.length - 1];
 
-      // const res = await fetch('/datas');
-      // const datas = res.json();
-
-      const datas = [
+      // 임의로 작성한 데이터
+      /*const datas = [
         {
           division: "expense",
           money: "13000",
-          date: "2024-02-22",
+          date: "2024-03-22",
           category: "food",
           memo: "배달의 민족",
         },
         {
           division: "expense",
           money: "1000",
-          date: "2024-02-21",
+          date: "2024-02-24",
           category: "food",
           memo: "편의점",
         },
@@ -166,28 +197,32 @@
           money: "18000",
           date: "2024-02-23",
           category: "culture",
-          memo: "영화",
         },
         {
           division: "income",
           money: "10000",
           date: "2024-02-23",
-          category: "culture",
+          category: "additional",
           memo: "당근마켓",
         },
-      ];
+      ];*/
 
-      // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
-      function renderData(currentDate = new Date().getDate()) {
+      // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
+      function renderData() {
+        // 특정 날짜에 해당하는 데이터 불러오기
+
+        const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
+        const filteredData = res.json();
         const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
-            dataDate.getFullYear() === currentYear &&
-            dataDate.getMonth() === currentMonth &&
-            dataDate.getDate() === currentDate
+            dataDate.getFullYear() == currentYear &&
+            dataDate.getMonth() == currentMonth &&
+            dataDate.getDate() == currentDate
           );
         });
 
+        // 거래 내역 동적 생성
         const transactions = document.querySelector(".transactions");
         transactions.innerHTML = "";
 
@@ -197,7 +232,7 @@
 
           const money = document.createElement("div");
           if (data.division === "income") {
-            money.textContent = +data.money;
+            money.textContent = "+" + data.money;
             money.classList.add("transaction-money");
             money.style.color = "#5fbb82";
           } else {
@@ -208,8 +243,32 @@
           const div = document.createElement("div");
           const category = document.createElement("div");
           const memo = document.createElement("div");
-          category.textContent = data.category;
+
+          const categoryList = {
+            food: "식비",
+            cafe: "카페",
+            mart: "마트/생필품",
+            culture: "문화생활",
+            medical: "의료비",
+            dues: "공과금",
+            transportation: "교통비",
+            communication: "통신비",
+            subscription: "구독료",
+            hobby: "취미",
+            shopping: "쇼핑",
+            beauty: "미용",
+            gift: "경조사/선물",
+            travel: "여행",
+            etc: "기타",
+            salary: "급여",
+            additional: "부수입",
+            allowance: "용돈",
+          };
+
+          category.textContent = categoryList[data.category];
+          category.classList.add("transaction-category");
           memo.textContent = data.memo;
+          memo.classList.add("transaction-memo");
 
           transactions.append(transactionDiv);
           div.append(category);
@@ -219,13 +278,21 @@
         });
       }
 
+      function handleCalendarClick(event) {
+        const dates = [...document.querySelectorAll(".date")];
+        dates.forEach((date) => date.classList.remove("selected-date"));
+        event.target.classList.add("selected-date");
+        currentDate = event.target.textContent;
+
+        renderData();
+      }
+
       // --- 달력 동적 생성 ---
       function renderCalendar() {
         const calendarDates = document.getElementById("calendarDates");
         const currentMonthElement = document.getElementById("currentMonth");
         const prevBtn = document.querySelector(".prev.btn");
         const nextBtn = document.querySelector(".next.btn");
-        const transactions = document.querySelector(".transactions");
 
         function renderDates() {
           const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -254,6 +321,10 @@
             dateElement.classList.add("date");
             dateElement.textContent = i;
             calendarDates.appendChild(dateElement);
+
+            if (i === currentDate) {
+              dateElement.classList.add("selected-date");
+            }
           }
         }
 
@@ -266,8 +337,7 @@
             currentYear--;
           }
           renderDates();
-          transactions.innerHTML = "";
-          renderData();
+          updateDataAndEventListeners();
         });
 
         nextBtn.addEventListener("click", () => {
@@ -277,19 +347,21 @@
             currentYear++;
           }
           renderDates();
-          transactions.innerHTML = "";
-          renderData();
+          updateDataAndEventListeners();
         });
       }
-
       renderCalendar();
-      renderData();
-      document
-        .getElementById("calendarDates")
-        .addEventListener("click", (event) => {
-          const clickedDate = parseInt(event.target.textContent);
-          renderData(clickedDate);
-        });
+
+      function updateDataAndEventListeners() {
+        renderData();
+
+        const dates = [...document.querySelectorAll(".date")];
+
+        dates.forEach((date) =>
+          date.addEventListener("click", handleCalendarClick)
+        );
+      }
+      updateDataAndEventListeners();
     </script>
   </body>
 </html>

@@ -8,6 +8,10 @@ public class Calendar {
     @Id
     private int calid;
 
+    private int year;
+    private int month;
+    private int day;
+
     private int income;
     private int spended;
     private String category;

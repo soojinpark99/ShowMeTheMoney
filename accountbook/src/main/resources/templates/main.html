@@ -78,10 +78,12 @@
       padding: 3px;
     }
 
-    .date:hover,
+    .date:hover {
+      border: 1px solid #bebfc0;
+    }
+
     .selected-date {
-      background-color: #e6e6e6;
-      border-radius: 7px;
+      background-color: #bebfc0;
     }
 
     .write-btn {
@@ -168,25 +170,25 @@
       const today = new Date();
       let currentMonth = today.getMonth();
       let currentYear = today.getFullYear();
+      let currentDate = today.getDate();
 
       const host = window.location.host;
       const pathname = window.location.pathname.split("/");
       const username = pathname[pathname.length - 1];
 
-      // --- 데이터 받아오기 ---
-
-      const datas = [
+      // 임의로 작성한 데이터
+      /*const datas = [
         {
           division: "expense",
           money: "13000",
-          date: "2024-02-22",
+          date: "2024-03-22",
           category: "food",
           memo: "배달의 민족",
         },
         {
           division: "expense",
           money: "1000",
-          date: "2024-02-21",
+          date: "2024-02-24",
           category: "food",
           memo: "편의점",
         },
@@ -203,29 +205,24 @@
           category: "additional",
           memo: "당근마켓",
         },
-      ];
+      ];*/
 
-      // --- 선택한 날짜의 데이터 렌더링해서 화면에 추가 ---
-      function renderData(currentDate = new Date().getDate()) {
-        // const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
-        // const filteredData = res.json();
+      // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
+      function renderData() {
+        // 특정 날짜에 해당하는 데이터 불러오기
 
+        const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
+        const filteredData = res.json();
         const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
-            dataDate.getFullYear() === currentYear &&
-            dataDate.getMonth() === currentMonth &&
-            dataDate.getDate() === currentDate
+            dataDate.getFullYear() == currentYear &&
+            dataDate.getMonth() == currentMonth &&
+            dataDate.getDate() == currentDate
           );
         });
 
-        const dates = [...document.querySelectorAll(".date")];
-        const selectedDate = dates.find((date) => {
-          return date.textContent == currentDate;
-        });
-        dates.forEach((date) => date.classList.remove("selected-date"));
-        selectedDate.classList.add("selected-date");
-
+        // 거래 내역 동적 생성
         const transactions = document.querySelector(".transactions");
         transactions.innerHTML = "";
 
@@ -281,13 +278,21 @@
         });
       }
 
+      function handleCalendarClick(event) {
+        const dates = [...document.querySelectorAll(".date")];
+        dates.forEach((date) => date.classList.remove("selected-date"));
+        event.target.classList.add("selected-date");
+        currentDate = event.target.textContent;
+
+        renderData();
+      }
+
       // --- 달력 동적 생성 ---
       function renderCalendar() {
         const calendarDates = document.getElementById("calendarDates");
         const currentMonthElement = document.getElementById("currentMonth");
         const prevBtn = document.querySelector(".prev.btn");
         const nextBtn = document.querySelector(".next.btn");
-        const transactions = document.querySelector(".transactions");
 
         function renderDates() {
           const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -316,6 +321,10 @@
             dateElement.classList.add("date");
             dateElement.textContent = i;
             calendarDates.appendChild(dateElement);
+
+            if (i === currentDate) {
+              dateElement.classList.add("selected-date");
+            }
           }
         }
 
@@ -328,8 +337,7 @@
             currentYear--;
           }
           renderDates();
-          transactions.innerHTML = "";
-          renderData();
+          updateDataAndEventListeners();
         });
 
         nextBtn.addEventListener("click", () => {
@@ -339,19 +347,21 @@
             currentYear++;
           }
           renderDates();
-          transactions.innerHTML = "";
-          renderData();
+          updateDataAndEventListeners();
         });
       }
-
       renderCalendar();
-      renderData();
-      document
-        .getElementById("calendarDates")
-        .addEventListener("click", (event) => {
-          const clickedDate = parseInt(event.target.textContent);
-          renderData(clickedDate);
-        });
+
+      function updateDataAndEventListeners() {
+        renderData();
+
+        const dates = [...document.querySelectorAll(".date")];
+
+        dates.forEach((date) =>
+          date.addEventListener("click", handleCalendarClick)
+        );
+      }
+      updateDataAndEventListeners();
     </script>
   </body>
 </html>

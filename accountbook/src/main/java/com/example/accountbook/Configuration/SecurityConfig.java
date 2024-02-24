@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/write","/main").hasRole("USER") //USER role을 부여받았을떄만오픈
                 .anyRequest().authenticated());
         http.formLogin(auth->auth.loginPage("/login")
-                        .defaultSuccessUrl("/main/username")
+                        .defaultSuccessUrl("/main")
                         .loginProcessingUrl("/loginProc")
                         .permitAll());
         http.csrf((x)->x.disable());

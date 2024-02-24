@@ -24,9 +24,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       width: 40px;
       height: 40px;
-
+      color: black;
+      text-decoration: none;
       font-size: 30px;
       cursor: pointer;
     }
@@ -129,7 +131,7 @@
   </style>
   <body>
     <div class="layout">
-      <a class="uturn-btn" th:href="@{/main/username/{username}}">✕</a>
+      <a class="uturn-btn">✕</a>
       <form class="form">
         <div>
           분류
@@ -195,37 +197,36 @@
       </form>
     </div>
     <script>
-      document.querySelector(".date").value = new Date()
-        .toISOString()
-        .substring(0, 10);
+      function setDefault() {
+        document.querySelector(".date").value = new Date()
+          .toISOString()
+          .substring(0, 10);
 
-      const division = document.querySelector(".division");
-      const incomeCategory = document.querySelector(".income.category");
-      const expenseCategory = document.querySelector(".expense.category");
+        const division = document.querySelector(".division");
+        const incomeCategory = document.querySelector(".income.category");
+        const expenseCategory = document.querySelector(".expense.category");
 
-      division.addEventListener("click", (event) => {
-        if (event.target.value === "income") {
-          incomeCategory.style.display = "block";
-          expenseCategory.style.display = "none";
-        } else {
-          incomeCategory.style.display = "none";
-          expenseCategory.style.display = "block";
-        }
-      });
+        division.addEventListener("click", (event) => {
+          if (event.target.value === "income") {
+            incomeCategory.style.display = "block";
+            expenseCategory.style.display = "none";
+          } else {
+            incomeCategory.style.display = "none";
+            expenseCategory.style.display = "block";
+          }
+        });
+      }
 
       const form = document.querySelector(".form");
 
       async function handleSubmitForm(event) {
         event.preventDefault();
-        const formData = new FormData(form);
-
-        for (let [name, value] of formData) {
-          console.log(`${name} = ${value}`);
-        }
 
         const host = window.location.host;
         const pathname = window.location.pathname.split("/");
         const username = pathname[pathname.length - 1];
+
+        const formData = new FormData(form);
 
         try {
           const res = await fetch(`${host}/username/${username}`, {
@@ -233,12 +234,19 @@
             body: formData,
           });
           const data = await res.json();
-          if (data === "200") window.location.pathname = "/write";
+          if (data === "200")
+            window.location.pathname = `/main/username/${username}`;
         } catch (error) {
           console.log(error);
         }
       }
 
+      const uturnBtn = document.querySelector(".uturn-btn");
+      uturnBtn.addEventListener("click", () => {
+        fetch("/main");
+      });
+
+      setDefault();
       form.addEventListener("submit", handleSubmitForm);
     </script>
   </body>

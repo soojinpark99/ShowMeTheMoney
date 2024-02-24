@@ -83,7 +83,7 @@
     }
 
     .selected-date {
-      background-color: #bebfc0;
+      background-color: #e6e6e6;
     }
 
     .write-btn {
@@ -135,7 +135,7 @@
       <div class="calendar-container">
         <div class="calendar-header">
           <div class="prev btn">◀</div>
-          <h2 id="currentMonth"></h2>
+          <h2 id="month"></h2>
           <div class="next btn">▶</div>
         </div>
         <div class="sum-div">
@@ -167,10 +167,8 @@
       <div class="transactions"></div>
     </div>
     <script>
-      const today = new Date();
-      let currentMonth = today.getMonth();
-      let currentYear = today.getFullYear();
-      let currentDate = today.getDate();
+      let month = new Date().getMonth();
+      let year = new Date().getFullYear();
 
       const host = window.location.host;
       const pathname = window.location.pathname.split("/");
@@ -208,19 +206,29 @@
       ];*/
 
       // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
-      async function renderData() {
+      async function renderData(year, month, date) {
         // 특정 날짜에 해당하는 데이터 불러오기
+        const res = await fetch(
+          `${host}/username/${username}?date=${year}-${month}-${date}`
+        );
 
-        const res = await fetch(`${host}/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
-        //const res = await fetch(`/username/${username}?date=${currentYear}-${currentMonth}-${currentDate}`);
         const filteredData = res.json();
+
         /*const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
-            dataDate.getFullYear() == currentYear &&
-            dataDate.getMonth() == currentMonth &&
-            dataDate.getDate() == currentDate
+            dataDate.getFullYear() == year &&
+            dataDate.getMonth() == month &&
+            dataDate.getDate() == date
           );
+        });*/
+
+        const dateNodes = [...document.querySelectorAll(".date")];
+        dateNodes.forEach((dateNode) => {
+          dateNode.classList.remove("selected-date");
+          if (dateNode.textContent == date) {
+            dateNode.classList.add("selected-date");
+          }
         });
 
          */
@@ -281,35 +289,20 @@
         });
       }
 
-      function handleCalendarClick(event) {
-        const dates = [...document.querySelectorAll(".date")];
-        dates.forEach((date) => date.classList.remove("selected-date"));
-        event.target.classList.add("selected-date");
-        currentDate = event.target.textContent;
-
-        renderData();
-      }
-
       // --- 달력 동적 생성 ---
       function renderCalendar() {
         const calendarDates = document.getElementById("calendarDates");
-        const currentMonthElement = document.getElementById("currentMonth");
+        const monthElement = document.getElementById("month");
         const prevBtn = document.querySelector(".prev.btn");
         const nextBtn = document.querySelector(".next.btn");
 
         function renderDates() {
-          const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-          const daysInMonth = new Date(
-            currentYear,
-            currentMonth + 1,
-            0
-          ).getDate();
+          const firstDayOfMonth = new Date(year, month, 1);
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
 
           const startDayOfWeek = firstDayOfMonth.getDay();
 
-          currentMonthElement.textContent = `${currentYear}년 ${
-            currentMonth + 1
-          }월`;
+          monthElement.textContent = `${year}년 ${month + 1}월`;
 
           calendarDates.innerHTML = "";
 
@@ -324,47 +317,58 @@
             dateElement.classList.add("date");
             dateElement.textContent = i;
             calendarDates.appendChild(dateElement);
-
-            if (i === currentDate) {
-              dateElement.classList.add("selected-date");
-            }
           }
         }
 
         renderDates();
 
         prevBtn.addEventListener("click", () => {
-          currentMonth--;
-          if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
+          month--;
+          if (month < 0) {
+            month = 11;
+            year--;
           }
           renderDates();
-          updateDataAndEventListeners();
+          renderDataOfToday();
+          registerRenderingEvent(year, month);
         });
 
         nextBtn.addEventListener("click", () => {
-          currentMonth++;
-          if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
+          month++;
+          if (month > 11) {
+            month = 0;
+            year++;
           }
           renderDates();
-          updateDataAndEventListeners();
+          renderDataOfToday();
+          registerRenderingEvent(year, month);
         });
       }
-      renderCalendar();
 
-      function updateDataAndEventListeners() {
-        renderData();
+      function renderDataOfToday() {
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const currentDate = today.getDate();
+        if ((year === currentYear) & (month === currentMonth)) {
+          renderData(currentYear, currentMonth, currentDate);
+        } else return false;
+      }
 
+      function registerRenderingEvent(year, month) {
         const dates = [...document.querySelectorAll(".date")];
 
         dates.forEach((date) =>
-          date.addEventListener("click", handleCalendarClick)
+          date.addEventListener("click", (event) => {
+            clickedDate = event.target.textContent;
+            renderData(year, month, clickedDate);
+          })
         );
       }
-      updateDataAndEventListeners();
+
+      renderCalendar();
+      renderDataOfToday();
+      registerRenderingEvent(year, month);
     </script>
   </body>
 </html>

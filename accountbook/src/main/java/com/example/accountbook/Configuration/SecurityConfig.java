@@ -1,9 +1,14 @@
 package com.example.accountbook.Configuration;
 
+import com.example.accountbook.Controller.LoginController;
+import com.example.accountbook.Entity.MyUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,7 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/write","/main").hasRole("USER") //USER role을 부여받았을떄만오픈
                 .anyRequest().authenticated());
         http.formLogin(auth->auth.loginPage("/login")
-                        .defaultSuccessUrl("/main")
+                        .defaultSuccessUrl("/main/username")
                         .loginProcessingUrl("/loginProc")
                         .permitAll());
         http.csrf((x)->x.disable());

@@ -234,9 +234,9 @@
         },
       ];
 
-      // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
-      function renderData(year, month, date) {
-        // 특정 날짜에 해당하는 데이터 불러오기
+      // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
+      function displayTransactions(year, month, date) {
+        // 특정 날짜의 거래 내역 데이터 불러오기
         /*
         const res = await fetch(
           `/username/${username}?date=${year}-${month}-${date}`
@@ -253,6 +253,7 @@
           );
         });
 
+        // 선택된 날짜 배경색 바꾸기
         const dateNodes = [...document.querySelectorAll(".date")];
         for (dateNode of dateNodes) {
           dateNode.classList.remove("selected-date");
@@ -324,6 +325,7 @@
         const prevBtn = document.querySelector(".prev.btn");
         const nextBtn = document.querySelector(".next.btn");
 
+        // 특정 연도와 달의 달력 페이지 생성
         function renderDates() {
           const firstDayOfMonth = new Date(year, month, 1);
           const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -351,6 +353,7 @@
 
         renderDates();
 
+        // 이전 버튼을 누르면 이전달로 이동
         prevBtn.addEventListener("click", () => {
           month--;
           if (month < 0) {
@@ -360,7 +363,7 @@
           renderDates();
           updateData();
         });
-
+        // 다음 버튼을 누르면 다음달로 이동
         nextBtn.addEventListener("click", () => {
           month++;
           if (month > 11) {
@@ -372,19 +375,21 @@
         });
       }
 
-      function renderDataOfToday() {
+      // --- 현재 날짜의 거래 내역을 보여주는 함수 ---
+      function displayTransactionsOfToday() {
         const today = new Date();
         const currentYear = today.getFullYear();
         const currentMonth = today.getMonth();
         const currentDate = today.getDate();
         if ((year === currentYear) & (month === currentMonth)) {
-          renderData(currentYear, currentMonth, currentDate);
+          displayTransactions(currentYear, currentMonth, currentDate);
         } else {
           const transactions = document.querySelector(".transactions");
           transactions.innerHTML = "";
         }
       }
 
+      // --- 일별 지출/수입 금액을 합산하여 달력에 표시 ---
       function renderDailyTotalData() {
         const dateNodes = [...document.querySelectorAll(".date")];
 
@@ -419,7 +424,8 @@
         }
       }
 
-      function registerRenderingEvent(year, month) {
+      // --- 달력의 날짜 칸마다 이벤트 등록 ---
+      function registerClickEvent(year, month) {
         const dateNodes = [...document.querySelectorAll(".date")];
 
         dateNodes.forEach((dateNode) =>
@@ -428,15 +434,16 @@
             if (!e.target.classList.contains("date")) {
               clickedDate = e.target.parentElement.dataset.date;
             }
-            renderData(year, month, clickedDate);
+            displayTransactions(year, month, clickedDate);
           })
         );
       }
 
+      // 달력 페이지마다 실행할 함수
       function updateData() {
-        renderDataOfToday();
+        displayTransactionsOfToday();
         renderDailyTotalData();
-        registerRenderingEvent(year, month);
+        registerClickEvent(year, month);
       }
       renderCalendar();
       updateData();

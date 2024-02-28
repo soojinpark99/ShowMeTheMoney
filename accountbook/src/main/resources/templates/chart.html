@@ -1,9 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>사용내역 통계</title>
-</head>
-<body>
-</body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show me the Money</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .layout {
+      width: 430px;
+      height: 926px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fafaf9;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    }
+  </style>
+  <body>
+    <div class="layout"></div>
+    <script>
+      const datas = [
+        {
+          division: "expense",
+          money: "1000",
+          date: "2024-02-24",
+          category: "food",
+          memo: "편의점",
+        },
+        {
+          division: "expense",
+          money: "18000",
+          date: "2024-02-25",
+          category: "culture",
+        },
+        {
+          division: "income",
+          money: "10000",
+          date: "2024-02-25",
+          category: "additional",
+          memo: "당근마켓",
+        },
+        {
+          division: "expense",
+          money: "13000",
+          date: "2024-02-22",
+          category: "food",
+          memo: "배달의 민족",
+        },
+        {
+          division: "expense",
+          money: "45000",
+          date: "2024-02-22",
+          category: "shopping",
+          memo: "러쉬 샤워젤리",
+        },
+      ];
+    </script>
+  </body>
 </html>

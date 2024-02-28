@@ -6,6 +6,11 @@
     <title>Show me the Money</title>
   </head>
   <style>
+    :root {
+      --expensecolor: #e16f63;
+      --incomecolor: #5fbb82;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -16,8 +21,10 @@
       width: 430px;
       height: 926px;
       margin: 50px auto;
-      padding: 15px;
+      padding: 20px;
       background-color: #fafaf9;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.05) 0px 8px 32px;
       position: relative;
     }
 
@@ -57,11 +64,11 @@
     }
 
     .income {
-      color: #5fbb82;
+      color: var(--incomecolor);
     }
 
     .expense {
-      color: #e16f63;
+      color: var(--expensecolor);
     }
 
     .day {
@@ -84,6 +91,18 @@
 
     .selected-date {
       background-color: #e6e6e6;
+    }
+
+    .daily-expense {
+      font-size: 12px;
+      color: var(--expensecolor);
+      padding-left: 2px;
+    }
+
+    .daily-income {
+      font-size: 12px;
+      color: var(--incomecolor);
+      padding-left: 2px;
     }
 
     .write-btn {
@@ -116,18 +135,21 @@
       margin-bottom: 5px;
       border: 1.3px solid #e6e6e6;
       border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
     }
 
     .transaction-category {
-      margin-bottom: 5px;
+      font-size: 19px;
     }
 
     .transaction-memo {
       color: #a0a1a6;
+      font-size: 14px;
+      margin-top: 3px;
     }
 
     .transaction-money {
-      font-size: 30px;
+      font-size: 25px;
     }
   </style>
   <body>
@@ -169,50 +191,72 @@
     <script>
       let month = new Date().getMonth();
       let year = new Date().getFullYear();
-
+      /*
       const host = window.location.host;
       const pathname = window.location.pathname.split("/");
-      const username = pathname[pathname.length - 1];
+      const username = pathname[pathname.length - 1];*/
 
-      // 임의로 작성한 데이터
-      /*const datas = [
-        {
-          division: "expense",
-          money: "13000",
-          date: "2024-03-22",
-          category: "food",
-          memo: "배달의 민족",
-        },
-        {
-          division: "expense",
-          money: "1000",
-          date: "2024-02-24",
-          category: "food",
-          memo: "편의점",
-        },
-        {
-          division: "expense",
-          money: "18000",
-          date: "2024-02-23",
-          category: "culture",
-        },
-        {
-          division: "income",
-          money: "10000",
-          date: "2024-02-23",
-          category: "additional",
-          memo: "당근마켓",
-        },
-      ];*/
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
+      }
+      getUsername();
 
-      // --- 특정 날짜에 해당하는 데이터를 렌더링하여 페이지에 추가 ---
-      async function renderData(year, month, date) {
-        // 특정 날짜에 해당하는 데이터 불러오기
-        const res = await fetch(
-          `/username/${username}?date=${year}-${month}-${date}`
-        );
-
-        const filteredData = res.json();
+      // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
+      function displayTransactions(year, month, date) {
+        // 임의로 작성한 데이터
+        /*let datasOfClickedDate = [
+          {
+            division: "expense",
+            money: "1000",
+            date: "2024-02-24",
+            category: "food",
+            memo: "편의점",
+          },
+          {
+            division: "expense",
+            money: "18000",
+            date: "2024-02-25",
+            category: "culture",
+          },
+          {
+            division: "income",
+            money: "10000",
+            date: "2024-02-25",
+            category: "additional",
+            memo: "당근마켓",
+          },
+          {
+            division: "expense",
+            money: "13000",
+            date: "2024-02-22",
+            category: "food",
+            memo: "배달의 민족",
+          },
+          {
+            division: "expense",
+            money: "45000",
+            date: "2024-02-22",
+            category: "shopping",
+            memo: "러쉬 샤워젤리",
+          },
+        ];*/
+        // 특정 날짜의 거래 내역 데이터 불러오기
+        let datasOfClickedDate = [];
+        async function getData() {
+          try {
+            const res = await fetch(
+              `/users/${username}/transactions?date=${year}-${month}-${date}`
+            );
+            datasOfClickedDate = await res.json();
+          } catch (error) {
+            alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
+          }
+        }
+        getData();
 
         /*const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
@@ -223,33 +267,32 @@
           );
         });*/
 
+        // 선택된 날짜 배경색 바꾸기
         const dateNodes = [...document.querySelectorAll(".date")];
-        dateNodes.forEach((dateNode) => {
+        for (dateNode of dateNodes) {
           dateNode.classList.remove("selected-date");
-          if (dateNode.textContent == date) {
+          if (dateNode.dataset.date == date) {
             dateNode.classList.add("selected-date");
           }
-        });
-
-
+        }
 
         // 거래 내역 동적 생성
         const transactions = document.querySelector(".transactions");
         transactions.innerHTML = "";
 
-        filteredData.reverse().forEach((data) => {
+        datasOfClickedDate.forEach((data) => {
           const transactionDiv = document.createElement("div");
           transactionDiv.classList.add("transaction-div");
 
           const money = document.createElement("div");
           if (data.division === "income") {
-            money.textContent = "+" + data.money;
+            money.textContent = "+" + (+data.money).toLocaleString() + "원";
             money.classList.add("transaction-money");
-            money.style.color = "#5fbb82";
+            money.classList.add("income");
           } else {
-            money.textContent = -data.money;
+            money.textContent = (-data.money).toLocaleString() + "원";
             money.classList.add("transaction-money");
-            money.style.color = "#e16f63";
+            money.classList.add("expense");
           }
           const div = document.createElement("div");
           const category = document.createElement("div");
@@ -296,6 +339,7 @@
         const prevBtn = document.querySelector(".prev.btn");
         const nextBtn = document.querySelector(".next.btn");
 
+        // 특정 연도와 달의 달력 페이지 생성
         function renderDates() {
           const firstDayOfMonth = new Date(year, month, 1);
           const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -316,12 +360,14 @@
             const dateElement = document.createElement("div");
             dateElement.classList.add("date");
             dateElement.textContent = i;
+            dateElement.dataset.date = i;
             calendarDates.appendChild(dateElement);
           }
         }
 
         renderDates();
 
+        // 이전 버튼을 누르면 이전달로 이동
         prevBtn.addEventListener("click", () => {
           month--;
           if (month < 0) {
@@ -329,10 +375,9 @@
             year--;
           }
           renderDates();
-          renderDataOfToday();
-          registerRenderingEvent(year, month);
+          updateData();
         });
-
+        // 다음 버튼을 누르면 다음달로 이동
         nextBtn.addEventListener("click", () => {
           month++;
           if (month > 11) {
@@ -340,35 +385,127 @@
             year++;
           }
           renderDates();
-          renderDataOfToday();
-          registerRenderingEvent(year, month);
+          updateData();
         });
       }
 
-      function renderDataOfToday() {
+      // --- 현재 날짜의 거래 내역을 보여주는 함수 ---
+      function displayTransactionsOfToday() {
         const today = new Date();
         const currentYear = today.getFullYear();
         const currentMonth = today.getMonth();
         const currentDate = today.getDate();
         if ((year === currentYear) & (month === currentMonth)) {
-          renderData(currentYear, currentMonth, currentDate);
-        } else return false;
+          displayTransactions(currentYear, currentMonth, currentDate);
+        } else {
+          const transactions = document.querySelector(".transactions");
+          transactions.innerHTML = "";
+        }
       }
 
-      function registerRenderingEvent(year, month) {
-        const dates = [...document.querySelectorAll(".date")];
+      // --- 일별 지출/수입 금액을 합산하여 달력에 표시 ---
+      function renderDailyTotalData() {
+        const dateNodes = [...document.querySelectorAll(".date")];
+        let dailtData = [];
+        dateNodes.forEach((dateNode, i) => {
+          async function getData() {
+            const res = await fetch(
+              `/users/${username}/transactions?date=${year}-${month}-${i + 1}`
+            );
+            dailyData = await res.json();
+          }
+          getData();
+          // 임의로 작성한 데이터
+          /*let datas = [
+            {
+              division: "expense",
+              money: "1000",
+              date: "2024-02-24",
+              category: "food",
+              memo: "편의점",
+            },
+            {
+              division: "expense",
+              money: "18000",
+              date: "2024-02-25",
+              category: "culture",
+            },
+            {
+              division: "income",
+              money: "10000",
+              date: "2024-02-25",
+              category: "additional",
+              memo: "당근마켓",
+            },
+            {
+              division: "expense",
+              money: "13000",
+              date: "2024-02-22",
+              category: "food",
+              memo: "배달의 민족",
+            },
+            {
+              division: "expense",
+              money: "45000",
+              date: "2024-02-22",
+              category: "shopping",
+              memo: "러쉬 샤워젤리",
+            },
+          ];
 
-        dates.forEach((date) =>
-          date.addEventListener("click", (event) => {
-            clickedDate = event.target.textContent;
-            renderData(year, month, clickedDate);
+          const dailyData = datas.filter((data) => {
+            const dataDate = new Date(data.date);
+            return dataDate.getMonth() == month && dataDate.getDate() == i + 1;
+          });*/
+
+          let totalExpense = 0;
+          let totalIncome = 0;
+          for (data of dailyData) {
+            if (data.division === "expense") {
+              totalExpense += +data.money;
+            } else {
+              totalIncome += +data.money;
+            }
+          }
+          if (totalIncome !== 0) {
+            const dailyIncomeElement = document.createElement("div");
+            dailyIncomeElement.textContent = "+" + totalIncome.toLocaleString();
+            dailyIncomeElement.classList.add("daily-income");
+            dateNodes[i].appendChild(dailyIncomeElement);
+          }
+          if (totalExpense !== 0) {
+            const dailyExpenseElement = document.createElement("div");
+            dailyExpenseElement.textContent =
+              "-" + totalExpense.toLocaleString();
+            dailyExpenseElement.classList.add("daily-expense");
+            dateNodes[i].appendChild(dailyExpenseElement);
+          }
+        });
+      }
+
+      // --- 달력의 날짜 칸마다 이벤트 등록 ---
+      function registerClickEvent(year, month) {
+        const dateNodes = [...document.querySelectorAll(".date")];
+
+        dateNodes.forEach((dateNode) =>
+          dateNode.addEventListener("click", (e) => {
+            let clickedDate = e.target.dataset.date;
+            if (!e.target.classList.contains("date")) {
+              clickedDate = e.target.parentElement.dataset.date;
+            }
+            displayTransactions(year, month, clickedDate);
           })
         );
       }
 
+      // 달력 페이지마다 실행할 함수
+      function updateData() {
+        displayTransactionsOfToday();
+        renderDailyTotalData();
+        registerClickEvent(year, month);
+      }
       renderCalendar();
-      renderDataOfToday();
-      registerRenderingEvent(year, month);
+      updateData();
     </script>
   </body>
 </html>

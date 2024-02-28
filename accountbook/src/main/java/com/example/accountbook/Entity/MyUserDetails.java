@@ -16,6 +16,7 @@ public class MyUserDetails implements UserDetails {
     private UserEntity userEntity;
     public MyUserDetails(UserEntity userEntity) {this.userEntity=userEntity;}
 
+    //UserEntity의 roleㄹ GrantedAuthority 타입의 객체로 변환한다.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> cl = new ArrayList<>();

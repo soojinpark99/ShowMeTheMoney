@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -131,8 +131,8 @@
   </style>
   <body>
     <div class="layout">
-      <a class="uturn-btn">✕</a>
-      <form class="form">
+      <a class="uturn-btn" th:href="@{/main}">✕</a>
+      <form action="/writeProc" method="POST" class="form">
         <div>
           분류
           <div class="division">
@@ -197,78 +197,80 @@
       </form>
     </div>
     <script>
-      // --- 폼 기본 세팅 ---
-      function setDefault() {
-        // 날짜 입력칸의 기본값을 현재 날짜로 설정
-        document.querySelector(".date").value = new Date()
-          .toISOString()
-          .substring(0, 10);
+           // --- 폼 기본 세팅 ---
+           function setDefault() {
+             // 날짜 입력칸의 기본값을 현재 날짜로 설정
+             document.querySelector(".date").value = new Date()
+               .toISOString()
+               .substring(0, 10);
 
-        // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
-        const money = document.querySelector(".money");
-        money.addEventListener("input", (e) => {
-          const val = e.target.value.replace(/[^0-9]/g, "");
-          e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
-        });
+             // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
+             const money = document.querySelector(".money");
+             money.addEventListener("input", (e) => {
+               const val = e.target.value.replace(/[^0-9]/g, "");
+               e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
+             });
 
-        // 지출/수입 선택 시 카테고리 내용 변경
-        const division = document.querySelector(".division");
-        const incomeCategory = document.querySelector(".income.category");
-        const expenseCategory = document.querySelector(".expense.category");
+             // 지출/수입 선택 시 카테고리 내용 변경
+             const division = document.querySelector(".division");
+             const incomeCategory = document.querySelector(".income.category");
+             const expenseCategory = document.querySelector(".expense.category");
 
-        division.addEventListener("click", (event) => {
-          if (event.target.value === "income") {
-            incomeCategory.style.display = "block";
-            expenseCategory.style.display = "none";
-          } else {
-            incomeCategory.style.display = "none";
-            expenseCategory.style.display = "block";
-          }
-        });
-      }
+             division.addEventListener("click", (event) => {
+               if (event.target.value === "income") {
+                 incomeCategory.style.display = "block";
+                 expenseCategory.style.display = "none";
+               } else {
+                 incomeCategory.style.display = "none";
+                 expenseCategory.style.display = "block";
+               }
+             });
+           }
 
-      // 현재 사용자의 username 얻기
-      let username;
-      async function getUsername() {
-        const res = await fetch("/username");
-        const json = await res.json();
-        username = json.username;
-      }
-      getUsername();
+           // 현재 사용자의 username 얻기
+           let username;
+           async function getUsername() {
+             const res = await fetch("/username");
+             const json = await res.json();
+             username = json.username;
+           }
+           getUsername();
 
-      const form = document.querySelector(".form");
+           const form = document.querySelector(".form");
 
-      // --- 폼 제출 시 실행되는 함수 ---
-      async function handleSubmitForm(event) {
-        event.preventDefault();
-        /*
-        const host = window.location.host;
-        const pathname = window.location.pathname.split("/");
-        const username = pathname[pathname.length - 1];*/
+           // --- 폼 제출 시 실행되는 함수 ---
+           async function handleSubmitForm(event) {
+             event.preventDefault();
+             /*
+             const host = window.location.host;
+             const pathname = window.location.pathname.split("/");
+             const username = pathname[pathname.length - 1];*/
 
-        const formData = new FormData(form);
+             const formData = new FormData(form);
 
-        try {
-          const res = await fetch(`/users/${username}/transactions`, {
-            method: "POST",
-            body: formData,
-          });
-          const staus = await res.status;
-          if (status === "200")
-            window.location.pathname = `/calendar/username/${username}`;
-        } catch (error) {
-          alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
-        }
-      }
+             try {
+               const res = await fetch(`/users/${username}/transactions`, {
+                 method: "POST",
+                 body: formData,
+               });
+               const staus = await res.status;
+               if (status === "200")
+                 window.location.pathname = `/calendar/username/${username}`;
+             } catch (error) {
+               alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
+             }
+           }
 
-      // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
-      const uturnBtn = document.querySelector(".uturn-btn");
-      uturnBtn.addEventListener("click", () => {
-        window.location.pathname = `/calendar/username/${username}`;
-      });
+           // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
+           const uturnBtn = document.querySelector(".uturn-btn");
+           uturnBtn.addEventListener("click", () => {
+             window.location.pathname = `/calendar/username/${username}`;
+           });
 
-      setDefault();
-      form.addEventListener("submit", handleSubmitForm);
+      */
+
+           setDefault();
+           form.addEventListener("submit", handleSubmitForm);
     </script>
   </body>
 </html>

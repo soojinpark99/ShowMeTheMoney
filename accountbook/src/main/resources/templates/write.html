@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -131,8 +131,8 @@
   </style>
   <body>
     <div class="layout">
-      <a class="uturn-btn">✕</a>
-      <form class="form">
+      <a class="uturn-btn" th:href="@{/main}">✕</a>
+      <form action="/writeProc" method="POST" class="form">
         <div>
           분류
           <div class="division">
@@ -229,7 +229,7 @@
         const formData = new FormData(form);
 
         try {
-          const res = await fetch(`${host}/username/${username}`, {
+          const res = await fetch(`/username/${username}`, {
             method: "POST",
             body: formData,
           });
@@ -240,11 +240,13 @@
           console.log(error);
         }
       }
-
+/*
       const uturnBtn = document.querySelector(".uturn-btn");
       uturnBtn.addEventListener("click", () => {
-        fetch("/main");
+        fetch(`/main`);
       });
+
+ */
 
       setDefault();
       form.addEventListener("submit", handleSubmitForm);

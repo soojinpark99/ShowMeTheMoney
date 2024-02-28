@@ -19,8 +19,8 @@ public class Calendar {
     private int month;
     private int day;
 
-    private int income;
-    private int expense;
+    private String division; //income or expense
+    private int money;
     private String category;
     private String memo;
 }

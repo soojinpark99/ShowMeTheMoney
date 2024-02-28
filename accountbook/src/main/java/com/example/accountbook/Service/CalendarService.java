@@ -1,12 +1,16 @@
 package com.example.accountbook.Service;
 
+import com.example.accountbook.DTO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Exception.NotFoundException;
 import com.example.accountbook.Repository.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+
+import java.util.*;
 
 @Service
 @Transactional
@@ -34,49 +38,56 @@ public class CalendarService {
         calendarRepository.deleteById(calid);
     }
 
-//월별 총수입 or 총지출
-    public int monthlyTotal(String username, int year, int month, String type) {
-        List<Calendar> calendars = calendarRepository.findByUsernameAndYearAndMonth(username,year,month);
+    //사용자의 모든 내역을 dto로 변환후 list에 담아 list를 반환
+    public List<CalendarDTO> getUsersAllCal(String username) {
+        List<Calendar> beforeDTO = calendarRepository.findByUsername(username);
+        List<CalendarDTO> afterDTO = new ArrayList<>();
+        for (Calendar cal : beforeDTO) {
+            afterDTO.add(toDTO(cal));
+        }
+        //id 역순(최신순)정렬
+        Collections.sort(afterDTO, Comparator.comparingInt(CalendarDTO::getId).reversed());
+        return afterDTO;
+    }
 
-        int total=0;
+    //엔티티를 DTO로 변환
+    public CalendarDTO toDTO(Calendar calendar) {
+        CalendarDTO dto = new CalendarDTO();
+        dto.setId(calendar.getCalid());
+        dto.setDate(String.format("%d-%d-%d",calendar.getYear(), calendar.getMonth(), calendar.getDay()));
+        dto.setDivision(calendar.getDivision());
+        dto.setMoney(calendar.getMoney());
+        dto.setCategory(calendar.getCategory());
+        dto.setMemo(calendar.getMemo());
+        return dto;
+    }
+
+    //월별 총수입 or 총지출
+    public int[] monthlyTotal(String username, int year, int month, String division) {
+        List<Calendar> calendars = calendarRepository.findByUsernameAndYearAndMonth(username,year,month);
+       //total[0] = incometotal, total[1]=expensetotal
+        int[] total = {0,0};
         for(Calendar cal : calendars) {
-            if(type.equals("income")) total+=cal.getIncome();
-            else if(type.equals("expense")) total+=cal.getExpense();
+            if(division.equals("income")) total[0]+=cal.getMoney();
+            else if(division.equals("expense")) total[1]+=cal.getMoney();
             else throw new IllegalArgumentException("요청이 유효하지 않습니다.");
         }
         return total;
     }
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 /*
-    //월별 총수입 or 총지출. type에는 "income" or "expense"를 넣어야함
-    public Map<String, Integer> monthlyTotal(int year, String type) {
-        Map<String, Integer> total = new HashMap<>();
-        for (int m = 1; m <= 12; m++) {
-            int totalmoney = 0;
-            Calendar calendar = calendarRepository.findByYearandMonth(year, m);
-            if (type.equals("income")) totalmoney += calendar.getIncome();
-            else if ("expense".equals(type)) totalmoney += calendar.getExpense();
+    public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String type, String category) {
 
-            total.put(year + "-" + m, totalmoney);
-        }
-        return total;
-    }
-*/
-    /*
-    public Map<String, Integer> categoryTotal(int year, int month, String type, String category) {
-        Map<String, Integer> categoryTotal = new HashMap<>();
-        int totalmoney;
-
-        List<Calendar> calendars = calendarRepository.findByYear(year);
-        for (Calendar calendar : calendars) {
-            category = calendar.getCategory();
-            if ("income".equals(type)) totalmoney= calendar.getIncome();
-            else if ("expense".equals(type)) totalmoney = calendar.getExpense();
-            else throw new InvalidRequestStateException("유효하지 않은 요청입니다.");
-
-            categoryTotal.put(category, categoryTotal.getOrDefault(category, 0) + totalmoney);
-        }
-        return categoryTotal;
     }
 
  */
 }
+
+/*
+    public enum IncomeCategory {FOOD, CAFE, MART, CULTURE, MEDICAL, DUES, TRANSPORTATION, COMMUNICATION,
+                                SUBSCRIPTION, HOBBY, SHOPPING, BEAUTY, GIFT, TRAVEL, ETC}
+    public enum ExpenseCategory {SALARY, ADDITIONAL, ALLOWANCE, ETC}
+
+ */

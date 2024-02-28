@@ -1,4 +1,4 @@
-package com.example.accountbook.Entity;
+package com.example.accountbook.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

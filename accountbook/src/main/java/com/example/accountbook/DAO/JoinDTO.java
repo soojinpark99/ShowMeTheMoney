@@ -1,4 +1,4 @@
-package com.example.accountbook.DTO;
+package com.example.accountbook.DAO;
 
 import lombok.Getter;
 import lombok.Setter;

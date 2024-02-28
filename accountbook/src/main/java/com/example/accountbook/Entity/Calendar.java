@@ -14,7 +14,7 @@ public class Calendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int calid;
-
+    private String username;
     private int year;
     private int month;
     private int day;

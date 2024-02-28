@@ -1,11 +1,10 @@
 package com.example.accountbook.Service;
 
-import com.example.accountbook.DTO.CalendarDTO;
+import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Exception.NotFoundException;
-import com.example.accountbook.Repository.CalendarRepository;
+import com.example.accountbook.DAO.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +25,11 @@ public class CalendarService {
     public void saveCal(Calendar calendar) {
         calendarRepository.save(calendar);
     }
-
     // #READ 내역 조회
     public Calendar viewCal(int calid) {
         return calendarRepository.findById(calid)
                 .orElseThrow(() -> new NotFoundException("해당하는 내역을 찾을 수 없습니다. " + calid));
     }
-
     // #DELETE 내역 삭제
     public void deleteCal(int calid) {
         calendarRepository.deleteById(calid);
@@ -75,19 +72,27 @@ public class CalendarService {
         return total;
     }
 
-    @Autowired
+    //각각의 카테고리당 월별 지출/수입 합계
     private JdbcTemplate jdbcTemplate;
-/*
-    public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String type, String category) {
+    public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
 
+        String sql = "SELECT category,SUM(money) AS each_category_total FROM calendar" +
+                            " WHERE username =? AND division = ? GROUP BY category";
+
+        List<CalendarDTO> afterGroupBy = jdbcTemplate.query(sql, (rs, rowNum) -> {
+                    CalendarDTO dto = new CalendarDTO();
+                    dto.setCategory(rs.getString("category"));
+                    dto.setMoney(rs.getInt("total_money"));
+                    return dto;},
+                    username,division);
+
+        Map<String, Integer> categoryTotal = new HashMap<>();
+        categoryTotal.put("year",year);
+        categoryTotal.put("month",month);
+        for (CalendarDTO dto : afterGroupBy) {
+            categoryTotal.put(dto.getCategory(), dto.getMoney());
+        }
+        return categoryTotal;
     }
-
- */
 }
 
-/*
-    public enum IncomeCategory {FOOD, CAFE, MART, CULTURE, MEDICAL, DUES, TRANSPORTATION, COMMUNICATION,
-                                SUBSCRIPTION, HOBBY, SHOPPING, BEAUTY, GIFT, TRAVEL, ETC}
-    public enum ExpenseCategory {SALARY, ADDITIONAL, ALLOWANCE, ETC}
-
- */

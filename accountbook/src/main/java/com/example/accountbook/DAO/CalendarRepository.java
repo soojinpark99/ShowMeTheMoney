@@ -1,4 +1,4 @@
-package com.example.accountbook.Repository;
+package com.example.accountbook.DAO;
 
 import com.example.accountbook.Entity.Calendar;
 import org.springframework.data.jpa.repository.JpaRepository;

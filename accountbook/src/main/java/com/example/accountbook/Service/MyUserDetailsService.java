@@ -1,8 +1,7 @@
 package com.example.accountbook.Service;
 
-import com.example.accountbook.Entity.MyUserDetails;
 import com.example.accountbook.Entity.UserEntity;
-import com.example.accountbook.Repository.UserRepository;
+import com.example.accountbook.DAO.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar,Integer> {
-    List<Calendar> findByYearandMonth(int year, int month);
+    List<Calendar> findByUsernameAndYearAndMonth(String username, int year, int month);
 }

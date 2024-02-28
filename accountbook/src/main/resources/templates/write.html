@@ -227,33 +227,45 @@
         });
       }
 
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
+      }
+      getUsername();
+
       const form = document.querySelector(".form");
 
       // --- 폼 제출 시 실행되는 함수 ---
       async function handleSubmitForm(event) {
         event.preventDefault();
-
+        /*
         const host = window.location.host;
         const pathname = window.location.pathname.split("/");
-        const username = pathname[pathname.length - 1];
+        const username = pathname[pathname.length - 1];*/
 
         const formData = new FormData(form);
 
         try {
-          const res = await fetch(`/username/${username}`, {
+          const res = await fetch(`/users/${username}/transactions`, {
             method: "POST",
             body: formData,
           });
-          const data = await res.json();
-          if (data === "200")
-            window.location.pathname = `/main/username/${username}`;
+          const staus = await res.status;
+          if (status === "200")
+            window.location.pathname = `/calendar/username/${username}`;
         } catch (error) {
-          console.log(error);
+          alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
         }
       }
 
-      // const uturnBtn = document.querySelector(".uturn-btn");
-      // uturnBtn.addEventListener("click", fetch("/main"));
+      // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
+      const uturnBtn = document.querySelector(".uturn-btn");
+      uturnBtn.addEventListener("click", () => {
+        window.location.pathname = `/calendar/username/${username}`;
+      });
 
       setDefault();
       form.addEventListener("submit", handleSubmitForm);

@@ -191,67 +191,81 @@
     <script>
       let month = new Date().getMonth();
       let year = new Date().getFullYear();
-
+      /*
       const host = window.location.host;
       const pathname = window.location.pathname.split("/");
-      const username = pathname[pathname.length - 1];
+      const username = pathname[pathname.length - 1];*/
 
-      // 임의로 작성한 데이터
-      const datas = [
-        {
-          division: "expense",
-          money: "1000",
-          date: "2024-02-24",
-          category: "food",
-          memo: "편의점",
-        },
-        {
-          division: "expense",
-          money: "18000",
-          date: "2024-02-25",
-          category: "culture",
-        },
-        {
-          division: "income",
-          money: "10000",
-          date: "2024-02-25",
-          category: "additional",
-          memo: "당근마켓",
-        },
-        {
-          division: "expense",
-          money: "13000",
-          date: "2024-02-22",
-          category: "food",
-          memo: "배달의 민족",
-        },
-        {
-          division: "expense",
-          money: "45000",
-          date: "2024-02-22",
-          category: "shopping",
-          memo: "러쉬 샤워젤리",
-        },
-      ];
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
+      }
+      getUsername();
 
       // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
       function displayTransactions(year, month, date) {
+        // 임의로 작성한 데이터
+        /*let datasOfClickedDate = [
+          {
+            division: "expense",
+            money: "1000",
+            date: "2024-02-24",
+            category: "food",
+            memo: "편의점",
+          },
+          {
+            division: "expense",
+            money: "18000",
+            date: "2024-02-25",
+            category: "culture",
+          },
+          {
+            division: "income",
+            money: "10000",
+            date: "2024-02-25",
+            category: "additional",
+            memo: "당근마켓",
+          },
+          {
+            division: "expense",
+            money: "13000",
+            date: "2024-02-22",
+            category: "food",
+            memo: "배달의 민족",
+          },
+          {
+            division: "expense",
+            money: "45000",
+            date: "2024-02-22",
+            category: "shopping",
+            memo: "러쉬 샤워젤리",
+          },
+        ];*/
         // 특정 날짜의 거래 내역 데이터 불러오기
-        /*
-        const res = await fetch(
-          `/username/${username}?date=${year}-${month}-${date}`
-        );
+        let datasOfClickedDate = [];
+        async function getData() {
+          try {
+            const res = await fetch(
+              `/users/${username}/transactions?date=${year}-${month}-${date}`
+            );
+            datasOfClickedDate = await res.json();
+          } catch (error) {
+            alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
+          }
+        }
+        getData();
 
-        const filteredData = res.json();*/
-
-        const filteredData = datas.filter((data) => {
+        /*const filteredData = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
             dataDate.getFullYear() == year &&
             dataDate.getMonth() == month &&
             dataDate.getDate() == date
           );
-        });
+        });*/
 
         // 선택된 날짜 배경색 바꾸기
         const dateNodes = [...document.querySelectorAll(".date")];
@@ -266,7 +280,7 @@
         const transactions = document.querySelector(".transactions");
         transactions.innerHTML = "";
 
-        for (data of filteredData) {
+        datasOfClickedDate.forEach((data) => {
           const transactionDiv = document.createElement("div");
           transactionDiv.classList.add("transaction-div");
 
@@ -315,7 +329,7 @@
           div.append(memo);
           transactionDiv.append(div);
           transactionDiv.append(money);
-        }
+        });
       }
 
       // --- 달력 동적 생성 ---
@@ -392,12 +406,57 @@
       // --- 일별 지출/수입 금액을 합산하여 달력에 표시 ---
       function renderDailyTotalData() {
         const dateNodes = [...document.querySelectorAll(".date")];
+        let dailtData = [];
+        dateNodes.forEach((dateNode, i) => {
+          async function getData() {
+            const res = await fetch(
+              `/users/${username}/transactions?date=${year}-${month}-${i + 1}`
+            );
+            dailyData = await res.json();
+          }
+          getData();
+          // 임의로 작성한 데이터
+          /*let datas = [
+            {
+              division: "expense",
+              money: "1000",
+              date: "2024-02-24",
+              category: "food",
+              memo: "편의점",
+            },
+            {
+              division: "expense",
+              money: "18000",
+              date: "2024-02-25",
+              category: "culture",
+            },
+            {
+              division: "income",
+              money: "10000",
+              date: "2024-02-25",
+              category: "additional",
+              memo: "당근마켓",
+            },
+            {
+              division: "expense",
+              money: "13000",
+              date: "2024-02-22",
+              category: "food",
+              memo: "배달의 민족",
+            },
+            {
+              division: "expense",
+              money: "45000",
+              date: "2024-02-22",
+              category: "shopping",
+              memo: "러쉬 샤워젤리",
+            },
+          ];
 
-        for (let i = 0; i < dateNodes.length; i++) {
           const dailyData = datas.filter((data) => {
             const dataDate = new Date(data.date);
             return dataDate.getMonth() == month && dataDate.getDate() == i + 1;
-          });
+          });*/
 
           let totalExpense = 0;
           let totalIncome = 0;
@@ -421,7 +480,7 @@
             dailyExpenseElement.classList.add("daily-expense");
             dateNodes[i].appendChild(dailyExpenseElement);
           }
-        }
+        });
       }
 
       // --- 달력의 날짜 칸마다 이벤트 등록 ---

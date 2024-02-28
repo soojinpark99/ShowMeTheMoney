@@ -19,39 +19,199 @@
       padding: 15px;
       background-color: #fafaf9;
     }
+
+    .uturn-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .uturn-btn:hover {
+      background-color: #e6e6e6;
+    }
+
+    .form {
+      width: 350px;
+      margin: 40px auto;
+    }
+
+    .form > div {
+      margin: 10px;
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .division,
+    .money,
+    .date,
+    .category,
+    .memo {
+      width: 250px;
+      height: 50px;
+      font-size: 16px;
+    }
+
+    .division {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .money,
+    .date,
+    .category,
+    .memo {
+      height: 30px;
+      padding: 3px;
+      border: 2px solid #c9cacb;
+      border-width: 0 0 2px;
+      background-color: transparent;
+    }
+
+    .division > label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 90px;
+      height: 40px;
+      border: 1.5px solid #c9cacb;
+      cursor: pointer;
+    }
+
+    .money {
+      font-size: 22px;
+    }
+
+    .income.category {
+      display: none;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input:checked + label {
+      background-color: #c9cacb;
+    }
+
+    input::-webkit-inner-spin-button {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 50px;
+      background-color: #c9cacb;
+      color: black;
+      border: none;
+      font-size: 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
+    }
   </style>
   <body>
     <div class="layout">
-      <a href="./main.html">돌아가기</a>
+      <a class="uturn-btn" th:href="@{/main/username/{username}}">✕</a>
       <form class="form">
-        <div class="division">
-          <input type="radio" name="division" value="expense" />지출
-          <input type="radio" name="division" value="income" />수입
+        <div>
+          분류
+          <div class="division">
+            <input
+              type="radio"
+              name="division"
+              value="expense"
+              id="expense"
+              checked="checked"
+            />
+            <label for="expense">지출</label>
+            <input type="radio" name="division" value="income" id="income" />
+            <label for="income">수입</label>
+          </div>
         </div>
-        <div class="money">금액<input type="number" name="money" />원</div>
-        <div class="date">
+        <div>
+          금액
+          <input class="money" type="number" name="money" />
+        </div>
+        <div>
           날짜
-          <input type="date" name="date" />
+          <input class="date" type="date" name="date" />
         </div>
-        <div class="category">
-          <p>카테고리</p>
-          <input type="radio" name="category" value="food" />식비
-          <input type="radio" name="category" value="transportation" />교통비
-          <input type="radio" name="category" value="dues" />공과금
-          <input type="radio" name="category" value="medical" />의료비
-          <input type="radio" name="category" value="culture" />문화생활
-          <input type="radio" name="category" value="shopping" />쇼핑
+        <div>
+          카테고리
+          <select class="expense category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
+            <option value="food">식비</option>
+            <option value="cafe">카페</option>
+            <option value="mart">마트/생필품</option>
+            <option value="culture">문화생활</option>
+            <option value="medical">의료비</option>
+            <option value="dues">공과금</option>
+            <option value="transportation">교통비</option>
+            <option value="communication">통신비</option>
+            <option value="subscription">구독료</option>
+            <option value="hobby">취미</option>
+            <option value="shopping">쇼핑</option>
+            <option value="beauty">미용</option>
+            <option value="gift">경조사/선물</option>
+            <option value="travel">여행</option>
+            <option value="etc">기타</option>
+          </select>
+          <select class="income category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
+            <option value="salary">급여</option>
+            <option value="additional">부수입</option>
+            <option value="allowance">용돈</option>
+            <option value="etc">기타</option>
+          </select>
         </div>
-        <div class="memo">
-          메모<input name="memo" placeholder="메모를 입력하세요." />
+        <div>
+          내용
+          <input
+            class="memo"
+            name="memo"
+            autocomplete="off"
+            placeholder="내용을 입력하세요."
+          />
         </div>
         <button class="submit-btn" type="submit">저장</button>
       </form>
     </div>
     <script>
-      document.querySelector(".date > input").value = new Date()
+      document.querySelector(".date").value = new Date()
         .toISOString()
         .substring(0, 10);
+
+      const division = document.querySelector(".division");
+      const incomeCategory = document.querySelector(".income.category");
+      const expenseCategory = document.querySelector(".expense.category");
+
+      division.addEventListener("click", (event) => {
+        if (event.target.value === "income") {
+          incomeCategory.style.display = "block";
+          expenseCategory.style.display = "none";
+        } else {
+          incomeCategory.style.display = "none";
+          expenseCategory.style.display = "block";
+        }
+      });
 
       const form = document.querySelector(".form");
 
@@ -62,18 +222,21 @@
         for (let [name, value] of formData) {
           console.log(`${name} = ${value}`);
         }
-        /* try {
-          const res = await fetch("/items", {
+
+        const host = window.location.host;
+        const pathname = window.location.pathname.split("/");
+        const username = pathname[pathname.length - 1];
+
+        try {
+          const res = await fetch(`${host}/username/${username}`, {
             method: "POST",
             body: formData,
           });
           const data = await res.json();
-          if (data === "200") window.location.pathname = "/";
-        } catch(error) {
+          if (data === "200") window.location.pathname = "/write";
+        } catch (error) {
           console.log(error);
         }
-        
-        */
       }
 
       form.addEventListener("submit", handleSubmitForm);

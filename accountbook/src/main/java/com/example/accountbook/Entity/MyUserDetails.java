@@ -1,12 +1,18 @@
 package com.example.accountbook.Entity;
 
+import jakarta.persistence.Entity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Component
 public class MyUserDetails implements UserDetails {
+
     private UserEntity userEntity;
     public MyUserDetails(UserEntity userEntity) {this.userEntity=userEntity;}
 

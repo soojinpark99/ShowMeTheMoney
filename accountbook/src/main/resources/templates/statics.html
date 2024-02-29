@@ -311,6 +311,8 @@
 
         // 범례 생성
         let i = 0;
+        const legend = document.querySelector(".legend");
+        legend.innerHTML = "";
         for (const key in sortedData) {
           const legendItem = document.createElement("div");
           const leftDiv = document.createElement("div");
@@ -332,7 +334,6 @@
           percent.classList.add("percent");
           total.classList.add("total");
 
-          const legend = document.querySelector(".legend");
           legend.appendChild(legendItem);
           leftDiv.appendChild(indexColor);
           leftDiv.appendChild(category);

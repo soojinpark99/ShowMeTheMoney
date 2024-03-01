@@ -1,5 +1,6 @@
-package com.example.accountbook.Entity;
+package com.example.accountbook.Service;
 
+import com.example.accountbook.Entity.UserEntity;
 import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -65,8 +65,8 @@ public class CalendarService {
        //total[0] = incometotal, total[1]=expensetotal
         int[] total = {0,0};
         for(Calendar cal : calendars) {
-            if(division.equals("income")) total[0]+=cal.getMoney();
-            else if(division.equals("expense")) total[1]+=cal.getMoney();
+            if(cal.getDivision().equals("income")) total[0]+=cal.getMoney();
+            else if(cal.getDivision().equals("expense")) total[1]+=cal.getMoney();
             else throw new IllegalArgumentException("요청이 유효하지 않습니다.");
         }
         return total;

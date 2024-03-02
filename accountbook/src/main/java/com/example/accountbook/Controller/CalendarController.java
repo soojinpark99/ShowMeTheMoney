@@ -23,8 +23,8 @@ public class CalendarController {
     }
 
     @PostMapping("/users/{username}/transactions")
-    public ResponseEntity<String> saveCalendar (@RequestBody Calendar calendar) {
-        calendarService.saveCal(calendar);
+    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
+        calendarService.saveCal(username, calendardto);
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
     }
@@ -37,6 +37,7 @@ public class CalendarController {
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
+    @ResponseBody
     public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable String username, Authentication au) {
         MyUserDetails userDetails = (MyUserDetails)au.getPrincipal();
         String currentUsername = userDetails.getUsername();
@@ -85,7 +86,8 @@ public class CalendarController {
         MyUserDetails userDetails = (MyUserDetails)au.getPrincipal();
         String currentUsername = userDetails.getUsername();
         if (!currentUsername.equals(username)) throw new IllegalArgumentException("접근 권한이 없습니다.");
-        return calendarService.categoryMonthlyTotal(username,year,month,division);
+        Map<String, Integer> categoryTotal = calendarService.categoryMonthlyTotal(username,year,month,division);
+        return categoryTotal;
     }
 }
 

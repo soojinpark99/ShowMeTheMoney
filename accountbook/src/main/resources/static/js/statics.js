@@ -36,6 +36,38 @@ const indexColorList = [
   "#DDD7D3",
 ];
 
+let month = new Date().getMonth();
+let year = new Date().getFullYear();
+
+function renderDate() {
+  const dateElement = document.querySelector(".date");
+  const prevBtn = document.querySelector(".prev.btn");
+  const nextBtn = document.querySelector(".next.btn");
+
+  dateElement.textContent = `${year}년 ${month + 1}월`;
+
+  prevBtn.addEventListener("click", () => {
+    month--;
+    if (month < 0) {
+      month = 11;
+      year--;
+    }
+    dateElement.textContent = `${year}년 ${month + 1}월`;
+    displayTotalAmount();
+    displayStatics();
+  });
+  nextBtn.addEventListener("click", () => {
+    month++;
+    if (month > 11) {
+      month = 0;
+      year++;
+    }
+    dateElement.textContent = `${year}년 ${month + 1}월`;
+    displayTotalAmount();
+    displayStatics();
+  });
+}
+
 // 임의로 작성한 데이터
 const totalData = {
   year: 2024,
@@ -54,24 +86,23 @@ function displayTotalAmount() {
   }
   // getData();
 
-  const expenseRadioElement = document.getElementById("expense").parentNode;
-  const incomeRadioElement = document.getElementById("income").parentNode;
+  const expenseLabelElement = document.querySelector(".expense-label");
+  const incomeLabelElement = document.querySelector(".income-label");
 
   expenseTotal = document.createTextNode(
-    `${totalData["expense-total"].toLocaleString()}원`
+    `지출 ${totalData["expense-total"].toLocaleString()}원`
   );
   incomeTotal = document.createTextNode(
-    `${totalData["income-total"].toLocaleString()}원`
+    `수입 ${totalData["income-total"].toLocaleString()}원`
   );
 
-  expenseRadioElement.appendChild(expenseTotal);
-  incomeRadioElement.appendChild(incomeTotal);
+  expenseLabelElement.replaceChild(expenseTotal, expenseLabelElement.lastChild);
+  incomeLabelElement.replaceChild(incomeTotal, incomeLabelElement.lastChild);
 }
 
 // 지출/수입 선택 따라 차트 생성
 function displayStatics() {
   // 지출/수입 중에 무엇을 선택했는지 확인
-
   const division = document.querySelector('input[type="radio"]:checked').value;
 
   const totalAmount =
@@ -195,10 +226,11 @@ function displayStatics() {
   }
 }
 
+renderDate();
 displayTotalAmount();
 displayStatics();
 
-const labels = document.querySelectorAll("label");
-labels.forEach((label) => {
-  label.addEventListener("click", displayStatics);
+const divisions = document.querySelectorAll("input[name='division']");
+divisions.forEach((division) => {
+  division.addEventListener("click", displayStatics);
 });

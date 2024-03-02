@@ -299,7 +299,11 @@ function renderDailyTotalData() {
 
     dailyData = datas.filter((data) => {
       const dataDate = new Date(data.date);
-      return dataDate.getMonth() == month && dataDate.getDate() == i + 1;
+      return (
+        dataDate.getFullYear() == year &&
+        dataDate.getMonth() == month &&
+        dataDate.getDate() == i + 1
+      );
     });
     // 임의로 작성한 데이터 !!!!!
 

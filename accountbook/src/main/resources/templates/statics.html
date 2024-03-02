@@ -10,22 +10,20 @@
     <div class="layout">
       <div class="date-header">
         <div class="prev btn">◀</div>
-        <h2 class="date">2024년 2월</h2>
+        <h2 class="date"></h2>
         <div class="next btn">▶</div>
       </div>
       <div class="division">
-        <label for="expense">
-          <input
-            type="radio"
-            name="division"
-            value="expense"
-            id="expense"
-            checked="checked"
-          />지출
-        </label>
-        <label for="income">
-          <input type="radio" name="division" value="income" id="income" />수입
-        </label>
+        <input
+          type="radio"
+          name="division"
+          value="expense"
+          id="expense"
+          checked="checked"
+        />
+        <label for="expense" class="expense-label">지출</label>
+        <input type="radio" name="division" value="income" id="income" />
+        <label for="income" class="income-label">수입</label>
       </div>
       <canvas id="myChart"></canvas>
       <div class="total-amount_div">

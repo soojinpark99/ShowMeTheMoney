@@ -1,13 +1,20 @@
 package com.example.accountbook.Controller;
 
-import com.example.accountbook.Entity.JoinDTO;
+import com.example.accountbook.DAO.JoinDTO;
 import com.example.accountbook.Service.JoinService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
 public class JoinController {
     @Autowired
     private JoinService joinService;
@@ -20,4 +27,14 @@ public class JoinController {
         joinService.joinProcess(joinDTO);
         return "redirect:/login";
     }
+
+    //중복 회원인지 아닌지 보내줌
+    @PostMapping("blah")
+    @ResponseBody
+    public Map<String,Boolean> DuplicateCheck(String username) {
+        Map<String,Boolean> res = new HashMap<>();
+        res.put("duplicate",joinService.isDuplicateUsername(username));
+        return res;
+    }
 }
+

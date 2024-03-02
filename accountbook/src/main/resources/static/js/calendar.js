@@ -15,12 +15,12 @@ async function getUsername() {
 // getUsername();
 
 // !!!!! 임의로 작성한 데이터
-const totalData = {
-  year: 2024,
-  month: 3,
-  "expense-total": 1001486,
-  "income-total": 2547000,
-};
+// const totalData = {
+//   year: 2024,
+//   month: 3,
+//   "expense-total": 1001486,
+//   "income-total": 2547000,
+// };
 // 임의로 작성한 데이터 !!!!!
 
 function renderMonthlyTotalData() {
@@ -30,7 +30,7 @@ function renderMonthlyTotalData() {
     );
     const totalData = await res.json();
   }
-  // getData();
+  getData();
 
   const monthlyIncome = totalData["income-total"];
   const monthlyExpense = totalData["expense-total"];
@@ -60,64 +60,64 @@ function displayTransactions(year, month, date) {
       alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
     }
   }
-  // getData();
+  getData();
 
   // !!!!! 임의로 작성한 데이터
-  let datas = [
-    {
-      division: "expense",
-      money: "1000",
-      date: "2024-02-24",
-      category: "food",
-      memo: "편의점",
-    },
-    {
-      division: "expense",
-      money: "18000",
-      date: "2024-02-25",
-      category: "culture",
-    },
-    {
-      division: "income",
-      money: "10000",
-      date: "2024-02-25",
-      category: "additional",
-      memo: "당근마켓",
-    },
-    {
-      division: "expense",
-      money: "13000",
-      date: "2024-02-22",
-      category: "food",
-      memo: "배달의 민족",
-    },
-    {
-      division: "expense",
-      money: "45000",
-      date: "2024-02-22",
-      category: "shopping",
-      memo: "러쉬 샤워젤리",
-    },
-  ];
+  // let datas = [
+  //   {
+  //     division: "expense",
+  //     money: "1000",
+  //     date: "2024-02-24",
+  //     category: "food",
+  //     memo: "편의점",
+  //   },
+  //   {
+  //     division: "expense",
+  //     money: "18000",
+  //     date: "2024-02-25",
+  //     category: "culture",
+  //   },
+  //   {
+  //     division: "income",
+  //     money: "10000",
+  //     date: "2024-02-25",
+  //     category: "additional",
+  //     memo: "당근마켓",
+  //   },
+  //   {
+  //     division: "expense",
+  //     money: "13000",
+  //     date: "2024-02-22",
+  //     category: "food",
+  //     memo: "배달의 민족",
+  //   },
+  //   {
+  //     division: "expense",
+  //     money: "45000",
+  //     date: "2024-02-22",
+  //     category: "shopping",
+  //     memo: "러쉬 샤워젤리",
+  //   },
+  // ];
 
-  datasOfClickedDate = datas.filter((data) => {
-    const dataDate = new Date(data.date);
-    return (
-      dataDate.getFullYear() == year &&
-      dataDate.getMonth() == month &&
-      dataDate.getDate() == date
-    );
-  });
+  // datasOfClickedDate = datas.filter((data) => {
+  //   const dataDate = new Date(data.date);
+  //   return (
+  //     dataDate.getFullYear() == year &&
+  //     dataDate.getMonth() == month &&
+  //     dataDate.getDate() == date
+  //   );
+  // });
   // 임의로 작성한 데이터 !!!!!
 
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
-  for (dateNode of dateNodes) {
+  dateNodes.forEach((dateNode) => {
     dateNode.classList.remove("selected-date");
     if (dateNode.dataset.date == date) {
       dateNode.classList.add("selected-date");
     }
-  }
+  });
 
   // 거래 내역 동적 생성
   const transactions = document.querySelector(".transactions");
@@ -257,54 +257,54 @@ function renderDailyTotalData() {
       );
       dailyData = await res.json();
     }
-    // getData();
+    getData();
 
     // !!!!! 임의로 작성한 데이터
-    let datas = [
-      {
-        division: "expense",
-        money: "1000",
-        date: "2024-02-24",
-        category: "food",
-        memo: "편의점",
-      },
-      {
-        division: "expense",
-        money: "18000",
-        date: "2024-02-25",
-        category: "culture",
-      },
-      {
-        division: "income",
-        money: "10000",
-        date: "2024-02-25",
-        category: "additional",
-        memo: "당근마켓",
-      },
-      {
-        division: "expense",
-        money: "13000",
-        date: "2024-02-22",
-        category: "food",
-        memo: "배달의 민족",
-      },
-      {
-        division: "expense",
-        money: "45000",
-        date: "2024-02-22",
-        category: "shopping",
-        memo: "러쉬 샤워젤리",
-      },
-    ];
+    // let datas = [
+    //   {
+    //     division: "expense",
+    //     money: "1000",
+    //     date: "2024-02-24",
+    //     category: "food",
+    //     memo: "편의점",
+    //   },
+    //   {
+    //     division: "expense",
+    //     money: "18000",
+    //     date: "2024-02-25",
+    //     category: "culture",
+    //   },
+    //   {
+    //     division: "income",
+    //     money: "10000",
+    //     date: "2024-02-25",
+    //     category: "additional",
+    //     memo: "당근마켓",
+    //   },
+    //   {
+    //     division: "expense",
+    //     money: "13000",
+    //     date: "2024-02-22",
+    //     category: "food",
+    //     memo: "배달의 민족",
+    //   },
+    //   {
+    //     division: "expense",
+    //     money: "45000",
+    //     date: "2024-02-22",
+    //     category: "shopping",
+    //     memo: "러쉬 샤워젤리",
+    //   },
+    // ];
 
-    dailyData = datas.filter((data) => {
-      const dataDate = new Date(data.date);
-      return (
-        dataDate.getFullYear() == year &&
-        dataDate.getMonth() == month &&
-        dataDate.getDate() == i + 1
-      );
-    });
+    // dailyData = datas.filter((data) => {
+    //   const dataDate = new Date(data.date);
+    //   return (
+    //     dataDate.getFullYear() == year &&
+    //     dataDate.getMonth() == month &&
+    //     dataDate.getDate() == i + 1
+    //   );
+    // });
     // 임의로 작성한 데이터 !!!!!
 
     let totalExpense = 0;

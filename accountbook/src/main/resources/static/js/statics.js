@@ -69,12 +69,12 @@ function renderDate() {
 }
 
 // 임의로 작성한 데이터
-const totalData = {
-  year: 2024,
-  month: 2,
-  "expense-total": 1001486,
-  "income-total": 2547000,
-};
+// const totalData = {
+//   year: 2024,
+//   month: 2,
+//   "expense-total": 1001486,
+//   "income-total": 2547000,
+// };
 
 // 지출/수입 총액 input label에 추가하기
 function displayTotalAmount() {
@@ -84,7 +84,7 @@ function displayTotalAmount() {
     );
     const totalData = await res.json();
   }
-  // getData();
+  getData();
 
   const expenseLabelElement = document.querySelector(".expense-label");
   const incomeLabelElement = document.querySelector(".income-label");
@@ -110,7 +110,7 @@ function displayStatics() {
       ? totalData["expense-total"]
       : totalData["income-total"];
 
-  // let data = {};
+  let data = {};
   // 해당 연도, 달의 지출 or 수입 데이터 불러오기
   async function getData(division) {
     const res = await fetch(
@@ -118,28 +118,28 @@ function displayStatics() {
     );
     data = res.json();
   }
-  // getData();
+  getData();
 
   // !!!!! 임의로 작성한 데이터
-  const data = {
-    year: 2024,
-    month: 2,
-    food: 523800,
-    cafe: 41500,
-    mart: 21980,
-    culture: 31000,
-    medical: 5000,
-    dues: 40230,
-    transportation: 63250,
-    communication: 33000,
-    subscription: 17900,
-    hobby: 59900,
-    shopping: 89900,
-    beauty: 22000,
-    gift: 50000,
-    travel: 0,
-    etc: 0,
-  };
+  // data = {
+  //   year: 2024,
+  //   month: 2,
+  //   food: 523800,
+  //   cafe: 41500,
+  //   mart: 21980,
+  //   culture: 31000,
+  //   medical: 5000,
+  //   dues: 40230,
+  //   transportation: 63250,
+  //   communication: 33000,
+  //   subscription: 17900,
+  //   hobby: 59900,
+  //   shopping: 89900,
+  //   beauty: 22000,
+  //   gift: 50000,
+  //   travel: 0,
+  //   etc: 0,
+  // };
   // 임의로 작성한 데이터 !!!!!
 
   // 카테고리별 총액 데이터만 남김

@@ -1,6 +1,5 @@
 package com.example.accountbook.Service;
 
-import com.example.accountbook.Entity.MyUserDetails;
 import com.example.accountbook.Entity.UserEntity;
 import com.example.accountbook.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

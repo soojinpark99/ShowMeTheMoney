@@ -1,28 +1,97 @@
 package com.example.accountbook.Service;
 
+import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
-import com.example.accountbook.Repository.CalendarRepository;
+import com.example.accountbook.Exception.NotFoundException;
+import com.example.accountbook.DAO.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
 
 @Service
+@Transactional
+
 public class CalendarService {
+    private final CalendarRepository calendarRepository;
+
     @Autowired
-    private CalendarRepository calendarRepository;
+    public CalendarService(CalendarRepository calendarRepository) {
+        this.calendarRepository = calendarRepository;
+    }
+
     // #CREATE #UPDATE 내역 저장, 내역 변경
-    public void saveCalendar(Calendar calendar) {
+    public void saveCal(Calendar calendar) {
         calendarRepository.save(calendar);
     }
+
     // #READ 내역 조회
-    public Calendar calendarView(int calid) {return calendarRepository.findById(calid).get();}
-
-
+    public Calendar viewCal(int calid) {
+        return calendarRepository.findById(calid)
+                .orElseThrow(() -> new NotFoundException("해당하는 내역을 찾을 수 없습니다. " + calid));
+    }
     // #DELETE 내역 삭제
-    public void deleteCalendar(int calid) {calendarRepository.deleteById(calid);}
-
-    int sum=0;
-    public void SumHistory(int history) {
-        sum+=history;
+    public void deleteCal(int calid) {
+        calendarRepository.deleteById(calid);
     }
 
-}
+    public List<CalendarDTO> getUsersAllCal(String username) {
+        List<Calendar> beforeDTO = calendarRepository.findByUsername(username);
+        List<CalendarDTO> afterDTO = new ArrayList<>();
+        for (Calendar cal : beforeDTO) {
+            afterDTO.add(toDTO(cal));
+        }
+        //id 역순(최신순)정렬
+        Collections.sort(afterDTO, Comparator.comparingInt(CalendarDTO::getId).reversed());
+        return afterDTO;
+    }
+
+    //엔티티를 DTO로 변환
+    public CalendarDTO toDTO(Calendar calendar) {
+        CalendarDTO dto = new CalendarDTO();
+        dto.setId(calendar.getCalid());
+        dto.setDate(String.format("%d-%d-%d",calendar.getYear(), calendar.getMonth(), calendar.getDay()));
+        dto.setDivision(calendar.getDivision());
+        dto.setMoney(calendar.getMoney());
+        dto.setCategory(calendar.getCategory());
+        dto.setMemo(calendar.getMemo());
+        return dto;
+    }
+
+
+    //월별 총수입 or 총지출
+    public int monthlyTotal(String username, int year, int month, String type) {
+        List<Calendar> calendars = calendarRepository.findByUsernameAndYearAndMonth(username,year,month);
+
+        int total=0;
+        for(Calendar cal : calendars) {
+            if(type.equals("income")) total+=cal.getIncome();
+            else if(type.equals("expense")) total+=cal.getExpense();
+            else throw new IllegalArgumentException("요청이 유효하지 않습니다.");
+        }
+        return total;
+
+        //각각의 카테고리당 월별 지출/수입 합계
+        private JdbcTemplate jdbcTemplate;
+        public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
+
+            String sql = "SELECT category,SUM (money) AS each_category_total FROM calendar" +
+                    " WHERE username = ? AND division = ? GROUP BY category";
+
+            List<CalendarDTO> afterGroupBy = jdbcTemplate.query(sql, (rs, rowNum) -> {
+                        CalendarDTO dto = new CalendarDTO();
+                        dto.setCategory(rs.getString("category"));
+                        dto.setMoney(rs.getInt("each_category_total"));
+                        return dto;
+                        }, username, division);
+
+            Map<String, Integer> categoryTotal = new HashMap<>();
+            categoryTotal.put("year",year);
+            categoryTotal.put("month",month);
+            for (CalendarDTO dto : afterGroupBy) {
+                categoryTotal.put(dto.getCategory(), dto.getMoney());
+            }
+            return categoryTotal;
+        }
+    }

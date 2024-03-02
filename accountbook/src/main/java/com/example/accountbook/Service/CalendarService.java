@@ -17,8 +17,8 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
 
     @Autowired
-    public CalendarService(CalendarRepository calendarRepository) {
-        this.calendarRepository = calendarRepository;
+    public CalendarService(CalendarRepository calendarRepository)
+            {this.calendarRepository = calendarRepository;
     }
 
     // #CREATE #UPDATE 내역 저장, 내역 변경
@@ -30,6 +30,7 @@ public class CalendarService {
         return calendarRepository.findById(calid)
                 .orElseThrow(() -> new NotFoundException("해당하는 내역을 찾을 수 없습니다. " + calid));
     }
+
     // #DELETE 내역 삭제
     public void deleteCal(int calid) {
         calendarRepository.deleteById(calid);
@@ -93,6 +94,19 @@ public class CalendarService {
             categoryTotal.put(dto.getCategory(), dto.getMoney());
         }
         return categoryTotal;
+    }
+
+    //저장
+    public void saveCal(String username, CalendarDTO calendarDTO) {
+        Calendar calendar = new Calendar();
+        calendar.setUsername(username);
+        calendar.setDay(calendar.getDay());
+        calendar.setDivision(calendar.getDivision());
+        calendar.setMoney(calendarDTO.getMoney());
+        calendar.setCategory(calendarDTO.getCategory());
+        calendar.setMemo(calendar.getMemo());
+
+        calendarRepository.save(calendar);
     }
 }
 

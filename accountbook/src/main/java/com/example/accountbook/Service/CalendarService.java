@@ -2,7 +2,6 @@ package com.example.accountbook.Service;
 
 import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
-import com.example.accountbook.Exception.NotFoundException;
 import com.example.accountbook.DAO.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,19 +16,30 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
 
     @Autowired
-    public CalendarService(CalendarRepository calendarRepository) {
-        this.calendarRepository = calendarRepository;
+    public CalendarService(CalendarRepository calendarRepository)
+            {this.calendarRepository = calendarRepository;
     }
 
     // #CREATE #UPDATE 내역 저장, 내역 변경
-    public void saveCal(Calendar calendar) {
+    //저장 수정
+    public void saveCal(String username, CalendarDTO calendarDTO) {
+        Calendar calendar = new Calendar();
+        calendar.setUsername(username);
+        calendar.setDay(calendar.getDay());
+        calendar.setDivision(calendar.getDivision());
+        calendar.setMoney(calendarDTO.getMoney());
+        calendar.setCategory(calendarDTO.getCategory());
+        calendar.setMemo(calendar.getMemo());
+
         calendarRepository.save(calendar);
     }
+
     // #READ 내역 조회
     public Calendar viewCal(int calid) {
         return calendarRepository.findById(calid)
-                .orElseThrow(() -> new NotFoundException("해당하는 내역을 찾을 수 없습니다. " + calid));
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));
     }
+
     // #DELETE 내역 삭제
     public void deleteCal(int calid) {
         calendarRepository.deleteById(calid);
@@ -65,8 +75,8 @@ public class CalendarService {
        //total[0] = incometotal, total[1]=expensetotal
         int[] total = {0,0};
         for(Calendar cal : calendars) {
-            if(division.equals("income")) total[0]+=cal.getMoney();
-            else if(division.equals("expense")) total[1]+=cal.getMoney();
+            if(cal.getDivision().equals("income")) total[0]+=cal.getMoney();
+            else if(cal.getDivision().equals("expense")) total[1]+=cal.getMoney();
             else throw new IllegalArgumentException("요청이 유효하지 않습니다.");
         }
         return total;
@@ -94,5 +104,6 @@ public class CalendarService {
         }
         return categoryTotal;
     }
+
 }
 

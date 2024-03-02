@@ -3,7 +3,6 @@ package com.example.accountbook.Controller;
 import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Service.MyUserDetails;
-import com.example.accountbook.Exception.UnauthorizedException;
 import com.example.accountbook.Service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,8 @@ public class CalendarController {
     }
 
     @PostMapping("/users/{username}/transactions")
-    public ResponseEntity<String> saveCalendar (@RequestBody Calendar calendar) {
-        calendarService.saveCal(calendar);
+    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
+        calendarService.saveCal(username, calendardto);
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
     }
@@ -44,7 +43,7 @@ public class CalendarController {
         String currentUsername = userDetails.getUsername();
         //url의 username과 현재 로그인한 username이 다르면 예외처리
         if (!currentUsername.equals(username)) {
-            throw new UnauthorizedException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
         List<CalendarDTO> caldto = calendarService.getUsersAllCal(username);
@@ -63,7 +62,7 @@ public class CalendarController {
         String currentUsername = userDetails.getUsername();
         //url의 username과 현재 로그인한 username이 다르면 예외처리
         if (!currentUsername.equals(username)) {
-            throw new UnauthorizedException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
         int[] total = calendarService.monthlyTotal(username,year,month,division);
 
@@ -86,7 +85,7 @@ public class CalendarController {
                                                      Authentication au) {
         MyUserDetails userDetails = (MyUserDetails)au.getPrincipal();
         String currentUsername = userDetails.getUsername();
-        if (!currentUsername.equals(username)) throw new UnauthorizedException("접근 권한이 없습니다.");
+        if (!currentUsername.equals(username)) throw new IllegalArgumentException("접근 권한이 없습니다.");
         Map<String, Integer> categoryTotal = calendarService.categoryMonthlyTotal(username,year,month,division);
         return categoryTotal;
     }

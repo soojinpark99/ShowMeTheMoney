@@ -48,6 +48,20 @@ function renderMonthlyTotalData() {
 
 // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
 function displayTransactions(year, month, date) {
+  // 특정 날짜의 거래 내역 데이터 불러오기
+  let datasOfClickedDate = [];
+  async function getData() {
+    try {
+      const res = await fetch(
+        `/users/${username}/transactions?date=${year}-${month}-${date}`
+      );
+      datasOfClickedDate = await res.json();
+    } catch (error) {
+      alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
+    }
+  }
+  // getData();
+
   // !!!!! 임의로 작성한 데이터
   let datas = [
     {
@@ -86,7 +100,7 @@ function displayTransactions(year, month, date) {
     },
   ];
 
-  const datasOfClickedDate = datas.filter((data) => {
+  datasOfClickedDate = datas.filter((data) => {
     const dataDate = new Date(data.date);
     return (
       dataDate.getFullYear() == year &&
@@ -95,19 +109,6 @@ function displayTransactions(year, month, date) {
     );
   });
   // 임의로 작성한 데이터 !!!!!
-
-  // 특정 날짜의 거래 내역 데이터 불러오기
-  async function getData() {
-    try {
-      const res = await fetch(
-        `/users/${username}/transactions?date=${year}-${month}-${date}`
-      );
-      const datasOfClickedDate = await res.json();
-    } catch (error) {
-      alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
-    }
-  }
-  // getData();
 
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
@@ -248,7 +249,7 @@ function displayTransactionsOfToday() {
 // --- 일별 지출/수입 금액을 합산하여 달력에 표시 ---
 function renderDailyTotalData() {
   const dateNodes = [...document.querySelectorAll(".date")];
-  let dailtData = [];
+  let dailyData = [];
   dateNodes.forEach((dateNode, i) => {
     async function getData() {
       const res = await fetch(
@@ -296,7 +297,7 @@ function renderDailyTotalData() {
       },
     ];
 
-    const dailyData = datas.filter((data) => {
+    dailyData = datas.filter((data) => {
       const dataDate = new Date(data.date);
       return dataDate.getMonth() == month && dataDate.getDate() == i + 1;
     });

@@ -55,21 +55,23 @@ function displayTotalAmount() {
   // getData();
 
   const expenseRadioElement = document.getElementById("expense").parentNode;
+  const incomeRadioElement = document.getElementById("income").parentNode;
+
   expenseTotal = document.createTextNode(
     `${totalData["expense-total"].toLocaleString()}원`
   );
-  expenseRadioElement.appendChild(expenseTotal);
-
-  const incomeRadioElement = document.getElementById("income").parentNode;
   incomeTotal = document.createTextNode(
     `${totalData["income-total"].toLocaleString()}원`
   );
+
+  expenseRadioElement.appendChild(expenseTotal);
   incomeRadioElement.appendChild(incomeTotal);
 }
 
 // 지출/수입 선택 따라 차트 생성
 function displayStatics() {
   // 지출/수입 중에 무엇을 선택했는지 확인
+
   const division = document.querySelector('input[type="radio"]:checked').value;
 
   const totalAmount =
@@ -77,8 +79,17 @@ function displayStatics() {
       ? totalData["expense-total"]
       : totalData["income-total"];
 
+  // let data = {};
   // 해당 연도, 달의 지출 or 수입 데이터 불러오기
-  // 임의로 작성한 데이터
+  async function getData(division) {
+    const res = await fetch(
+      `/users/${username}/statics/category/${division}?year=${year}&month=${month}`
+    );
+    data = res.json();
+  }
+  // getData();
+
+  // !!!!! 임의로 작성한 데이터
   const data = {
     year: 2024,
     month: 2,
@@ -98,6 +109,7 @@ function displayStatics() {
     travel: 0,
     etc: 0,
   };
+  // 임의로 작성한 데이터 !!!!!
 
   // 카테고리별 총액 데이터만 남김
   delete data.year;

@@ -203,12 +203,43 @@
         const json = await res.json();
         username = json.username;
       }
-      getUsername();
+      // getUsername();
+
+      // !!!!! 임의로 작성한 데이터
+      const totalData = {
+        year: 2024,
+        month: 3,
+        "expense-total": 1001486,
+        "income-total": 2547000,
+      };
+      // 임의로 작성한 데이터 !!!!!
+
+      function renderMonthlyTotalData() {
+
+        function getData() {
+          const res = await fetch(`/users/${username}/statics/total?year=${year}&month=${month}`)
+          const totalData = await res.json();
+        }
+        // getData();
+
+        const monthlyIncome = totalData["income-total"];
+        const monthlyExpense = totalData["expense-total"];
+
+        const monthlyIncomeElement = document.querySelector(".income");
+        const monthlyExpenseElement = document.querySelector(".expense");
+        const monthlyTotalEmement = document.querySelector(".total");
+
+        monthlyIncomeElement.textContent = `+${monthlyIncome.toLocaleString()}원`;
+        monthlyExpenseElement.textContent = `-${monthlyExpense.toLocaleString()}원`;
+        monthlyTotalEmement.textContent = `${(
+          monthlyIncome - monthlyExpense
+        ).toLocaleString()}원`;
+      }
 
       // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
       function displayTransactions(year, month, date) {
-        // 임의로 작성한 데이터
-        /*let datasOfClickedDate = [
+        // !!!!! 임의로 작성한 데이터
+        let datas = [
           {
             division: "expense",
             money: "1000",
@@ -243,29 +274,30 @@
             category: "shopping",
             memo: "러쉬 샤워젤리",
           },
-        ];*/
-        // 특정 날짜의 거래 내역 데이터 불러오기
-        let datasOfClickedDate = [];
-        async function getData() {
-          try {
-            const res = await fetch(
-              `/users/${username}/transactions?date=${year}-${month}-${date}`
-            );
-            datasOfClickedDate = await res.json();
-          } catch (error) {
-            alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
-          }
-        }
-        getData();
+        ];
 
-        /*const filteredData = datas.filter((data) => {
+        const datasOfClickedDate = datas.filter((data) => {
           const dataDate = new Date(data.date);
           return (
             dataDate.getFullYear() == year &&
             dataDate.getMonth() == month &&
             dataDate.getDate() == date
           );
-        });*/
+        });
+        // 임의로 작성한 데이터 !!!!!
+
+        // 특정 날짜의 거래 내역 데이터 불러오기
+        async function getData() {
+          try {
+            const res = await fetch(
+              `/users/${username}/transactions?date=${year}-${month}-${date}`
+            );
+            const datasOfClickedDate = await res.json();
+          } catch (error) {
+            alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
+          }
+        }
+        // getData();
 
         // 선택된 날짜 배경색 바꾸기
         const dateNodes = [...document.querySelectorAll(".date")];
@@ -414,9 +446,10 @@
             );
             dailyData = await res.json();
           }
-          getData();
-          // 임의로 작성한 데이터
-          /*let datas = [
+          // getData();
+
+          // !!!!! 임의로 작성한 데이터
+          let datas = [
             {
               division: "expense",
               money: "1000",
@@ -456,17 +489,19 @@
           const dailyData = datas.filter((data) => {
             const dataDate = new Date(data.date);
             return dataDate.getMonth() == month && dataDate.getDate() == i + 1;
-          });*/
+          });
+          // 임의로 작성한 데이터 !!!!!
 
           let totalExpense = 0;
           let totalIncome = 0;
-          for (data of dailyData) {
+          dailyData.forEach((data) => {
             if (data.division === "expense") {
               totalExpense += +data.money;
             } else {
               totalIncome += +data.money;
             }
-          }
+          });
+
           if (totalIncome !== 0) {
             const dailyIncomeElement = document.createElement("div");
             dailyIncomeElement.textContent = "+" + totalIncome.toLocaleString();
@@ -501,6 +536,7 @@
       // 달력 페이지마다 실행할 함수
       function updateData() {
         displayTransactionsOfToday();
+        renderMonthlyTotalData();
         renderDailyTotalData();
         registerClickEvent(year, month);
       }

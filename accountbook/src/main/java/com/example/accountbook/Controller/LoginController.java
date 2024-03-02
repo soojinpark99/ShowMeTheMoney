@@ -34,7 +34,7 @@ public class LoginController {
         if (!username.equals(currentUsername)) {
             return "redirect:/error";
         }
-        return "main";
+        return "calendar";
     }
 
 

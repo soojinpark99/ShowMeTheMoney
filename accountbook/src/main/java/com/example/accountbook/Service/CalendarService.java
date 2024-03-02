@@ -22,9 +22,7 @@ public class CalendarService {
     }
 
     // #CREATE #UPDATE 내역 저장, 내역 변경
-    public void saveCal(Calendar calendar) {
-        calendarRepository.save(calendar);
-    }
+
     // #READ 내역 조회
     public Calendar viewCal(int calid) {
         return calendarRepository.findById(calid)

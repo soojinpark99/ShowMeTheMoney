@@ -3,7 +3,6 @@ package com.example.accountbook.Controller;
 import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Service.MyUserDetails;
-import com.example.accountbook.Exception.UnauthorizedException;
 import com.example.accountbook.Service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,13 +37,12 @@ public class CalendarController {
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
-    @ResponseBody
     public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable String username, Authentication au) {
         MyUserDetails userDetails = (MyUserDetails)au.getPrincipal();
         String currentUsername = userDetails.getUsername();
         //url의 username과 현재 로그인한 username이 다르면 예외처리
         if (!currentUsername.equals(username)) {
-            throw new UnauthorizedException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
         List<CalendarDTO> caldto = calendarService.getUsersAllCal(username);
@@ -63,7 +61,7 @@ public class CalendarController {
         String currentUsername = userDetails.getUsername();
         //url의 username과 현재 로그인한 username이 다르면 예외처리
         if (!currentUsername.equals(username)) {
-            throw new UnauthorizedException("접근 권한이 없습니다.");
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
         int[] total = calendarService.monthlyTotal(username,year,month,division);
 
@@ -86,9 +84,8 @@ public class CalendarController {
                                                      Authentication au) {
         MyUserDetails userDetails = (MyUserDetails)au.getPrincipal();
         String currentUsername = userDetails.getUsername();
-        if (!currentUsername.equals(username)) throw new UnauthorizedException("접근 권한이 없습니다.");
-        Map<String, Integer> categoryTotal = calendarService.categoryMonthlyTotal(username,year,month,division);
-        return categoryTotal;
+        if (!currentUsername.equals(username)) throw new IllegalArgumentException("접근 권한이 없습니다.");
+        return calendarService.categoryMonthlyTotal(username,year,month,division);
     }
 }
 

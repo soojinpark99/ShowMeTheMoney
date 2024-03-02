@@ -2,7 +2,6 @@ package com.example.accountbook.Service;
 
 import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
-import com.example.accountbook.Exception.NotFoundException;
 import com.example.accountbook.DAO.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +27,7 @@ public class CalendarService {
     // #READ 내역 조회
     public Calendar viewCal(int calid) {
         return calendarRepository.findById(calid)
-                .orElseThrow(() -> new NotFoundException("해당하는 내역을 찾을 수 없습니다. " + calid));
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));
     }
     // #DELETE 내역 삭제
     public void deleteCal(int calid) {

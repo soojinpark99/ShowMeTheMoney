@@ -1,5 +1,6 @@
 package com.example.accountbook.Controller;
 
+import com.example.accountbook.DAO.JoinDTO;
 import com.example.accountbook.Service.JoinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

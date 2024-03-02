@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 @Service
 @Transactional
-
 public class CalendarService {
     private final CalendarRepository calendarRepository;
 
@@ -25,7 +25,6 @@ public class CalendarService {
     public void saveCal(Calendar calendar) {
         calendarRepository.save(calendar);
     }
-
     // #READ 내역 조회
     public Calendar viewCal(int calid) {
         return calendarRepository.findById(calid)
@@ -36,6 +35,7 @@ public class CalendarService {
         calendarRepository.deleteById(calid);
     }
 
+    //사용자의 모든 내역을 dto로 변환후 list에 담아 list를 반환
     public List<CalendarDTO> getUsersAllCal(String username) {
         List<Calendar> beforeDTO = calendarRepository.findByUsername(username);
         List<CalendarDTO> afterDTO = new ArrayList<>();
@@ -59,39 +59,40 @@ public class CalendarService {
         return dto;
     }
 
-
     //월별 총수입 or 총지출
-    public int monthlyTotal(String username, int year, int month, String type) {
+    public int[] monthlyTotal(String username, int year, int month, String division) {
         List<Calendar> calendars = calendarRepository.findByUsernameAndYearAndMonth(username,year,month);
-
-        int total=0;
+       //total[0] = incometotal, total[1]=expensetotal
+        int[] total = {0,0};
         for(Calendar cal : calendars) {
-            if(type.equals("income")) total+=cal.getIncome();
-            else if(type.equals("expense")) total+=cal.getExpense();
+            if(cal.getDivision().equals("income")) total[0]+=cal.getMoney();
+            else if(cal.getDivision().equals("expense")) total[1]+=cal.getMoney();
             else throw new IllegalArgumentException("요청이 유효하지 않습니다.");
         }
         return total;
-
-        //각각의 카테고리당 월별 지출/수입 합계
-        private JdbcTemplate jdbcTemplate;
-        public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
-
-            String sql = "SELECT category,SUM (money) AS each_category_total FROM calendar" +
-                    " WHERE username = ? AND division = ? GROUP BY category";
-
-            List<CalendarDTO> afterGroupBy = jdbcTemplate.query(sql, (rs, rowNum) -> {
-                        CalendarDTO dto = new CalendarDTO();
-                        dto.setCategory(rs.getString("category"));
-                        dto.setMoney(rs.getInt("each_category_total"));
-                        return dto;
-                        }, username, division);
-
-            Map<String, Integer> categoryTotal = new HashMap<>();
-            categoryTotal.put("year",year);
-            categoryTotal.put("month",month);
-            for (CalendarDTO dto : afterGroupBy) {
-                categoryTotal.put(dto.getCategory(), dto.getMoney());
-            }
-            return categoryTotal;
-        }
     }
+
+    //각각의 카테고리당 월별 지출/수입 합계
+    private JdbcTemplate jdbcTemplate;
+    public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
+
+        String sql = "SELECT category,SUM(money) AS each_category_total FROM calendar" +
+                            " WHERE username =? AND division = ? GROUP BY category";
+
+        List<CalendarDTO> afterGroupBy = jdbcTemplate.query(sql, (rs, rowNum) -> {
+                    CalendarDTO dto = new CalendarDTO();
+                    dto.setCategory(rs.getString("category"));
+                    dto.setMoney(rs.getInt("total_money"));
+                    return dto;},
+                    username,division);
+
+        Map<String, Integer> categoryTotal = new HashMap<>();
+        categoryTotal.put("year",year);
+        categoryTotal.put("month",month);
+        for (CalendarDTO dto : afterGroupBy) {
+            categoryTotal.put(dto.getCategory(), dto.getMoney());
+        }
+        return categoryTotal;
+    }
+}
+

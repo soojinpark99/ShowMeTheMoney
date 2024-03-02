@@ -7,7 +7,7 @@
   </head>
   <style>
     :root {
-      --maincolor: #5fbb82;
+      --maincolor: #f3cdcc;
     }
 
     * {
@@ -55,6 +55,14 @@
       align-items: center;
     }
 
+    input[type="radio"] {
+      display: none;
+    }
+
+    input:checked + label {
+      background-color: var(--maincolor);
+    }
+
     .division,
     .money,
     .date,
@@ -95,18 +103,6 @@
 
     .money {
       font-size: 22px;
-    }
-
-    .income.category {
-      display: none;
-    }
-
-    input[type="radio"] {
-      display: none;
-    }
-
-    input:checked + label {
-      background-color: var(--maincolor);
     }
 
     input:focus,
@@ -150,15 +146,14 @@
         </div>
         <div>
           금액
-          <input class="money" type="text" name="money" />
+          <input class="money" type="text" name="money" autocomplete="off" />
         </div>
         <div>
           날짜
           <input class="date" type="date" name="date" />
         </div>
-        <div>
-          카테고리
-          <select class="expense category" name="category">
+        <div class="category-div">
+          카테고리<select class="category" name="category">
             <option value="" selected disabled hidden>선택하세요.</option>
             <option value="food">식비</option>
             <option value="cafe">카페</option>
@@ -176,13 +171,6 @@
             <option value="travel">여행</option>
             <option value="etc">기타</option>
           </select>
-          <select class="income category" name="category">
-            <option value="" selected disabled hidden>선택하세요.</option>
-            <option value="salary">급여</option>
-            <option value="additional">부수입</option>
-            <option value="allowance">용돈</option>
-            <option value="etc">기타</option>
-          </select>
         </div>
         <div>
           내용
@@ -197,80 +185,86 @@
       </form>
     </div>
     <script>
-           // --- 폼 기본 세팅 ---
-           function setDefault() {
-             // 날짜 입력칸의 기본값을 현재 날짜로 설정
-             document.querySelector(".date").value = new Date()
-               .toISOString()
-               .substring(0, 10);
+      // --- 지출/수입 선택 시 카테고리 내용 변경 ---
+      function displayCategory(event) {
+        const categoryDiv = document.querySelector(".category-div");
 
-             // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
-             const money = document.querySelector(".money");
-             money.addEventListener("input", (e) => {
-               const val = e.target.value.replace(/[^0-9]/g, "");
-               e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
-             });
+        if (event.target.value === "expense") {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="food">식비</option><option value="cafe">카페</option><option value="mart">마트/생필품</option><option value="culture">문화생활</option><option value="medical">의료비</option><option value="dues">공과금</option><option value="transportation">교통비</option><option value="communication">통신비</option><option value="subscription">구독료</option><option value="hobby">취미</option><option value="shopping">쇼핑</option><option value="beauty">미용</option><option value="gift">경조사/선물</option><option value="travel">여행</option><option value="etc">기타</option></select>';
+        } else {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="salary">급여</option><option value="additional">부수입</option><option value="allowance">용돈</option><option value="etc">기타</option></select>';
+        }
+      }
 
-             // 지출/수입 선택 시 카테고리 내용 변경
-             const division = document.querySelector(".division");
-             const incomeCategory = document.querySelector(".income.category");
-             const expenseCategory = document.querySelector(".expense.category");
+      // --- 날짜와 금액 입력칸 세팅 ---
+      function setDateAndMoney() {
+        // 날짜 입력칸의 기본값을 현재 날짜로 설정
+        document.querySelector(".date").value = new Date()
+          .toISOString()
+          .substring(0, 10);
 
-             division.addEventListener("click", (event) => {
-               if (event.target.value === "income") {
-                 incomeCategory.style.display = "block";
-                 expenseCategory.style.display = "none";
-               } else {
-                 incomeCategory.style.display = "none";
-                 expenseCategory.style.display = "block";
-               }
-             });
-           }
+        // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
+        const money = document.querySelector(".money");
+        money.addEventListener("input", (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, "");
+          e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
+        });
+      }
 
-           // 현재 사용자의 username 얻기
-           let username;
-           async function getUsername() {
-             const res = await fetch("/username");
-             const json = await res.json();
-             username = json.username;
-           }
-           getUsername();
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
 
-           const form = document.querySelector(".form");
+        /*
+        const host = window.location.host;
+        const pathname = window.location.pathname.split("/");
+        const username = pathname[pathname.length - 1];*/
+      }
+      getUsername();
 
-           // --- 폼 제출 시 실행되는 함수 ---
-           async function handleSubmitForm(event) {
-             event.preventDefault();
-             /*
-             const host = window.location.host;
-             const pathname = window.location.pathname.split("/");
-             const username = pathname[pathname.length - 1];*/
+      // --- 폼 제출 시 실행되는 함수 ---
+      async function handleSubmitForm(event) {
+        event.preventDefault();
 
-             const formData = new FormData(form);
+        const formData = new FormData(form);
 
-             try {
-               const res = await fetch(`/users/${username}/transactions`, {
-                 method: "POST",
-                 body: formData,
-               });
-               const staus = await res.status;
-               if (status === "200")
-                 window.location.pathname = `/calendar/username/${username}`;
-             } catch (error) {
-               alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
-             }
-           }
+        for (let key of formData.keys()) {
+          console.log(key, ":", formData.get(key));
+        }
 
-           // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
-           const uturnBtn = document.querySelector(".uturn-btn");
-           uturnBtn.addEventListener("click", () => {
-             window.location.pathname = `/calendar/username/${username}`;
-           });
+        try {
+          const res = await fetch(`/users/${username}/transactions`, {
+            method: "POST",
+            body: formData,
+          });
+          const staus = await res.status;
+          if (status === "200")
+            window.location.pathname = `/calendar/username/${username}`;
+        } catch (error) {
+          alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
+        }
+      }
 
-      */
+      // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
+      const uturnBtn = document.querySelector(".uturn-btn");
+      uturnBtn.addEventListener("click", () => {
+        window.location.pathname = `/calendar/username/${username}`;
+      });
+      const divisionInputs = document.querySelectorAll(
+        "input[name='division']"
+      );
+      divisionInputs.forEach((divisionInput) => {
+        divisionInput.addEventListener("click", displayCategory);
+      });
 
-           setDefault();
-           form.addEventListener("submit", handleSubmitForm);
+      setDateAndMoney();
+      const form = document.querySelector(".form");
+      form.addEventListener("submit", handleSubmitForm);
     </script>
   </body>
 </html>

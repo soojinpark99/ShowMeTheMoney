@@ -1,9 +1,9 @@
 package com.example.accountbook.Service;
 
 
-import com.example.accountbook.Entity.JoinDTO;
+import com.example.accountbook.DAO.JoinDTO;
 import com.example.accountbook.Entity.UserEntity;
-import com.example.accountbook.Repository.UserRepository;
+import com.example.accountbook.DAO.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

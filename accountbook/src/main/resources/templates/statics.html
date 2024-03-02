@@ -211,6 +211,14 @@
 
       // 지출/수입 총액 input label에 추가하기
       function displayTotalAmount() {
+        async function getData() {
+          const res = await fetch(
+            `/users/${username}/statics/total?year=${year}&month=${month}`
+          );
+          const totalData = await res.json();
+        }
+        // getData();
+
         const expenseRadioElement =
           document.getElementById("expense").parentNode;
         expenseTotal = document.createTextNode(

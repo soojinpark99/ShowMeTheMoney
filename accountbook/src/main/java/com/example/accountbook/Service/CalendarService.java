@@ -94,7 +94,7 @@ public class CalendarService {
         return categoryTotal;
     }
 
-    //저장
+    //저장 수정
     public void saveCal(String username, CalendarDTO calendarDTO) {
         Calendar calendar = new Calendar();
         calendar.setUsername(username);

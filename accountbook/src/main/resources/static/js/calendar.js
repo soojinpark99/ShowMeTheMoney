@@ -10,9 +10,9 @@ let username;
 async function getUsername() {
   const res = await fetch("/username");
   const json = await res.json();
-  username = json.username;
+  username = await json.username;
 }
-// getUsername();
+ getUsername();
 
 // !!!!! 임의로 작성한 데이터
 // const totalData = {

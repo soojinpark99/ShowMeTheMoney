@@ -38,8 +38,8 @@ public class LoginController {
     }
 
 
-    @PostMapping("/users/{username}")
-    public ResponseEntity<String> ServeUsername(@PathVariable String username) {
+    @GetMapping("/username")
+    public ResponseEntity<String> ServeUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 

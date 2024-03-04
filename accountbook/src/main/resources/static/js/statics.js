@@ -1,3 +1,15 @@
+let username;
+let myChart;
+
+async function getUsername() {
+  try {
+    const res = await fetch("/username");
+    const json = await res.json();
+    username = json.username;
+  } catch (error) {
+    console.error("Error fetching username:", error);
+  }
+}
 const categoryList = {
   food: "식비",
   cafe: "카페",
@@ -77,14 +89,11 @@ function renderDate() {
 // };
 
 // 지출/수입 총액 input label에 추가하기
-function displayTotalAmount() {
-  async function getData() {
-    const res = await fetch(
-      `/users/${username}/statics/total?year=${year}&month=${month}`
-    );
-    const totalData = await res.json();
-  }
-  getData();
+async function displayTotalAmount() {
+  const res = await fetch(
+    `/users/${username}/statics/total?year=${year}&month=${month}`
+  );
+  const totalData = await res.json();
 
   const expenseLabelElement = document.querySelector(".expense-label");
   const incomeLabelElement = document.querySelector(".income-label");
@@ -101,29 +110,22 @@ function displayTotalAmount() {
 }
 
 // 지출/수입 선택 따라 차트 생성
-function displayStatics() {
-  // 지출/수입 중에 무엇을 선택했는지 확인
+async function displayStatics() {
   const division = document.querySelector('input[type="radio"]:checked').value;
-
-  const totalAmount =
-    division === "expense"
-      ? totalData["expense-total"]
-      : totalData["income-total"];
-
-  let data = {};
   // 해당 연도, 달의 지출 or 수입 데이터 불러오기
-  async function getData(division) {
-    const res = await fetch(
-      `/users/${username}/statics/category/${division}?year=${year}&month=${month}`
-    );
-    data = res.json();
-  }
-  getData();
+  const res = await fetch(
+    `/users/${username}/statics/category/${division}?year=${year}&month=${month}`
+  );
+  const data = await res.json();
+
+  const totalAmountElement = document.querySelector(".total-amount");
+  totalAmountElement.textContent = data.total.toLocaleString() + "원";
 
   // !!!!! 임의로 작성한 데이터
   // data = {
   //   year: 2024,
   //   month: 2,
+  //   total: 1001486
   //   food: 523800,
   //   cafe: 41500,
   //   mart: 21980,
@@ -145,6 +147,7 @@ function displayStatics() {
   // 카테고리별 총액 데이터만 남김
   delete data.year;
   delete data.month;
+  delete data.total;
 
   // 카테고리명 변경
   for (const key in data) {
@@ -156,9 +159,6 @@ function displayStatics() {
   const sortedData = Object.fromEntries(
     Object.entries(data).sort(([, a], [, b]) => (a > b ? -1 : 1))
   );
-
-  const totalAmountElement = document.querySelector(".total-amount");
-  totalAmountElement.textContent = totalAmount.toLocaleString() + "원";
 
   // 도넛 차트 생성
   const ctx = document.getElementById("myChart");
@@ -226,11 +226,16 @@ function displayStatics() {
   }
 }
 
-renderDate();
-displayTotalAmount();
-displayStatics();
-
 const divisions = document.querySelectorAll("input[name='division']");
 divisions.forEach((division) => {
   division.addEventListener("click", displayStatics);
 });
+
+async function init() {
+  await getUsername();
+  await displayTotalAmount();
+  await displayStatics();
+}
+
+renderDate();
+init();

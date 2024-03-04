@@ -1,18 +1,17 @@
 let month = new Date().getMonth();
 let year = new Date().getFullYear();
-/*
-const host = window.location.host;
-const pathname = window.location.pathname.split("/");
-const username = pathname[pathname.length - 1];*/
 
 // 현재 사용자의 username 얻기
 let username;
 async function getUsername() {
-  const res = await fetch("/username");
-  const json = await res.json();
-  username = json.username;
+  try {
+    const res = await fetch("/username");
+    const json = await res.json();
+    username = json.username;
+  } catch (error) {
+    console.error("Error fetching username:", error);
+  }
 }
-// getUsername();
 
 // !!!!! 임의로 작성한 데이터
 // const totalData = {
@@ -23,14 +22,11 @@ async function getUsername() {
 // };
 // 임의로 작성한 데이터 !!!!!
 
-function renderMonthlyTotalData() {
-  async function getData() {
-    const res = await fetch(
-      `/users/${username}/statics/total?year=${year}&month=${month}`
-    );
-    const totalData = await res.json();
-  }
-  getData();
+async function renderMonthlyTotalData() {
+  const res = await fetch(
+    `/users/${username}/statics/total?year=${year}&month=${month}`
+  );
+  const totalData = await res.json();
 
   const monthlyIncome = totalData["income-total"];
   const monthlyExpense = totalData["expense-total"];
@@ -47,20 +43,12 @@ function renderMonthlyTotalData() {
 }
 
 // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---
-function displayTransactions(year, month, date) {
+async function displayTransactions(year, month, date) {
   // 특정 날짜의 거래 내역 데이터 불러오기
-  let datasOfClickedDate = [];
-  async function getData() {
-    try {
-      const res = await fetch(
-        `/users/${username}/transactions?date=${year}-${month}-${date}`
-      );
-      datasOfClickedDate = await res.json();
-    } catch (error) {
-      alert(`데이터를 불러오는 데 실패했습니다.\n${error}`);
-    }
-  }
-  getData();
+  const res = await fetch(
+    `/users/${username}/transactions?date=${year}-${month}-${date}`
+  );
+  const datasOfClickedDate = await res.json();
 
   // !!!!! 임의로 작성한 데이터
   // let datas = [
@@ -247,17 +235,13 @@ function displayTransactionsOfToday() {
 }
 
 // --- 일별 지출/수입 금액을 합산하여 달력에 표시 ---
-function renderDailyTotalData() {
+async function renderDailyTotalData() {
   const dateNodes = [...document.querySelectorAll(".date")];
-  let dailyData = [];
-  dateNodes.forEach((dateNode, i) => {
-    async function getData() {
-      const res = await fetch(
-        `/users/${username}/transactions?date=${year}-${month}-${i + 1}`
-      );
-      dailyData = await res.json();
-    }
-    getData();
+  for (let i = 0; i < dateNodes.length; i++) {
+    const res = await fetch(
+      `/users/${username}/transactions?date=${year}-${month}-${i + 1}`
+    );
+    const dailyData = await res.json();
 
     // !!!!! 임의로 작성한 데이터
     // let datas = [
@@ -329,7 +313,7 @@ function renderDailyTotalData() {
       dailyExpenseElement.classList.add("daily-expense");
       dateNodes[i].appendChild(dailyExpenseElement);
     }
-  });
+  }
 }
 
 // --- 달력의 날짜 칸마다 이벤트 등록 ---
@@ -354,5 +338,12 @@ function updateData() {
   renderDailyTotalData();
   registerClickEvent(year, month);
 }
+
+// 서버에 username 요청하여
+async function init() {
+  await getUsername();
+  await updateData();
+}
+
 renderCalendar();
-updateData();
+init();

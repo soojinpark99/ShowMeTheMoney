@@ -55,7 +55,7 @@ public class CalendarController {
     public Map<String, Object> Monthlytotal(@PathVariable("username") String username,
                                            @RequestParam("year") int year,
                                            @RequestParam("month") int month,
-                                           @RequestParam("divison") String division,
+                                         //  @RequestParam("divison") String division,
                                            Authentication au) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
@@ -63,7 +63,7 @@ public class CalendarController {
         if (!username.equals(currentUsername)) {
             throw new IllegalArgumentException("Monthlytotal : 접근 권한이 없습니다.");
         }
-        int[] total = calendarService.monthlyTotal(username,year,month,division);
+        int[] total = calendarService.monthlyTotal(username,year,month);
 
         Map<String,Object> response = new HashMap<>();
             response.put("year", year);

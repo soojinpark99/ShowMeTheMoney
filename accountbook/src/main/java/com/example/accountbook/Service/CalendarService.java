@@ -70,7 +70,7 @@ public class CalendarService {
     }
 
     //월별 총수입 or 총지출
-    public int[] monthlyTotal(String username, int year, int month, String division) {
+    public int[] monthlyTotal(String username, int year, int month) {
         List<Calendar> calendars = calendarRepository.findByUsernameAndYearAndMonth(username,year,month);
        //total[0] = incometotal, total[1]=expensetotal
         int[] total = {0,0};

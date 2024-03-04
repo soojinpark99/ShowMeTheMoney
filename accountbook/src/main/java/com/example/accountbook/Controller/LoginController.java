@@ -34,12 +34,12 @@ public class LoginController {
         if (!username.equals(currentUsername)) {
             return "redirect:/error";
         }
-        return "main";
+        return "calendar";
     }
 
 
-    @PostMapping("/users/{username}")
-    public ResponseEntity<String> ServeUsername(@PathVariable String username) {
+    @GetMapping("/username")
+    public ResponseEntity<String> ServeUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 

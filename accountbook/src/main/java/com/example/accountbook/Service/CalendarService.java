@@ -83,6 +83,7 @@ public class CalendarService {
     }
 
     //각각의 카테고리당 월별 지출/수입 합계
+    @Autowired
     private JdbcTemplate jdbcTemplate;
     public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
 

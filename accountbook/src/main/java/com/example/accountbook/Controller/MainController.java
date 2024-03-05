@@ -12,4 +12,7 @@ public class MainController {
 
     @GetMapping("/error")
     public String errorPage() {return "error";}
+
+    @GetMapping("/write")
+    public String writePage() {return "write";}
 }

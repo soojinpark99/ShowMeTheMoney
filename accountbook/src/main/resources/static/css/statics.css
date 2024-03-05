@@ -1,0 +1,129 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.layout {
+  width: 430px;
+  height: 926px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fafaf9;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
+
+.date-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.division {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked {
+  background-color: #ffcdce;
+  border: 3px solid white;
+  box-shadow: 0 0 0 1.6px #ffcdce;
+}
+
+.expense-label {
+  margin-right: 30px;
+}
+
+#myChart {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+
+.total-amount_div {
+  display: flex;
+  justify-content: space-between;
+
+  margin-left: 15px;
+  margin-bottom: 10px;
+  padding: 10px 5px 10px 15px;
+  width: 365px;
+  font-size: 15px;
+  color: #b6b7bb;
+  border-bottom: 0.5px solid #b6b7bb;
+}
+
+.legend {
+  height: 430px;
+  overflow: overlay;
+}
+
+.legend::-webkit-scrollbar {
+  width: 3px;
+}
+
+.legend::-webkit-scrollbar-track {
+  background-color: #fafaf9;
+}
+.legend::-webkit-scrollbar-thumb {
+  background-color: #b6b7bb;
+}
+.legend::-webkit-scrollbar-button {
+  display: none;
+}
+
+.legend-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 17px;
+}
+
+.left-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
+.index-color {
+  background-color: blue;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.percent {
+  color: #b6b7bb;
+  font-size: 15px;
+}

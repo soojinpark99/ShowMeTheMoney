@@ -1,0 +1,145 @@
+:root {
+  --expensecolor: #e16f63;
+  --incomecolor: #5fbb82;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.layout {
+  width: 430px;
+  height: 926px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fafaf9;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  position: relative;
+}
+
+.calendar {
+  width: 400px;
+  margin: 10px auto;
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 30px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.sum-div {
+  margin: 10px 0;
+}
+
+.sum-div > div {
+  margin-bottom: 5px;
+}
+
+.income,
+.expense,
+.total {
+  margin-left: 10px;
+}
+
+.income {
+  color: var(--incomecolor);
+}
+
+.expense {
+  color: var(--expensecolor);
+}
+
+.day {
+  text-align: center;
+  margin-top: 10px;
+}
+.date,
+.empty {
+  aspect-ratio: 1;
+}
+
+.date {
+  cursor: pointer;
+  padding: 3px;
+}
+
+.date:hover {
+  border: 1px solid #bebfc0;
+}
+
+.selected-date {
+  background-color: #e6e6e6;
+}
+
+.daily-expense {
+  font-size: 12px;
+  color: var(--expensecolor);
+  padding-left: 2px;
+}
+
+.daily-income {
+  font-size: 12px;
+  color: var(--incomecolor);
+  padding-left: 2px;
+}
+
+.write-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: black;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.write-btn:hover {
+  background-color: #f0f3f4;
+}
+
+.transaction-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.write-btn,
+.transaction-div {
+  background-color: white;
+  width: 100%;
+  height: 80px;
+  padding: 15px 15px;
+  margin-bottom: 5px;
+  border: 1.3px solid #e6e6e6;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+}
+
+.transaction-category {
+  font-size: 19px;
+}
+
+.transaction-memo {
+  color: #a0a1a6;
+  font-size: 14px;
+  margin-top: 3px;
+}
+
+.transaction-money {
+  font-size: 25px;
+}

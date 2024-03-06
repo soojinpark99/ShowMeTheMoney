@@ -169,17 +169,14 @@
       }
 
       async function isDuplicateUsername() {
-        /* const res = await fetch("/join/username/duplication", {
+        const res = await fetch("/join/username/duplication", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: event.target.value }),
         });
-        const result = res.text(); */
-
-        const idList = ["aaa", "11", "aaaa"];
-        const result = "" + idList.includes(event.target.value);
+        const result = res.text();
 
         const condition = result === "true";
         showErrMessage(event, condition);

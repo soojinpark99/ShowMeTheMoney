@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>Show me the Money</title>
   </head>
   <style>
     :root {
@@ -185,19 +185,6 @@
       </form>
     </div>
     <script>
-      // --- 지출/수입 선택 시 카테고리 내용 변경 ---
-      function displayCategory(event) {
-        const categoryDiv = document.querySelector(".category-div");
-
-        if (event.target.value === "expense") {
-          categoryDiv.innerHTML =
-            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="food">식비</option><option value="cafe">카페</option><option value="mart">마트/생필품</option><option value="culture">문화생활</option><option value="medical">의료비</option><option value="dues">공과금</option><option value="transportation">교통비</option><option value="communication">통신비</option><option value="subscription">구독료</option><option value="hobby">취미</option><option value="shopping">쇼핑</option><option value="beauty">미용</option><option value="gift">경조사/선물</option><option value="travel">여행</option><option value="etc">기타</option></select>';
-        } else {
-          categoryDiv.innerHTML =
-            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="salary">급여</option><option value="additional">부수입</option><option value="allowance">용돈</option><option value="etc">기타</option></select>';
-        }
-      }
-
       // --- 날짜와 금액 입력칸 세팅 ---
       function setDateAndMoney() {
         // 날짜 입력칸의 기본값을 현재 날짜로 설정
@@ -213,6 +200,19 @@
         });
       }
 
+      // --- 지출/수입 선택 시 카테고리 내용 변경 ---
+      function displayCategory(event) {
+        const categoryDiv = document.querySelector(".category-div");
+
+        if (event.target.value === "expense") {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="food">식비</option><option value="cafe">카페</option><option value="mart">마트/생필품</option><option value="culture">문화생활</option><option value="medical">의료비</option><option value="dues">공과금</option><option value="transportation">교통비</option><option value="communication">통신비</option><option value="subscription">구독료</option><option value="hobby">취미</option><option value="shopping">쇼핑</option><option value="beauty">미용</option><option value="gift">경조사/선물</option><option value="travel">여행</option><option value="etc">기타</option></select>';
+        } else {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="salary">급여</option><option value="additional">부수입</option><option value="allowance">용돈</option><option value="etc">기타</option></select>';
+        }
+      }
+
       // 현재 사용자의 username 얻기
       let username;
       async function getUsername() {
@@ -225,12 +225,12 @@
         const pathname = window.location.pathname.split("/");
         const username = pathname[pathname.length - 1];*/
       }
-      getUsername();
 
       // --- 폼 제출 시 실행되는 함수 ---
       async function handleSubmitForm(event) {
         event.preventDefault();
 
+        const form = document.querySelector(".form");
         const formData = new FormData(form);
 
         for (let key of formData.keys()) {
@@ -242,29 +242,35 @@
             method: "POST",
             body: formData,
           });
-          const staus = await res.status;
-          if (status === "200")
-            window.location.pathname = `/calendar/username/${username}`;
+          const status = await res.status;
+          if (status === 200)
+            window.location.pathname = `/calendar/users/${username}`;
         } catch (error) {
           alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
         }
       }
 
-      // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
-      const uturnBtn = document.querySelector(".uturn-btn");
-      uturnBtn.addEventListener("click", () => {
-        window.location.pathname = `/calendar/username/${username}`;
-      });
-      const divisionInputs = document.querySelectorAll(
-        "input[name='division']"
-      );
-      divisionInputs.forEach((divisionInput) => {
-        divisionInput.addEventListener("click", displayCategory);
-      });
+      function registerEvents() {
+        getUsername();
+        // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
+        const uturnBtn = document.querySelector(".uturn-btn");
+        uturnBtn.addEventListener("click", () => {
+          window.location.pathname = `/calendar/users/${username}`;
+        });
+
+        const divisionInputs = document.querySelectorAll(
+          "input[name='division']"
+        );
+        divisionInputs.forEach((divisionInput) => {
+          divisionInput.addEventListener("click", displayCategory);
+        });
+
+        const form = document.querySelector(".form");
+        form.addEventListener("submit", handleSubmitForm);
+      }
 
       setDateAndMoney();
-      const form = document.querySelector(".form");
-      form.addEventListener("submit", handleSubmitForm);
+      registerEvents();
     </script>
   </body>
 </html>

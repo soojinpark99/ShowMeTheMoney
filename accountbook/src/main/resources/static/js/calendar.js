@@ -13,6 +13,13 @@ async function getUsername() {
   }
 }
 
+function handlePageBtns() {
+  const staticsPage = document.querySelector(".statics-page");
+  staticsPage.addEventListener("click", () => {
+    window.location.pathname = `/statics/users/${username}`;
+  });
+}
+
 // !!!!! 임의로 작성한 데이터
 // const totalData = {
 //   year: 2024,
@@ -322,10 +329,7 @@ function registerClickEvent(year, month) {
 
   dateNodes.forEach((dateNode) =>
     dateNode.addEventListener("click", (e) => {
-      let clickedDate = e.target.dataset.date;
-      if (!e.target.classList.contains("date")) {
-        clickedDate = e.target.parentElement.dataset.date;
-      }
+      const clickedDate = e.currentTarget.dataset.date;
       displayTransactions(year, month, clickedDate);
     })
   );
@@ -339,10 +343,10 @@ function updateData() {
   registerClickEvent(year, month);
 }
 
-// 서버에 username 요청하여
 async function init() {
   await getUsername();
-  await updateData();
+  handlePageBtns();
+  updateData();
 }
 
 renderCalendar();

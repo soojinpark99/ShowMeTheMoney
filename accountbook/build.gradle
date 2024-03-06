@@ -15,11 +15,7 @@ compileJava {
 java {
 	sourceCompatibility = '21'
 }
-jar {
-	manifest {
-		attributes 'Main-Class': 'AccountbookApplication.MainClass'
-	}
-}
+
 
 
 configurations {
@@ -43,10 +39,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-
 	// MySQL 데이터베이스 드라이버 의존성 추가
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-
+	implementation group: 'org.javaassist', name: 'javassist',version: '3.15.0-GA'
 }
 
 tasks.named('test') {

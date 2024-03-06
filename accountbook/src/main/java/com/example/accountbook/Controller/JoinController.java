@@ -38,3 +38,4 @@ public class JoinController {
         return new ResponseEntity<>(String.valueOf(res), HttpStatus.OK);
     }
 }
+

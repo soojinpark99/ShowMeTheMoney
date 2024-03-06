@@ -22,7 +22,7 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    //저장/
+    //저장 수정
     @PostMapping("/users/{username}/transactions")
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
         calendarService.saveCal(username, calendardto);
@@ -37,7 +37,7 @@ public class CalendarController {
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
     }
 
-    //조회
+    //조회 수정
     @GetMapping("/users/{username}/transactions")
     public ResponseEntity<Calendar> viewCalendar(@PathVariable String username, @RequestParam int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);

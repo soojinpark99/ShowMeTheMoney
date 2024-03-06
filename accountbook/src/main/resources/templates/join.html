@@ -168,21 +168,22 @@
         }
       }
 
-      async function isDuplicateUsername() {
+      async function isDuplicateUsername(event) {
         const res = await fetch("/join/username/duplication", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: event.target.value }),
         });
-        const result = res.text();
-
+        const result = await res.text();
+        //test
+        console.log(result);
         const condition = result === "true";
         showErrMessage(event, condition);
       }
 
-      function isValidPassword() {
+      function isValidPassword(event) {
         const regExp =
           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
         const password = event.target.value;
@@ -190,7 +191,7 @@
         showErrMessage(event, condition);
       }
 
-      function checkPasswordMatch() {
+      function checkPasswordMatch(event) {
         const passwordInput = document.querySelector("#password");
         const condition = passwordInput.value !== event.target.value;
         showErrMessage(event, condition);

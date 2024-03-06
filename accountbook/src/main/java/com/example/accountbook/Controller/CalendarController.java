@@ -22,7 +22,7 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    //저장
+    //저장/
     @PostMapping("/users/{username}/transactions")
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
         calendarService.saveCal(username, calendardto);

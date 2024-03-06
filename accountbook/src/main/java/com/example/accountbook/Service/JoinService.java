@@ -24,11 +24,6 @@ public class JoinService {
     //회원가입 로직
     public void joinProcess(JoinDTO joinDTO) {
 
-        //중복 회원 검사
-       // boolean isDuplicate = userRepository.existsByUsername(joinDTO.getUsername());
-       // if(isDuplicate) {throw new InvalidJoinProcException("이 이름은 이미 가입된 사용자 이름입니다. :"+joinDTO.getUsername());}
-
-
         // 비밀번호 길이 검사
         if(joinDTO.getPassword().length() < 6) {
             throw new InvalidJoinProcException("비밀번호가 너무 짧습니다.");

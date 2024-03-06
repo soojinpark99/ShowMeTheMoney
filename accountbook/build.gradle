@@ -15,6 +15,12 @@ compileJava {
 java {
 	sourceCompatibility = '21'
 }
+jar {
+	manifest {
+		attributes 'Main-Class': 'AccountbookApplication.MainClass'
+	}
+}
+
 
 configurations {
 	compileOnly {
@@ -37,11 +43,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	// Spring JDBC 의존성
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	// MySQL 데이터베이스 드라이버 의존성 추가
-	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 
 }
 

@@ -29,11 +29,11 @@ public class JoinController {
     }
 
     //중복 회원인지 아닌지 보내줌
-    @PostMapping("blah")
+    @GetMapping("/join/username/duplication")
     @ResponseBody
-    public Map<String,Boolean> DuplicateCheck(String username) {
-        Map<String,Boolean> res = new HashMap<>();
-        res.put("duplicate",joinService.isDuplicateUsername(username));
+    public Map<String,String> DuplicateCheck(String username) {
+        Map<String,String> res = new HashMap<>();
+        res.put("duplicate", String.valueOf(joinService.isDuplicateUsername(username)));
         return res;
     }
 }

@@ -1,13 +1,23 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Alert Page</title>
 </head>
 <body>
-<script>
-    alert("잘못된 접근 방식입니다.");
+
+
+<!-- Thymeleaf 변수를 JavaScript로 전달 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var errorMessage = /*[[${errorMessage}]]*/ '잘못된 접근입니다.';
+
+    // 페이지가 로드될 때 경고 메시지 표시
+    window.onload = function() {
+        alert(errorMessage);
+    }
+    /*]]>*/
 </script>
+
 </body>
 </html>
+

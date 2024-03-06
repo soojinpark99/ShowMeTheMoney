@@ -4,20 +4,22 @@ import com.example.accountbook.DAO.JoinDTO;
 import com.example.accountbook.Service.JoinService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class JoinController {
+    String portnum = "8080";
     @Autowired
     private JoinService joinService;
+
     @GetMapping("/join")
     public String joinPage() {return "join";}
 
@@ -29,12 +31,11 @@ public class JoinController {
     }
 
     //중복 회원인지 아닌지 보내줌
-    @PostMapping("blah")
-    @ResponseBody
-    public Map<String,Boolean> DuplicateCheck(String username) {
-        Map<String,Boolean> res = new HashMap<>();
-        res.put("duplicate",joinService.isDuplicateUsername(username));
-        return res;
+    @PostMapping("/join/username/duplication")
+    public ResponseEntity<String> DuplicateCheck(@RequestBody JoinDTO dto) {
+        //중복이라서 가입못함 -> true, 중복 ㄴㄴ 가입 ㄱㄴ -> false
+        boolean res = joinService.isDuplicateUsername(dto.getUsername());
+        return new ResponseEntity<>(String.valueOf(res), HttpStatus.OK);
     }
 }
 

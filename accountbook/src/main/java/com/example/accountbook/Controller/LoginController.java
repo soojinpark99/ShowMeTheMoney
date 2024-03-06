@@ -16,17 +16,17 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/main")
+    @GetMapping("/calendar")
     public ResponseEntity<Void> UserName(Principal principal) {
         String username = principal.getName();
-        String redirectUrl = "/main/users/" + username;
+        String redirectUrl = "/calendar/users/" + username;
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path(redirectUrl).build().toUri())
                 .build();
     }
 
-    @GetMapping("/main/users/{username}")
+    @GetMapping("/calendar/users/{username}")
     public String mainPage(@PathVariable String username) {
         //url 보안검증방식과 세션 관리 방식 중 url 보안검증 채택
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

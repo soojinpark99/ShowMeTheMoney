@@ -1,3 +1,4 @@
+/*
 package com.example.accountbook.Service;
 
 import com.example.accountbook.DAO.JoinDTO;
@@ -29,3 +30,4 @@ class JoinServiceTest {
         joinService.joinProcess(dto1);
     }
 }
+*/

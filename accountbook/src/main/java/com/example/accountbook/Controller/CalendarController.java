@@ -93,8 +93,9 @@ public class CalendarController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         if (!currentUsername.equals(username)) throw new IllegalArgumentException("MonthlyCategorytotal : 접근 권한이 없습니다.");
-        Map<String, Integer> categoryTotal = calendarService.categoryMonthlyTotal(username,year,month,division);
+        Map<String, Integer> categoryTotal = calendarService.categoryMonthlyTotal(username, year, month, division);
         return categoryTotal;
+
     }
 }
 

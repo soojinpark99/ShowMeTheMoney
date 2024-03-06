@@ -21,27 +21,46 @@
         rgba(17, 17, 26, 0.05) 0px 8px 32px;
     }
 
-    .join-form {
+    form {
       width: 350px;
-      margin: 100px auto;
+      margin: 70px auto 20px;
     }
 
-    .info {
+    .info-div {
       text-align: center;
       margin-bottom: 40px;
     }
 
+    .page.info {
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    .info.message {
+      margin-top: 30px;
+    }
+
     .input-div {
       width: 100%;
-      margin: 10px 0;
-      box-sizing: content-box;
+      margin: 10px 0 20px 0;
+    }
+
+    label {
+      color: #1e1e1e;
+      font-weight: 500;
     }
 
     input {
       width: 100%;
-      height: 30px;
-      padding: 0 5px;
+      height: 40px;
+      background-color: transparent;
+      border: 1px solid #d7d7d7;
+      border-width: 0 0 1px;
       font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #cbcbcb;
     }
 
     input:focus {
@@ -50,6 +69,7 @@
 
     .err-input {
       border: 1.5px solid #ff3f3f;
+      border-width: 0 0 1px;
       animation: vibration 0.1s;
     }
 
@@ -68,11 +88,38 @@
       color: #ff3f3f;
       margin-top: 5px;
     }
+
+    .submit-btn {
+      width: 100%;
+      height: 45px;
+      background-color: #f3cdcc;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .login-page_btn {
+      display: block;
+      width: 100px;
+      margin: 0 auto;
+      text-align: center;
+      color: #1e1e1e;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
   <body>
     <div class="layout">
-      <form class="join-form" action="/joinProc" method="post" name="joinForm">
-        <p class="info">회원가입</p>
+      <form action="/joinProc" method="post" name="joinForm">
+        <div class="info-div">
+          <p class="page info">회원가입</p>
+          <p class="message info">
+            지금 가입하고 당신만의 가계부를 만들어보세요!
+          </p>
+        </div>
         <div class="username input-div">
           <label for="username" />아이디
           <input
@@ -105,8 +152,9 @@
           />
           <div class="err-message">비밀번호가 일치하지 않습니다.</div>
         </div>
-        <input type="submit" value="join" />
+        <button class="submit-btn" value="join">가입하기</button>
       </form>
+      <a class="login-page_btn" th:href="@{/login}">로그인</a>
     </div>
     <script>
       function showErrMessage(event, condition) {
@@ -137,13 +185,14 @@
       function isValidPassword() {
         const regExp =
           /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
-        const password = passwordInput.value;
+        const password = event.target.value;
         const condition = !regExp.test(password);
         showErrMessage(event, condition);
       }
 
       function checkPasswordMatch() {
-        const condition = passwordInput.value !== passwordCheckInput.value;
+        const passwordInput = document.querySelector("#password");
+        const condition = passwordInput.value !== event.target.value;
         showErrMessage(event, condition);
       }
 

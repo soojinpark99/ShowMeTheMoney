@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show me the Money</title>
+  </head>
+  <style>
+    :root {
+      --maincolor: #f3cdcc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .layout {
+      width: 430px;
+      height: 926px;
+      margin: 50px auto;
+      padding: 15px;
+      background-color: #fafaf9;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    }
+
+    .uturn-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 40px;
+      height: 40px;
+      color: black;
+      text-decoration: none;
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .uturn-btn:hover {
+      background-color: #e6e6e6;
+    }
+
+    .form {
+      width: 350px;
+      margin: 40px auto;
+    }
+
+    .form > div {
+      margin: 10px;
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input:checked + label {
+      background-color: var(--maincolor);
+    }
+
+    .division,
+    .money,
+    .date,
+    .category,
+    .memo {
+      width: 250px;
+      height: 50px;
+      font-size: 16px;
+    }
+
+    .division {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .money,
+    .date,
+    .category,
+    .memo {
+      height: 30px;
+      padding: 3px;
+      border: 2px solid var(--maincolor);
+      border-width: 0 0 2px;
+      background-color: transparent;
+    }
+
+    .division > label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 90px;
+      height: 40px;
+      border: 1.5px solid var(--maincolor);
+      cursor: pointer;
+    }
+
+    .money {
+      font-size: 22px;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 50px;
+      background-color: var(--maincolor);
+      color: black;
+      border: none;
+      font-size: 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <div class="layout">
+      <a class="uturn-btn" th:href="@{/calendar}">✕</a>
+      <form action="/writeProc" method="POST" class="form">
+        <div>
+          분류
+          <div class="division">
+            <input
+              type="radio"
+              name="division"
+              value="expense"
+              id="expense"
+              checked="checked"
+            />
+            <label for="expense">지출</label>
+            <input type="radio" name="division" value="income" id="income" />
+            <label for="income">수입</label>
+          </div>
+        </div>
+        <div>
+          금액
+          <input class="money" type="text" name="money" autocomplete="off" />
+        </div>
+        <div>
+          날짜
+          <input class="date" type="date" name="date" />
+        </div>
+        <div class="category-div">
+          카테고리<select class="category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
+            <option value="food">식비</option>
+            <option value="cafe">카페</option>
+            <option value="mart">마트/생필품</option>
+            <option value="culture">문화생활</option>
+            <option value="medical">의료비</option>
+            <option value="dues">공과금</option>
+            <option value="transportation">교통비</option>
+            <option value="communication">통신비</option>
+            <option value="subscription">구독료</option>
+            <option value="hobby">취미</option>
+            <option value="shopping">쇼핑</option>
+            <option value="beauty">미용</option>
+            <option value="gift">경조사/선물</option>
+            <option value="travel">여행</option>
+            <option value="etc">기타</option>
+          </select>
+        </div>
+        <div>
+          내용
+          <input
+            class="memo"
+            name="memo"
+            autocomplete="off"
+            placeholder="내용을 입력하세요."
+          />
+        </div>
+        <button class="submit-btn" type="submit">저장</button>
+      </form>
+    </div>
+    <script>
+      // --- 날짜와 금액 입력칸 세팅 ---
+      function setDateAndMoney() {
+        // 날짜 입력칸의 기본값을 현재 날짜로 설정
+        document.querySelector(".date").value = new Date()
+          .toISOString()
+          .substring(0, 10);
+
+        // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
+        const money = document.querySelector(".money");
+        money.addEventListener("input", (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, "");
+          e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
+        });
+      }
+
+      // --- 지출/수입 선택 시 카테고리 내용 변경 ---
+      function displayCategory(event) {
+        const categoryDiv = document.querySelector(".category-div");
+
+        if (event.target.value === "expense") {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="food">식비</option><option value="cafe">카페</option><option value="mart">마트/생필품</option><option value="culture">문화생활</option><option value="medical">의료비</option><option value="dues">공과금</option><option value="transportation">교통비</option><option value="communication">통신비</option><option value="subscription">구독료</option><option value="hobby">취미</option><option value="shopping">쇼핑</option><option value="beauty">미용</option><option value="gift">경조사/선물</option><option value="travel">여행</option><option value="etc">기타</option></select>';
+        } else {
+          categoryDiv.innerHTML =
+            '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="salary">급여</option><option value="additional">부수입</option><option value="allowance">용돈</option><option value="etc">기타</option></select>';
+        }
+      }
+
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
+
+        /*
+        const host = window.location.host;
+        const pathname = window.location.pathname.split("/");
+        const username = pathname[pathname.length - 1];*/
+      }
+
+      // --- 폼 제출 시 실행되는 함수 ---
+      async function handleSubmitForm(event) {
+        event.preventDefault();
+
+        const form = document.querySelector(".form");
+        const formData = new FormData(form);
+
+        for (let key of formData.keys()) {
+          console.log(key, ":", formData.get(key));
+        }
+
+        try {
+          const res = await fetch(`/users/${username}/transactions`, {
+            method: "POST",
+            body: formData,
+          });
+          const status = await res.status;
+          if (status === 200)
+            window.location.pathname = `/calendar/users/${username}`;
+        } catch (error) {
+          alert(`데이터를 전송하는 데 실패했습니다.\n${error}`);
+        }
+      }
+
+      function registerEvents() {
+        getUsername();
+        // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
+        const uturnBtn = document.querySelector(".uturn-btn");
+        uturnBtn.addEventListener("click", () => {
+          window.location.pathname = `/calendar/users/${username}`;
+        });
+
+        const divisionInputs = document.querySelectorAll(
+          "input[name='division']"
+        );
+        divisionInputs.forEach((divisionInput) => {
+          divisionInput.addEventListener("click", displayCategory);
+        });
+
+        const form = document.querySelector(".form");
+        form.addEventListener("submit", handleSubmitForm);
+      }
+
+      setDateAndMoney();
+      registerEvents();
+    </script>
+  </body>
+</html>

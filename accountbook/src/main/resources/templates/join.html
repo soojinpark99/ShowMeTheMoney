@@ -82,6 +82,13 @@
       }
     }
 
+    .input-message {
+      display: none;
+      font-size: 14px;
+      color: #a3a4a5;
+      margin-top: 5px;
+    }
+
     .err-message {
       display: none;
       font-size: 14px;
@@ -127,12 +134,16 @@
             type="text"
             name="username"
             placeholder="아이디를 입력하세요."
+            autocomplete="off"
           />
+          <div class="input-message">
+            아이디는 5~20자의 영문 대/소문자, 숫자만 사용 가능합니다.
+          </div>
           <div class="id-duplication err-message">
             이미 사용 중인 아이디입니다.
           </div>
           <div class="id-validation err-message">
-            5~20자, 영문 대/소문자, 숫자만 사용
+            아이디는 5~20자의 영문 대/소문자, 숫자만 사용 가능합니다.
           </div>
         </div>
         <div class="password input-div">
@@ -143,8 +154,13 @@
             name="password"
             placeholder="비밀번호를 입력하세요."
           />
+          <div class="input-message">
+            비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 모두 포함해야
+            합니다.
+          </div>
           <div class="pw err-message">
-            8~16자, 영문 대/소문자, 숫자, 특수문자!@#$%^&* 모두 포함
+            비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 모두 포함해야
+            합니다.
           </div>
         </div>
         <div class="password-check input-div">
@@ -170,6 +186,16 @@
           event.target.classList.remove("err-input");
           errMessage.style.display = "none";
         }
+      }
+
+      function showInputMessage() {
+        const inputMessage = event.target.nextElementSibling;
+        inputMessage.style.display = "block";
+      }
+
+      function hideInputMessage() {
+        const inputMessage = event.target.nextElementSibling;
+        inputMessage.style.display = "none";
       }
 
       function isValidUsername(event) {
@@ -213,11 +239,22 @@
 
       function InputValidationHandlers() {
         const usernameInput = document.querySelector("#username");
-        usernameInput.addEventListener("focusout", isValidUsername);
-        usernameInput.addEventListener("focusout", isDuplicateUsername);
+        usernameInput.addEventListener("focusin", showInputMessage);
+        usernameInput.addEventListener("input", hideInputMessage);
+        usernameInput.addEventListener("focusout", (e) => {
+          usernameInput.removeEventListener("focusin", showInputMessage);
+          isValidUsername(e);
+          isDuplicateUsername(e);
+          hideInputMessage(e);
+        });
 
         const passwordInput = document.querySelector("#password");
-        passwordInput.addEventListener("input", isValidPassword);
+        passwordInput.addEventListener("focusin", showInputMessage);
+        passwordInput.addEventListener("input", (e) => {
+          passwordInput.removeEventListener("focusin", showInputMessage);
+          hideInputMessage(e);
+          isValidPassword(e);
+        });
 
         const passwordCheckInput = document.querySelector("#passwordCheck");
         passwordCheckInput.addEventListener("input", checkPasswordMatch);

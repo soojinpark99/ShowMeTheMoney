@@ -20,12 +20,29 @@
   position: relative;
 }
 
-.calendar {
-  width: 400px;
-  margin: 10px auto;
+.page-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+.calendar-page {
+  background-color: #f3cdcc;
+}
+
+.page-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 13.5px;
+
+  width: 50px;
+  height: 25px;
+  border: 1px solid #f3cdcc;
+
+  cursor: pointer;
 }
 
 .calendar-header {
@@ -34,7 +51,15 @@
   align-items: center;
   gap: 10px;
 
-  margin-top: 30px;
+  margin-top: 15px;
+}
+
+.calendar {
+  width: 400px;
+  margin: 10px auto;
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 
 .btn {

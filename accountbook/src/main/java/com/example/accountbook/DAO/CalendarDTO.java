@@ -12,4 +12,8 @@ public class CalendarDTO {
     private int money;
     private String category;
     private String memo;
+
+    private int month;
+    private int day;
+    private int calid;
 }

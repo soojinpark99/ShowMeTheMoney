@@ -10,6 +10,15 @@ async function getUsername() {
     console.error("Error fetching username:", error);
   }
 }
+
+function handlePageBtns() {
+  const calendarPage = document.querySelector(".calendar-page");
+  console.log(calendarPage);
+  calendarPage.addEventListener("click", () => {
+    window.location.pathname = `/calendar/users/${username}`;
+  });
+}
+
 const categoryList = {
   food: "식비",
   cafe: "카페",
@@ -119,7 +128,8 @@ async function displayStatics() {
   const data = await res.json();
 
   const totalAmountElement = document.querySelector(".total-amount");
-  totalAmountElement.textContent = data.total.toLocaleString() + "원";
+  const totalAmount = data.total;
+  totalAmountElement.textContent = totalAmount.toLocaleString() + "원";
 
   // !!!!! 임의로 작성한 데이터
   // data = {
@@ -233,8 +243,9 @@ divisions.forEach((division) => {
 
 async function init() {
   await getUsername();
-  await displayTotalAmount();
-  await displayStatics();
+  handlePageBtns();
+  displayTotalAmount();
+  displayStatics();
 }
 
 renderDate();

@@ -14,12 +14,37 @@
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
 
+.page-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.statics-page {
+  background-color: #f3cdcc;
+}
+
+.page-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 13.5px;
+
+  width: 50px;
+  height: 25px;
+  border: 1px solid #f3cdcc;
+
+  cursor: pointer;
+}
+
 .date-header {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 
 .btn {

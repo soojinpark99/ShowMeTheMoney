@@ -4,6 +4,8 @@ import com.example.accountbook.DAO.JoinDTO;
 import com.example.accountbook.Service.JoinService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,12 +31,12 @@ public class JoinController {
     }
 
     //중복 회원인지 아닌지 보내줌
-    @PostMapping("blah")
+    @GetMapping("/join/username/duplication")
     @ResponseBody
-    public Map<String,Boolean> DuplicateCheck(String username) {
-        Map<String,Boolean> res = new HashMap<>();
-        res.put("duplicate",joinService.isDuplicateUsername(username));
-        return res;
+    public ResponseEntity<String> DuplicateCheck(String username) {
+        //중복이라서 가입못함 -> true, 중복 ㄴㄴ 가입 ㄱㄴ -> false
+        boolean res = joinService.isDuplicateUsername(username);
+        return new ResponseEntity<>(String.valueOf(res), HttpStatus.OK);
     }
 }
 

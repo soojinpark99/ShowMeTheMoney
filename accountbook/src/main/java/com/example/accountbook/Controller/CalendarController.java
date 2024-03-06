@@ -23,13 +23,18 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
+    //저장
     @PostMapping("/users/{username}/transactions")
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
         calendarService.saveCal(username, calendardto);
+        String division = calendardto.getDivision();
+        String category = calendardto.getCategory();
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
     }
 
+
+    //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
     public ResponseEntity<String> deleteCalendar(@PathVariable int calid) {
         calendarService.deleteCal(calid);

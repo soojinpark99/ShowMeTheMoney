@@ -2,7 +2,6 @@ package com.example.accountbook.Controller;
 
 import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
-import com.example.accountbook.Service.MyUserDetails;
 import com.example.accountbook.Service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +26,9 @@ public class CalendarController {
     @PostMapping("/users/{username}/transactions")
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
         calendarService.saveCal(username, calendardto);
-        String division = calendardto.getDivision();
-        String category = calendardto.getCategory();
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
     }
-
 
     //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
@@ -40,6 +36,14 @@ public class CalendarController {
         calendarService.deleteCal(calid);
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
     }
+
+    //조회
+    @GetMapping("/users/{username}/transactions")
+    public ResponseEntity<Calendar> viewCalendar(@PathVariable String username, @RequestParam int calid) {
+        Calendar calendar = calendarService.viewCal(calid, username);
+        return new ResponseEntity<>(calendar, HttpStatus.OK);
+    }
+
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")

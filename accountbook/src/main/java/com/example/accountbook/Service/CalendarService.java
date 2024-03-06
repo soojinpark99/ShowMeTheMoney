@@ -4,7 +4,6 @@ import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.DAO.CalendarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +22,25 @@ public class CalendarService {
     // #CREATE #UPDATE 내역 저장, 내역 변경
     //저장 수정
     public void saveCal(String username, CalendarDTO calendarDTO) {
-        Calendar calendar = new Calendar();
+        Calendar calendar = calendarRepository.findById(calendarDTO.getCalid()).orElseGet(Calendar::new);
+
+        String division = calendarDTO.getDivision();
+        String category = calendarDTO.getCategory();
+
         calendar.setUsername(username);
-        calendar.setDay(calendar.getDay());
-        calendar.setDivision(calendar.getDivision());
+        calendar.setYear(calendar.getYear());
+        calendar.setMonth(calendarDTO.getMonth());
+        calendar.setDay(calendarDTO.getDay());
+        calendar.setDivision(division);
+        calendar.setMemo(calendarDTO.getMemo());
         calendar.setMoney(calendarDTO.getMoney());
-        calendar.setCategory(calendarDTO.getCategory());
-        calendar.setMemo(calendar.getMemo());
+        calendar.setCategory(category);
 
         calendarRepository.save(calendar);
     }
 
-    // #READ 내역 조회
-    public Calendar viewCal(int calid) {
+                        // #READ 내역 조회
+    public Calendar viewCal(int calid, String username) {
         return calendarRepository.findById(calid)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));
     }
@@ -53,7 +58,7 @@ public class CalendarService {
             afterDTO.add(toDTO(cal));
         }
         //id 역순(최신순)정렬
-        Collections.sort(afterDTO, Comparator.comparingInt(CalendarDTO::getId).reversed());
+        afterDTO.sort(Comparator.comparingInt(CalendarDTO::getId).reversed());
         return afterDTO;
     }
 
@@ -81,6 +86,7 @@ public class CalendarService {
         }
         return total;
     }
+
     //각각의 카테고리당 월별 지출/수입 합계
     public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
 
@@ -103,5 +109,6 @@ public class CalendarService {
         }
         return categoryTotal;
     }
+
 }
 

@@ -38,8 +38,7 @@ public class CalendarService {
 
         calendarRepository.save(calendar);
     }
-
-                        // #READ 내역 조회
+    // #READ 내역 조회
     public Calendar viewCal(int calid, String username) {
         return calendarRepository.findById(calid)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));

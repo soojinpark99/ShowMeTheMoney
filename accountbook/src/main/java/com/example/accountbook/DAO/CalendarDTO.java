@@ -13,6 +13,7 @@ public class CalendarDTO {
     private String category;
     private String memo;
 
+    //추가
     private int month;
     private int day;
     private int calid;

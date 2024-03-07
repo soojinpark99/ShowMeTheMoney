@@ -191,6 +191,7 @@
         document.querySelector(".date").value = new Date()
           .toISOString()
           .substring(0, 10);
+        console.log(document.querySelector('.date').value);
 
         // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
         const money = document.querySelector(".money");
@@ -240,6 +241,9 @@
         try {
           const res = await fetch(`/users/${username}/transactions`, {
             method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: formData,
           });
           const status = await res.status;

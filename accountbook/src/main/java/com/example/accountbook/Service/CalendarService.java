@@ -26,7 +26,9 @@ public class CalendarService {
 
         String division = calendarDTO.getDivision();
         String category = calendarDTO.getCategory();
-        String[] dates = calendarDTO.getDate().split("-");
+        String date = calendarDTO.getDate();
+        System.out.println(date);
+        String[] dates = date.split("-");
 
         calendar.setUsername(username);
         calendar.setYear(Integer.parseInt(dates[0]));
@@ -39,7 +41,8 @@ public class CalendarService {
 
         calendarRepository.save(calendar);
     }
-    // #READ 내역 조회
+
+                        // #READ 내역 조회
     public Calendar viewCal(int calid, String username) {
         return calendarRepository.findById(calid)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));
@@ -67,7 +70,6 @@ public class CalendarService {
         CalendarDTO dto = new CalendarDTO();
         dto.setId(calendar.getCalid());
         dto.setDate(String.format("%d-%d-%d",calendar.getYear(), calendar.getMonth(), calendar.getDay()));
-        System.out.println(dto.getDate());
         dto.setDivision(calendar.getDivision());
         dto.setMoney(calendar.getMoney());
         dto.setCategory(calendar.getCategory());

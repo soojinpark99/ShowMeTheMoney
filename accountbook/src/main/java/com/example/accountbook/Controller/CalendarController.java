@@ -24,8 +24,7 @@ public class CalendarController {
 
     //저장 수정
     @PostMapping("/users/{username}/transactions")
-    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto,
-                                                @PathVariable("username") String username) {
+    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
         calendarService.saveCal(username, calendardto);
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
@@ -33,15 +32,14 @@ public class CalendarController {
 
     //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
-    public ResponseEntity<String> deleteCalendar(@PathVariable("calid") int calid) {
+    public ResponseEntity<String> deleteCalendar(@PathVariable int calid) {
         calendarService.deleteCal(calid);
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
     }
 
     //조회 수정
     @GetMapping("/users/{username}/transactions/{calid}")
-    public ResponseEntity<Calendar> viewCalendar(@PathVariable("username") String username,
-                                                 @PathVariable("calid") int calid) {
+    public ResponseEntity<Calendar> viewCalendar(@PathVariable String username, @PathVariable int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
         return new ResponseEntity<>(calendar, HttpStatus.OK);
     }
@@ -49,7 +47,7 @@ public class CalendarController {
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
-    public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable("username") String username) {
+    public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable String username) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         //url의 username과 현재 로그인한 username이 다르면 예외처리
@@ -65,8 +63,9 @@ public class CalendarController {
     @GetMapping("/users/{username}/statics/total")
     public Map<String, Object> Monthlytotal(@PathVariable("username") String username,
                                            @RequestParam("year") int year,
-                                           @RequestParam("month") int month) {
-                                         //  @RequestParam("divison") String division) {
+                                           @RequestParam("month") int month,
+                                         //  @RequestParam("divison") String division,
+                                           Authentication au) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         //url의 username과 현재 로그인한 username이 다르면 예외처리

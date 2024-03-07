@@ -185,21 +185,13 @@
       </form>
     </div>
     <script>
-      // 현재 사용자의 username 얻기
-      let username;
-      async function getUsername() {
-         const res = await fetch("/username");
-        const json = await res.json();
-        username = json.username;
-
-      }
-
       // --- 날짜와 금액 입력칸 세팅 ---
       function setDateAndMoney() {
         // 날짜 입력칸의 기본값을 현재 날짜로 설정
         document.querySelector(".date").value = new Date()
           .toISOString()
           .substring(0, 10);
+        console.log(document.querySelector('.date').value);
 
         // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
         const money = document.querySelector(".money");
@@ -222,31 +214,37 @@
         }
       }
 
+      // 현재 사용자의 username 얻기
+      let username;
+      async function getUsername() {
+        const res = await fetch("/username");
+        const json = await res.json();
+        username = json.username;
+
+        /*
+        const host = window.location.host;
+        const pathname = window.location.pathname.split("/");
+        const username = pathname[pathname.length - 1];*/
+      }
+
       // --- 폼 제출 시 실행되는 함수 ---
       async function handleSubmitForm(event) {
         event.preventDefault();
 
-        const form = document.querySelector("form");
+        const form = document.querySelector(".form");
         const formData = new FormData(form);
-        const body = {};
 
-        // money 입력값에서 콤마(,) 삭제
-        const money = document.querySelector(".money");
-        formData.set("money", money.value.replaceAll(",", ""));
-
-        // formData를 객체로 변환
         for (let key of formData.keys()) {
-          body[key] = formData.get(key);
+          console.log(key, ":", formData.get(key));
         }
 
-        // 서버로 POST 요청 보내기
         try {
           const res = await fetch(`/users/${username}/transactions`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body),
+            body: formData,
           });
           const status = await res.status;
           if (status === 200)
@@ -256,8 +254,8 @@
         }
       }
 
-      async function registerEvents() {
-        await getUsername();
+      function registerEvents() {
+        getUsername();
         // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
         const uturnBtn = document.querySelector(".uturn-btn");
         uturnBtn.addEventListener("click", () => {

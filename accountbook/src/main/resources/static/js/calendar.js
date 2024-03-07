@@ -20,18 +20,9 @@ function handlePageBtns() {
   });
 }
 
-// !!!!! 임의로 작성한 데이터
-// const totalData = {
-//   year: 2024,
-//   month: 3,
-//   "expense-total": 1001486,
-//   "income-total": 2547000,
-// };
-// 임의로 작성한 데이터 !!!!!
-
 async function renderMonthlyTotalData() {
   const res = await fetch(
-    `/users/${username}/statics/total?year=${year}&month=${month}`
+    `/users/${username}/statics/total?year=${year}&month=${month + 1}`
   );
   const totalData = await res.json();
 
@@ -53,57 +44,9 @@ async function renderMonthlyTotalData() {
 async function displayTransactions(year, month, date) {
   // 특정 날짜의 거래 내역 데이터 불러오기
   const res = await fetch(
-    `/users/${username}/transactions?date=${year}-${month}-${date}`
+    `/users/${username}/transactions?date=${year}-${month + 1}-${date}`
   );
   const datasOfClickedDate = await res.json();
-  console.log(datasOfClickedDate);
-  // !!!!! 임의로 작성한 데이터
-  // let datas = [
-  //   {
-  //     division: "expense",
-  //     money: "1000",
-  //     date: "2024-02-24",
-  //     category: "food",
-  //     memo: "편의점",
-  //   },
-  //   {
-  //     division: "expense",
-  //     money: "18000",
-  //     date: "2024-02-25",
-  //     category: "culture",
-  //   },
-  //   {
-  //     division: "income",
-  //     money: "10000",
-  //     date: "2024-02-25",
-  //     category: "additional",
-  //     memo: "당근마켓",
-  //   },
-  //   {
-  //     division: "expense",
-  //     money: "13000",
-  //     date: "2024-02-22",
-  //     category: "food",
-  //     memo: "배달의 민족",
-  //   },
-  //   {
-  //     division: "expense",
-  //     money: "45000",
-  //     date: "2024-02-22",
-  //     category: "shopping",
-  //     memo: "러쉬 샤워젤리",
-  //   },
-  // ];
-
-  // datasOfClickedDate = datas.filter((data) => {
-  //   const dataDate = new Date(data.date);
-  //   return (
-  //     dataDate.getFullYear() == year &&
-  //     dataDate.getMonth() == month &&
-  //     dataDate.getDate() == date
-  //   );
-  // });
-  // 임의로 작성한 데이터 !!!!!
 
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
@@ -246,57 +189,9 @@ async function renderDailyTotalData() {
   const dateNodes = [...document.querySelectorAll(".date")];
   for (let i = 0; i < dateNodes.length; i++) {
     const res = await fetch(
-      `/users/${username}/transactions?date=${year}-${month}-${i + 1}`
+      `/users/${username}/transactions?date=${year}-${month + 1}-${i + 1}`
     );
     const dailyData = await res.json();
-
-    // !!!!! 임의로 작성한 데이터
-    // let datas = [
-    //   {
-    //     division: "expense",
-    //     money: "1000",
-    //     date: "2024-02-24",
-    //     category: "food",
-    //     memo: "편의점",
-    //   },
-    //   {
-    //     division: "expense",
-    //     money: "18000",
-    //     date: "2024-02-25",
-    //     category: "culture",
-    //   },
-    //   {
-    //     division: "income",
-    //     money: "10000",
-    //     date: "2024-02-25",
-    //     category: "additional",
-    //     memo: "당근마켓",
-    //   },
-    //   {
-    //     division: "expense",
-    //     money: "13000",
-    //     date: "2024-02-22",
-    //     category: "food",
-    //     memo: "배달의 민족",
-    //   },
-    //   {
-    //     division: "expense",
-    //     money: "45000",
-    //     date: "2024-02-22",
-    //     category: "shopping",
-    //     memo: "러쉬 샤워젤리",
-    //   },
-    // ];
-
-    // dailyData = datas.filter((data) => {
-    //   const dataDate = new Date(data.date);
-    //   return (
-    //     dataDate.getFullYear() == year &&
-    //     dataDate.getMonth() == month &&
-    //     dataDate.getDate() == i + 1
-    //   );
-    // });
-    // 임의로 작성한 데이터 !!!!!
 
     let totalExpense = 0;
     let totalIncome = 0;

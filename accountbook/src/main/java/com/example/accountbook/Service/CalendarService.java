@@ -26,11 +26,12 @@ public class CalendarService {
 
         String division = calendarDTO.getDivision();
         String category = calendarDTO.getCategory();
+        String[] dates = calendarDTO.getDate().split("-");
 
         calendar.setUsername(username);
-        calendar.setYear(calendar.getYear());
-        calendar.setMonth(calendarDTO.getMonth());
-        calendar.setDay(calendarDTO.getDay());
+        calendar.setYear(Integer.parseInt(dates[0]));
+        calendar.setMonth(Integer.parseInt(dates[1]));
+        calendar.setDay(Integer.parseInt(dates[2]));
         calendar.setDivision(division);
         calendar.setMemo(calendarDTO.getMemo());
         calendar.setMoney(calendarDTO.getMoney());
@@ -66,6 +67,7 @@ public class CalendarService {
         CalendarDTO dto = new CalendarDTO();
         dto.setId(calendar.getCalid());
         dto.setDate(String.format("%d-%d-%d",calendar.getYear(), calendar.getMonth(), calendar.getDay()));
+        System.out.println(dto.getDate());
         dto.setDivision(calendar.getDivision());
         dto.setMoney(calendar.getMoney());
         dto.setCategory(calendar.getCategory());

@@ -56,7 +56,7 @@ async function displayTransactions(year, month, date) {
     `/users/${username}/transactions?date=${year}-${month}-${date}`
   );
   const datasOfClickedDate = await res.json();
-
+  console.log(datasOfClickedDate);
   // !!!!! 임의로 작성한 데이터
   // let datas = [
   //   {

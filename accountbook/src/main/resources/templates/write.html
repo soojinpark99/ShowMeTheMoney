@@ -187,14 +187,10 @@
     <script>
       // 현재 사용자의 username 얻기
       let username;
-      function getUsername() {
-        /* const res = await fetch("/username");
+      async function getUsername() {
+        const res = await fetch("/username");
         const json = await res.json();
-        username = json.username; */
-
-        const host = window.location.host;
-        const pathname = window.location.pathname.split("/");
-        username = pathname[pathname.length - 1];
+        username = json.username;
       }
 
       // --- 날짜와 금액 입력칸 세팅 ---
@@ -259,8 +255,8 @@
         }
       }
 
-      function registerEvents() {
-        getUsername();
+      async function registerEvents() {
+        await getUsername();
         // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
         const uturnBtn = document.querySelector(".uturn-btn");
         uturnBtn.addEventListener("click", () => {

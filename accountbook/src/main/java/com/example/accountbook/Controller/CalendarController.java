@@ -51,7 +51,7 @@ public class CalendarController {
                                                              @RequestParam String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        //url의 username과 현재 로그인한 username이 다르면 예외처리
+        //url의 username과 현재 로그인한 username이 다르면 예외처리.
         if (!username.equals(currentUsername)) {
             throw new IllegalArgumentException("loadUsersAllCal : 접근 권한이 없습니다.");
         }

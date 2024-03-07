@@ -54,8 +54,8 @@ public class CalendarService {
     }
 
     //사용자의 모든 내역을 dto로 변환후 list에 담아 list를 반환
-    public List<CalendarDTO> getUsersAllCal(String username) {
-        List<Calendar> beforeDTO = calendarRepository.SearchUser(username);
+    public List<CalendarDTO> getUsersAllCal(String username, int year, int month, int day) {
+        List<Calendar> beforeDTO = calendarRepository.SearchUser(username, year, month, day);
         List<CalendarDTO> afterDTO = new ArrayList<>();
         for (Calendar cal : beforeDTO) {
             afterDTO.add(toDTO(cal));

@@ -26,11 +26,14 @@ public class CalendarService {
 
         String division = calendarDTO.getDivision();
         String category = calendarDTO.getCategory();
+        String date = calendarDTO.getDate();
+        System.out.println(date);
+        String[] dates = date.split("-");
 
         calendar.setUsername(username);
-        calendar.setYear(calendar.getYear());
-        calendar.setMonth(calendarDTO.getMonth());
-        calendar.setDay(calendarDTO.getDay());
+        calendar.setYear(Integer.parseInt(dates[0]));
+        calendar.setMonth(Integer.parseInt(dates[1]));
+        calendar.setDay(Integer.parseInt(dates[2]));
         calendar.setDivision(division);
         calendar.setMemo(calendarDTO.getMemo());
         calendar.setMoney(calendarDTO.getMoney());
@@ -51,8 +54,8 @@ public class CalendarService {
     }
 
     //사용자의 모든 내역을 dto로 변환후 list에 담아 list를 반환
-    public List<CalendarDTO> getUsersAllCal(String username) {
-        List<Calendar> beforeDTO = calendarRepository.SearchUser(username);
+    public List<CalendarDTO> getUsersAllCal(String username, int year, int month, int day) {
+        List<Calendar> beforeDTO = calendarRepository.SearchUser(username, year, month, day);
         List<CalendarDTO> afterDTO = new ArrayList<>();
         for (Calendar cal : beforeDTO) {
             afterDTO.add(toDTO(cal));

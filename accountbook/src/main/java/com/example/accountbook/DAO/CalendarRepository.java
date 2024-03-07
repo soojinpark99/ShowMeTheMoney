@@ -14,8 +14,8 @@ public interface CalendarRepository extends JpaRepository<Calendar,Integer> {
     List<Calendar> findByUsernameAndYearAndMonth(String username, int year, int month);
     List<Calendar> findByUsernameAndYearAndMonthAndCategory(String username, int year, int month, String category);
     */
-    @Query(value = "SELECT c FROM Calendar c WHERE c.username = :username")
-    List<Calendar> SearchUser(String username);
+    @Query(value = "SELECT c FROM Calendar c WHERE c.username = :username AND c.year = :year AND c.month = :month AND c.day = :day")
+    List<Calendar> SearchUser(String username,int year, int month, int day);
 
     @Query(value = "SELECT c FROM Calendar c " +
             "WHERE c.username = :username AND c.year = :year AND c.month= :month")

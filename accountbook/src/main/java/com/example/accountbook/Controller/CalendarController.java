@@ -22,9 +22,10 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    //저장/
+    //저장 수정
     @PostMapping("/users/{username}/transactions")
-    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto, String username) {
+    public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto,
+                                                @PathVariable("username") String username) {
         calendarService.saveCal(username, calendardto);
         return new
                 ResponseEntity<>("저장되었습니다.", HttpStatus.OK);
@@ -32,14 +33,15 @@ public class CalendarController {
 
     //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
-    public ResponseEntity<String> deleteCalendar(@PathVariable int calid) {
+    public ResponseEntity<String> deleteCalendar(@PathVariable("calid") int calid) {
         calendarService.deleteCal(calid);
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
     }
 
-    //조회
-    @GetMapping("/users/{username}/transactions")
-    public ResponseEntity<Calendar> viewCalendar(@PathVariable String username, @RequestParam int calid) {
+    //조회 수정
+    @GetMapping("/users/{username}/transactions/{calid}")
+    public ResponseEntity<Calendar> viewCalendar(@PathVariable("username") String username,
+                                                 @PathVariable("calid") int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
         return new ResponseEntity<>(calendar, HttpStatus.OK);
     }
@@ -47,15 +49,19 @@ public class CalendarController {
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
-    public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable String username) {
+    public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable("username") String username,
+                                                             @RequestParam("date") String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        //url의 username과 현재 로그인한 username이 다르면 예외처리
+        //url의 username과 현재 로그인한 username이 다르면 예외처리.
         if (!username.equals(currentUsername)) {
             throw new IllegalArgumentException("loadUsersAllCal : 접근 권한이 없습니다.");
         }
-
-        List<CalendarDTO> caldto = calendarService.getUsersAllCal(username);
+        String[] dates = date.split("-");
+        int year = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
+        List<CalendarDTO> caldto = calendarService.getUsersAllCal(username,year, month, day);
         return new ResponseEntity<>(caldto, HttpStatus.OK);
     }
 
@@ -84,12 +90,11 @@ public class CalendarController {
     }
 
     //한 유저의 해당 월의 카테코리별 총 수입/지출 통계
-    @GetMapping(" /users/{username}/statics/category/{division}/total?year={year}&month={month}")
+    @GetMapping(" /users/{username}/statics/category/{division}")
     public Map<String, Integer> MonthlyCategoryTotal(@PathVariable("username") String username,
                                                      @RequestParam("year") int year,
                                                      @RequestParam("month") int month,
-                                                     @PathVariable("division") String division,
-                                                     Authentication au) {
+                                                     @PathVariable("division") String division) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         if (!currentUsername.equals(username)) throw new IllegalArgumentException("MonthlyCategorytotal : 접근 권한이 없습니다.");

@@ -35,7 +35,13 @@
         rgba(17, 17, 26, 0.05) 0px 8px 32px;
     }
 
-    .uturn-btn {
+    .top-btns {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .uturn.btn {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -47,7 +53,18 @@
       font-size: 30px;
       cursor: pointer;
     }
-    .uturn-btn:hover {
+
+    .delete.btn {
+      width: 40px;
+      height: 40px;
+      background-image: url("https://cdn-icons-png.flaticon.com/512/3334/3334328.png");
+      background-size: 25px 25px;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+    }
+
+    .btn:hover {
       background-color: #e6e6e6;
     }
 
@@ -137,18 +154,15 @@
   </style>
   <body>
     <div class="layout">
-      <a class="uturn-btn" th:href="@{/calendar}">✕</a>
+      <div class="top-btns">
+        <a class="uturn btn" th:href="@{/calendar}">✕</a>
+        <div class="delete btn"></div>
+      </div>
       <form action="/writeProc" method="POST" class="form">
         <div>
           분류
           <div class="division">
-            <input
-              type="radio"
-              name="division"
-              value="expense"
-              id="expense"
-              checked="checked"
-            />
+            <input type="radio" name="division" value="expense" id="expense" />
             <label for="expense">지출</label>
             <input type="radio" name="division" value="income" id="income" />
             <label for="income">수입</label>
@@ -162,26 +176,7 @@
           날짜
           <input class="date" type="date" name="date" />
         </div>
-        <div class="category-div">
-          카테고리<select class="category" name="category">
-            <option value="" selected disabled hidden>선택하세요.</option>
-            <option value="food">식비</option>
-            <option value="cafe">카페</option>
-            <option value="mart">마트/생필품</option>
-            <option value="culture">문화생활</option>
-            <option value="medical">의료비</option>
-            <option value="dues">공과금</option>
-            <option value="transportation">교통비</option>
-            <option value="communication">통신비</option>
-            <option value="subscription">구독료</option>
-            <option value="hobby">취미</option>
-            <option value="shopping">쇼핑</option>
-            <option value="beauty">미용</option>
-            <option value="gift">경조사/선물</option>
-            <option value="travel">여행</option>
-            <option value="etc">기타</option>
-          </select>
-        </div>
+        <div class="category-div"></div>
         <div>
           내용
           <input
@@ -191,7 +186,7 @@
             placeholder="내용을 입력하세요."
           />
         </div>
-        <button class="submit-btn" type="submit">저장</button>
+        <button class="submit-btn" type="submit">수정</button>
       </form>
     </div>
     <script>
@@ -212,20 +207,22 @@
       }
 
       async function setForm() {
-        // getTransactionId();
+        getTransactionId();
         // 수정하려는 거래 내역 데이터 불러오기
-        //const res = fetch(`/users/${username}/transactions/${transactionId}`);
-        //const data = res.json();
+        const res = fetch(`/users/${username}/transactions/${transactionId}`);
+        const data = await res.json();
 
-        const data = {
-          division: "income",
-          money: 50000,
-          date: "2024-3-6",
-          category: "additional",
-          memo: "당근마켓",
-        };
+        // 지출/수입 선택칸의 기본값을 선택한 거래내역의 데이터로 설정
+        const divisions = document.querySelectorAll("input[name='division']");
+        const divisionToCheck = [...divisions].find(
+          (division) => division.value === data.division
+        );
+        if (divisionToCheck) {
+          divisionToCheck.checked = true;
+        }
+        displayCategory();
 
-        // 날짜 입력칸의 기본값을 선택한 거래내역의 금액 데이터로 설정
+        // 날짜 입력칸의 기본값을 선택한 거래내역의 데이터로 설정
         const money = document.querySelector(".money");
         money.value = data.money
           .toString()
@@ -235,20 +232,35 @@
           e.target.value = val.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
         });
 
-        // 날짜 입력칸의 기본값을 선택한 거래내역의 날짜 데이터로 설정
+        // 날짜 입력칸의 기본값을 선택한 거래내역의 데이터로 설정
         const date = new Date(data.date);
-        const offset = date.getTimezoneOffset() * 60000; //ms단위라 60000곱해줌
+        const offset = date.getTimezoneOffset() * 60000;
         const dateOffset = new Date(date.getTime() - offset);
         document.querySelector(".date").value = dateOffset
           .toISOString()
           .substring(0, 10);
+
+        // 카테고리 입력칸의 기본값을 선택한 거래내역의 데이터로 설정
+        const options = document.querySelectorAll(".category option");
+        const optionToSelect = [...options].find(
+          (option) => option.value === data.category
+        );
+        if (optionToSelect) {
+          optionToSelect.selected = true;
+        }
+
+        // 메모 입력칸의 기본값을 선택한 거래내역의 데이터로 설정
+        document.querySelector(".memo").value = data.memo;
       }
 
       // --- 지출/수입 선택 시 카테고리 내용 변경 ---
-      function displayCategory(event) {
+      function displayCategory() {
         const categoryDiv = document.querySelector(".category-div");
+        const division = document.querySelector(
+          'input[name="division"]:checked'
+        );
 
-        if (event.target.value === "expense") {
+        if (division.value === "expense") {
           categoryDiv.innerHTML =
             '카테고리<select class="category" name="category"><option value="" selected disabled hidden>선택하세요.</option><option value="food">식비</option><option value="cafe">카페</option><option value="mart">마트/생필품</option><option value="culture">문화생활</option><option value="medical">의료비</option><option value="dues">공과금</option><option value="transportation">교통비</option><option value="communication">통신비</option><option value="subscription">구독료</option><option value="hobby">취미</option><option value="shopping">쇼핑</option><option value="beauty">미용</option><option value="gift">경조사/선물</option><option value="travel">여행</option><option value="etc">기타</option></select>';
         } else {
@@ -293,10 +305,27 @@
         }
       }
 
-      function registerEvents() {
-        // await getUsername();
+      async function handleDeleteBtn() {
+        event.preventDefault();
+        try {
+          const res = await fetch(
+            `/users/${username}/transactions/${transactionId}`,
+            {
+              method: "DELETE",
+            }
+          );
+          const status = await res.status;
+          if (status === 200)
+            window.location.pathname = `/calendar/users/${username}`;
+        } catch (error) {
+          alert(`데이터를 삭제하는 데 실패했습니다.\n${error}`);
+        }
+      }
+
+      async function registerEvents() {
+        await getUsername();
         // 돌아가기 버튼 클릭 시 캘린더 페이지로 돌아가기
-        const uturnBtn = document.querySelector(".uturn-btn");
+        const uturnBtn = document.querySelector(".uturn.btn");
         uturnBtn.addEventListener("click", () => {
           window.location.pathname = `/calendar/users/${username}`;
         });
@@ -308,8 +337,11 @@
           divisionInput.addEventListener("click", displayCategory);
         });
 
-        const form = document.querySelector(".form");
+        const form = document.querySelector("form");
         form.addEventListener("submit", handleSubmitForm);
+
+        const deleteBtn = document.querySelector(".delete.btn");
+        deleteBtn.addEventListener("click", handleDeleteBtn);
       }
 
       setForm();

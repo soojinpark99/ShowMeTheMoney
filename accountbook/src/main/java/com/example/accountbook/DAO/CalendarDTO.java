@@ -3,6 +3,8 @@ package com.example.accountbook.DAO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class CalendarDTO {
@@ -14,7 +16,7 @@ public class CalendarDTO {
     private String memo;
 
     //추가
-    private int month;
-    private int day;
-    private int calid;
+ //   private int month;
+  //  private int day;
+   // private int calid;
 }

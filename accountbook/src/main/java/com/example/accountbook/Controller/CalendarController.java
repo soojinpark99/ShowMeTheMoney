@@ -23,7 +23,7 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-    //저장 수정
+    //저장
     @PostMapping("/users/{username}/transactions")
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto,
                                                 @PathVariable("username") String username) {
@@ -43,13 +43,32 @@ public class CalendarController {
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
     }
 
-    //조회 수정
+
+    //조회
     @GetMapping("/users/{username}/transactions/{calid}")
     public ResponseEntity<Calendar> viewCalendar(@PathVariable("username") String username,
                                                  @PathVariable("calid") int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
         return new ResponseEntity<>(calendar, HttpStatus.OK);
     }
+
+    //수정
+    @PutMapping("/users/{username}/transactions/{calid}")
+    public String modifyCalendar(@PathVariable("username") String username,
+                                 @PathVariable("calid") Long calid) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        if (!username.equals(currentUsername)) {
+            return "redirect:/error";
+        } return null;
+
+        try {
+            calendarService.modifyCal(calid);
+            return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
+        }
+
+    }
+
 
     //수정작업을 수행하게 될 페이지로 리턴
     @GetMapping("/users/{username}/modify/transactions/{calid}")
@@ -62,6 +81,7 @@ public class CalendarController {
         }
         return "modify";
     }
+
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")

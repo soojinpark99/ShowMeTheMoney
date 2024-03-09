@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS showmethemoney;
 USE showmethemoney;
 
-CREATE TABLE IF NOT EXISTS calendar
+CREATE TABLE IF NOT EXISTS Calendar
 (
     calid    int auto_increment
         primary key,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS calendar
     memo     varchar(500) null
 );
 
-CREATE TABLE userentity
+CREATE TABLE UserEntity
 (
     id       int auto_increment
         primary key,

@@ -12,7 +12,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./src/main/mysql:/docker-entrypoint-initdb.d
-      - ./src/main/mysql:/docker-entrypoint-initdb.d
     ports:
       - "3336:3306"
     command:

@@ -62,10 +62,10 @@ public class CalendarController {
             return "redirect:/error";
         } return null;
 
-        try {
-            calendarService.modifyCal(calid);
-            return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
-        }
+
+         //   calendarService.modifyCal(calid);
+           // return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
+
 
     }
 

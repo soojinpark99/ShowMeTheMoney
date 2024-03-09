@@ -47,7 +47,6 @@ async function displayTransactions(year, month, date) {
     `/users/${username}/transactions?date=${year}-${month + 1}-${date}`
   );
   const datasOfClickedDate = await res.json();
-console.log(datasOfClickedDate);
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
   dateNodes.forEach((dateNode) => {
@@ -114,9 +113,9 @@ console.log(datasOfClickedDate);
   });
 
   function modifyTransaction(event) {
-    const transactonId = event.currentTarget.dataset.id;
-    window.location.pathname =
-      "users/{username}/modify/transaction/{transactionId}";
+    console.log("클릭");
+    const transactionId = event.currentTarget.dataset.id;
+    window.location.pathname = `users/${username}/modify/transactions/${transactionId}`;
   }
 
   const transactionDivs = document.querySelectorAll(".transaction-div");

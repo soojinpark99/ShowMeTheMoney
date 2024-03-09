@@ -286,6 +286,14 @@
           body[key] = formData.get(key);
         }
 
+        if (!body.money) {
+          alert("금액을 입력해주세요.");
+          return false;
+        } else if (!body.category) {
+          alert("카테고리를 선택해주세요.");
+          return false;
+        }
+
         try {
           const res = await fetch(
             `/users/${username}/transactions/${transactionId}`,

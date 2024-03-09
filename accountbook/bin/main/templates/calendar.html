@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show me the Money</title>
+    <link rel="stylesheet" href="/css/calendar.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <div class="prev btn">◀</div>
+          <h2 id="month"></h2>
+          <div class="next btn">▶</div>
+        </div>
+        <div class="sum-div">
+          <div>
+            수입
+            <span class="income">+600000</span>
+          </div>
+          <div>
+            지출
+            <span class="expense">-500000</span>
+          </div>
+          <div>
+            합계
+            <span class="total">+100000</span>
+          </div>
+        </div>
+        <div class="calendar days">
+          <div class="day">일</div>
+          <div class="day">월</div>
+          <div class="day">화</div>
+          <div class="day">수</div>
+          <div class="day">목</div>
+          <div class="day">금</div>
+          <div class="day">토</div>
+        </div>
+        <div class="calendar dates" id="calendarDates"></div>
+      </div>
+      <a class="write-btn" th:href="@{/write}">+ 새로운 거래 추가하기</a>
+      <div class="transactions"></div>
+    </div>
+    <script src="/js/calendar.js"></script>
+  </body>
+</html>

@@ -16,14 +16,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize)->authorize
-                .requestMatchers("/","/login","/loginProc", "/join", "/joinProc").permitAll()//모든 사용자에게 오픈
+                .requestMatchers("/","/login/**","/loginProc", "/join/**", "/joinProc").permitAll()//모든 사용자에게 오픈
                // .requestMatchers("/admin").hasRole("ADMIN")
-                .requestMatchers("/write/**","/calendar/**").hasRole("USER") //USER role을 부여받았을떄만오픈
+                .requestMatchers("/write/**","/calendar/**","/statics/**","/users/**").hasRole("USER") //USER role을 부여받았을떄만오픈
                 .anyRequest().authenticated());
         http.formLogin(auth->auth.loginPage("/login")
                         .defaultSuccessUrl("/calendar")
                         .loginProcessingUrl("/loginProc")
                         .permitAll());
+        http.logout(logout -> logout.logoutUrl("/logout")
+                .logoutSuccessUrl("/"));
         http.csrf((x)->x.disable());
         return http.build();
     }

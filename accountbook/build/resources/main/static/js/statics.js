@@ -1,6 +1,9 @@
 let username;
 let myChart;
 
+let month = new Date().getMonth();
+let year = new Date().getFullYear();
+
 async function getUsername() {
   try {
     const res = await fetch("/username");
@@ -57,9 +60,6 @@ const indexColorList = [
   "#DDD7D3",
 ];
 
-let month = new Date().getMonth();
-let year = new Date().getFullYear();
-
 function renderDate() {
   const dateElement = document.querySelector(".date");
   const prevBtn = document.querySelector(".prev.btn");
@@ -89,18 +89,10 @@ function renderDate() {
   });
 }
 
-// 임의로 작성한 데이터
-// const totalData = {
-//   year: 2024,
-//   month: 2,
-//   "expense-total": 1001486,
-//   "income-total": 2547000,
-// };
-
 // 지출/수입 총액 input label에 추가하기
 async function displayTotalAmount() {
   const res = await fetch(
-    `/users/${username}/statics/total?year=${year}&month=${month}`
+    `/users/${username}/statics/total?year=${year}&month=${month + 1}`
   );
   const totalData = await res.json();
 
@@ -123,36 +115,15 @@ async function displayStatics() {
   const division = document.querySelector('input[type="radio"]:checked').value;
   // 해당 연도, 달의 지출 or 수입 데이터 불러오기
   const res = await fetch(
-    `/users/${username}/statics/category/${division}?year=${year}&month=${month}`
+    `/users/${username}/statics/category/${division}?year=${year}&month=${
+      month + 1
+    }`
   );
   const data = await res.json();
 
   const totalAmountElement = document.querySelector(".total-amount");
   const totalAmount = data.total;
   totalAmountElement.textContent = totalAmount.toLocaleString() + "원";
-
-  // !!!!! 임의로 작성한 데이터
-  // data = {
-  //   year: 2024,
-  //   month: 2,
-  //   total: 1001486
-  //   food: 523800,
-  //   cafe: 41500,
-  //   mart: 21980,
-  //   culture: 31000,
-  //   medical: 5000,
-  //   dues: 40230,
-  //   transportation: 63250,
-  //   communication: 33000,
-  //   subscription: 17900,
-  //   hobby: 59900,
-  //   shopping: 89900,
-  //   beauty: 22000,
-  //   gift: 50000,
-  //   travel: 0,
-  //   etc: 0,
-  // };
-  // 임의로 작성한 데이터 !!!!!
 
   // 카테고리별 총액 데이터만 남김
   delete data.year;

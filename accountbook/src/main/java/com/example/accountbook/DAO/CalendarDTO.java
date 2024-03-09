@@ -3,21 +3,20 @@ package com.example.accountbook.DAO;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
 public class CalendarDTO {
     private int id;
-    private LocalDate date; //yyyy-mm-dd
+    private String date; //yyyy-mm-dd
     private String division; //income or expense
     private int money;
     private String category;
     private String memo;
 
-    /*
-    private int month;
-    private int day;
-    private int calid;
-    */
+    //추가
+ //   private int month;
+  //  private int day;
+   // private int calid;
 }

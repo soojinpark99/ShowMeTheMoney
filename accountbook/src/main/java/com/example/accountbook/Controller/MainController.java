@@ -15,10 +15,14 @@ public class MainController {
     }
 
     @GetMapping("/error")
-    public String errorPage() {return "error";}
+    public String errorPage() {
+        return "error";
+    }
 
     @GetMapping("/write")
-    public String writePage() {return "write";}
+    public String writePage() {
+        return "write";
+    }
 
     @GetMapping("/statics/users/{username}")
     public String StaticsPage(@PathVariable String username) {
@@ -27,5 +31,7 @@ public class MainController {
         if (!username.equals(currentUsername)) {
             return "redirect:/error";
         }
-        return "statics";}
+        return "statics";
+    }
+
 }

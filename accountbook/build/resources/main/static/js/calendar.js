@@ -11,6 +11,8 @@ async function getUsername() {
   } catch (error) {
     console.error("Error fetching username:", error);
   }
+  const usernameElement = document.querySelector(".username");
+  usernameElement.textContent = username;
 }
 
 function handlePageBtns() {
@@ -47,7 +49,6 @@ async function displayTransactions(year, month, date) {
     `/users/${username}/transactions?date=${year}-${month + 1}-${date}`
   );
   const datasOfClickedDate = await res.json();
-console.log(datasOfClickedDate);
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
   dateNodes.forEach((dateNode) => {
@@ -64,6 +65,7 @@ console.log(datasOfClickedDate);
   datasOfClickedDate.forEach((data) => {
     const transactionDiv = document.createElement("div");
     transactionDiv.classList.add("transaction-div");
+    transactionDiv.setAttribute("data-id", data.id);
 
     const money = document.createElement("div");
     if (data.division === "income") {
@@ -110,6 +112,17 @@ console.log(datasOfClickedDate);
     div.append(memo);
     transactionDiv.append(div);
     transactionDiv.append(money);
+  });
+
+  function modifyTransaction(event) {
+    console.log("클릭");
+    const transactionId = event.currentTarget.dataset.id;
+    window.location.pathname = `users/${username}/modify/transactions/${transactionId}`;ㅈ
+  }
+
+  const transactionDivs = document.querySelectorAll(".transaction-div");
+  transactionDivs.forEach((transactionDiv) => {
+    transactionDiv.addEventListener("click", modifyTransaction);
   });
 }
 

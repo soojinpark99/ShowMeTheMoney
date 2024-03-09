@@ -19,6 +19,8 @@
 }
 
 .layout {
+  display: flex;
+  flex-direction: column;
   width: 430px;
   height: 926px;
   margin: 50px auto;
@@ -27,6 +29,33 @@
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
   position: relative;
+}
+
+.greeting-message {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 17px;
+}
+
+.logout-btn {
+  width: 30px;
+  height: 30px;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/992/992680.png");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #e6e6e6;
 }
 
 .page-btns {
@@ -109,6 +138,7 @@
 .date {
   cursor: pointer;
   padding: 3px;
+  overflow: hidden;
 }
 
 .date:hover {
@@ -138,12 +168,25 @@
 
   color: black;
   text-decoration: none;
-
-  cursor: pointer;
 }
 
-.write-btn:hover {
-  background-color: #f0f3f4;
+.transactions {
+  flex-grow: 1;
+  overflow: overlay;
+}
+
+.transaction::-webkit-scrollbar {
+  width: 3px;
+}
+
+.transaction::-webkit-scrollbar-track {
+  background-color: #fafaf9;
+}
+.transaction::-webkit-scrollbar-thumb {
+  background-color: #b6b7bb;
+}
+.transaction::-webkit-scrollbar-button {
+  display: none;
 }
 
 .transaction-div {
@@ -162,6 +205,12 @@
   border: 1.3px solid #e6e6e6;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+  cursor: pointer;
+}
+
+.transaction-div:hover,
+.write-btn:hover {
+  background-color: #f0f3f4;
 }
 
 .transaction-category {

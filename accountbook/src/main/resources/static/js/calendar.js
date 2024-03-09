@@ -11,8 +11,6 @@ async function getUsername() {
   } catch (error) {
     console.error("Error fetching username:", error);
   }
-  const usernameElement = document.querySelector(".username");
-  usernameElement.textContent = username;
 }
 
 function handlePageBtns() {
@@ -117,7 +115,7 @@ async function displayTransactions(year, month, date) {
   function modifyTransaction(event) {
     console.log("클릭");
     const transactionId = event.currentTarget.dataset.id;
-    window.location.pathname = `users/${username}/modify/transaction/${transactionId}`;
+    window.location.pathname = `users/${username}/modify/transactions/${transactionId}`;
   }
 
   const transactionDivs = document.querySelectorAll(".transaction-div");

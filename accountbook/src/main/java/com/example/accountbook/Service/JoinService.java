@@ -26,7 +26,8 @@ public class JoinService {
         if(isDuplicateUsername(joinDTO.getUsername())) {
             throw new InvalidJoinProcException("이미 사용하고 있는 유저명입니다.");
         }
-        String pattern1 = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{5,20}$";
+        String pattern1 = "^[A-Za-z\\d]{5,20}$";
+
         if(!joinDTO.getUsername().matches((pattern1))) throw new
                 InvalidJoinProcException("아이디가 적합하지 않습니다. 아이디는 영문과 숫자만 포함하여 5-20글자로 구성되어야 합니다.");
 

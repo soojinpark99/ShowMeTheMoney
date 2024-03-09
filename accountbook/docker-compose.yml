@@ -14,7 +14,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./src/main/mysql:/docker-entrypoint-initdb.d
     ports:
-      - "3307:3306"
+      - "3336:3306"
     command:
       - "mysqld"
       - "--character-set-server=utf8mb4"

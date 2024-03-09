@@ -10,9 +10,18 @@
       --maincolor: #f3cdcc;
     }
 
+    @font-face {
+      font-family: "Pretendard-Regular";
+      src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+        format("woff");
+      font-weight: 500;
+      font-style: normal;
+    }
+
     * {
       margin: 0;
       padding: 0;
+      font-family: "Pretendard-Regular";
       box-sizing: border-box;
     }
 
@@ -117,6 +126,7 @@
       color: black;
       border: none;
       font-size: 16px;
+      font-weight: 600;
 
       display: flex;
       justify-content: center;
@@ -199,7 +209,6 @@
         document.querySelector(".date").value = new Date()
           .toISOString()
           .substring(0, 10);
-        console.log(document.querySelector(".date").value);
 
         // 금액 입력칸에 숫자만 입력되고 입력값에 천 단위로 콤마 삽입
         const money = document.querySelector(".money");
@@ -245,7 +254,6 @@
             headers: {
               "Content-Type": "application/json",
             },
-            //수진님 제가 이줄 잠깐 고쳤어요 ㅠㅠ - 영채
             body: JSON.stringify(body),
           });
           const status = await res.status;

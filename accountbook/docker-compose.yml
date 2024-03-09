@@ -1,17 +1,17 @@
-version: '3'
+version: "3"
 
 services:
   database:
     container_name: mysql-container
     image: mysql/mysql-server:8.0
-    restart: unless-stopped
     environment:
       MYSQL_DATABASE: showmethemoney
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      TZ: 'Asia/Seoul'
+      TZ: "Asia/Seoul"
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./src/main/mysql:/docker-entrypoint-initdb.d
       - ./src/main/mysql:/docker-entrypoint-initdb.d
     ports:
       - "3307:3306"

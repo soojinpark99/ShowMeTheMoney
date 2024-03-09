@@ -31,6 +31,19 @@
   position: relative;
 }
 
+.greeting-message {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.logout-btn {
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .page-btns {
   display: flex;
   justify-content: center;
@@ -141,12 +154,6 @@
 
   color: black;
   text-decoration: none;
-
-  cursor: pointer;
-}
-
-.write-btn:hover {
-  background-color: #f0f3f4;
 }
 
 .transactions {
@@ -184,6 +191,12 @@
   border: 1.3px solid #e6e6e6;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+  cursor: pointer;
+}
+
+.transaction-div:hover,
+.write-btn:hover {
+  background-color: #f0f3f4;
 }
 
 .transaction-category {

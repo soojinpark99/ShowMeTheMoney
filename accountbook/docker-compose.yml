@@ -1,17 +1,17 @@
-version: '3'
+version: "3"
 
 services:
   database:
     container_name: mysql-container
     image: mysql/mysql-server:8.0
-    restart: unless-stopped
     environment:
       MYSQL_DATABASE: showmethemoney
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      TZ: 'Asia/Seoul'
+      TZ: "Asia/Seoul"
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./src/main/mysql:/docker-entrypoint-initdb.d
       - ./src/main/mysql:/docker-entrypoint-initdb.d
     ports:
       - "3336:3306"
@@ -29,7 +29,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/showmethemoney?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3307/showmethemoney?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:

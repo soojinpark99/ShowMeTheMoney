@@ -245,7 +245,8 @@
             headers: {
               "Content-Type": "application/json",
             },
-            body: formData,
+            //수진님 제가 이줄 잠깐 고쳤어요 ㅠㅠ - 영채
+            body: JSON.stringify(body),
           });
           const status = await res.status;
           if (status === 200)

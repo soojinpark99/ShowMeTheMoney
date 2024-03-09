@@ -24,6 +24,8 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/calendar")
                         .loginProcessingUrl("/loginProc")
                         .permitAll());
+        http.logout(logout -> logout.logoutUrl("/logout")
+                .logoutSuccessUrl("/"));
         http.csrf((x)->x.disable());
         return http.build();
     }

@@ -22,22 +22,18 @@ public class CalendarService {
     // #CREATE #UPDATE 내역 저장, 내역 변경
     //저장 수정
     public void saveCal(String username, CalendarDTO calendarDTO) {
-        Calendar calendar = calendarRepository.findById(calendarDTO.getCalid()).orElseGet(Calendar::new);
-
-        String division = calendarDTO.getDivision();
-        String category = calendarDTO.getCategory();
-        String date = calendarDTO.getDate();
-        System.out.println(date);
-        String[] dates = date.split("-");
+    //    Calendar calendar = calendarRepository.findById(calendarDTO.getId()).orElseGet(Calendar::new);
+        Calendar calendar = new Calendar();
+        String[] dates = calendarDTO.getDate().split("-");
 
         calendar.setUsername(username);
         calendar.setYear(Integer.parseInt(dates[0]));
         calendar.setMonth(Integer.parseInt(dates[1]));
         calendar.setDay(Integer.parseInt(dates[2]));
-        calendar.setDivision(division);
+        calendar.setDivision(calendarDTO.getDivision());
         calendar.setMemo(calendarDTO.getMemo());
         calendar.setMoney(calendarDTO.getMoney());
-        calendar.setCategory(category);
+        calendar.setCategory(calendarDTO.getCategory());
 
         calendarRepository.save(calendar);
     }
@@ -69,7 +65,7 @@ public class CalendarService {
     public CalendarDTO toDTO(Calendar calendar) {
         CalendarDTO dto = new CalendarDTO();
         dto.setId(calendar.getCalid());
-        dto.setDate(String.format("%d-%d-%d",calendar.getYear(), calendar.getMonth(), calendar.getDay()));
+        dto.setDate(String.format("%d-%d-%d",calendar.getYear(),calendar.getMonth(), calendar.getDay()));
         dto.setDivision(calendar.getDivision());
         dto.setMoney(calendar.getMoney());
         dto.setCategory(calendar.getCategory());
@@ -91,7 +87,7 @@ public class CalendarService {
     }
 
     //각각의 카테고리당 월별 지출/수입 합계
-    public Map<String,Integer> categoryMonthlyTotal(String username, int year, int month, String division) {
+    public Map<String,Number> categoryMonthlyTotal(String username, int year, int month, String division) {
 
         //{food, income,3만} , {cafe, income, 2만} ...
         List<Object[]> afterGroupBy = calendarRepository.CategoryTotal(username,division,year,month);
@@ -99,7 +95,7 @@ public class CalendarService {
         int[] monthlytotal = monthlyTotal(username, year, month);
 
         //{year: 2024, month: 3, total: 10000, food: 3000, cafe: 2000 ...}
-        Map<String, Integer> categoryTotal = new HashMap<>();
+        Map<String, Number> categoryTotal = new HashMap<>();
         categoryTotal.put("year",year);
         categoryTotal.put("month",month);
 
@@ -108,7 +104,7 @@ public class CalendarService {
         else throw new IllegalArgumentException("categoryMonthlyTotal : division이 유효하지 않습니다.");
 
         for(Object[] obarr : afterGroupBy) {
-            categoryTotal.put(obarr[0].toString(),(Integer)obarr[1]);
+            categoryTotal.put(obarr[0].toString(),(Long)obarr[1]);
         }
         return categoryTotal;
     }

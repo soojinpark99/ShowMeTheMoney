@@ -19,6 +19,8 @@
 }
 
 .layout {
+  display: flex;
+  flex-direction: column;
   width: 430px;
   height: 926px;
   margin: 50px auto;
@@ -109,6 +111,7 @@
 .date {
   cursor: pointer;
   padding: 3px;
+  overflow: hidden;
 }
 
 .date:hover {
@@ -144,6 +147,25 @@
 
 .write-btn:hover {
   background-color: #f0f3f4;
+}
+
+.transactions {
+  flex-grow: 1;
+  overflow: overlay;
+}
+
+.transaction::-webkit-scrollbar {
+  width: 3px;
+}
+
+.transaction::-webkit-scrollbar-track {
+  background-color: #fafaf9;
+}
+.transaction::-webkit-scrollbar-thumb {
+  background-color: #b6b7bb;
+}
+.transaction::-webkit-scrollbar-button {
+  display: none;
 }
 
 .transaction-div {

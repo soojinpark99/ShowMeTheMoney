@@ -21,7 +21,6 @@ services:
 
   application:
     container_name: spring-boot-container
-    restart: on-failure
     build:
       context: ./
       dockerfile: Dockerfile

@@ -47,7 +47,7 @@ async function displayTransactions(year, month, date) {
     `/users/${username}/transactions?date=${year}-${month + 1}-${date}`
   );
   const datasOfClickedDate = await res.json();
-
+console.log(datasOfClickedDate);
   // 선택된 날짜 배경색 바꾸기
   const dateNodes = [...document.querySelectorAll(".date")];
   dateNodes.forEach((dateNode) => {

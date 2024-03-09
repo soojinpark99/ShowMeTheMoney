@@ -13,6 +13,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./src/main/mysql:/docker-entrypoint-initdb.d
+      - ./src/main/mysql:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     command:
@@ -28,5 +29,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/showmethemoney?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       - database

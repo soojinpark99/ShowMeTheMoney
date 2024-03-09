@@ -64,6 +64,7 @@ async function displayTransactions(year, month, date) {
   datasOfClickedDate.forEach((data) => {
     const transactionDiv = document.createElement("div");
     transactionDiv.classList.add("transaction-div");
+    transactionDiv.setAttribute("data-id", data.id);
 
     const money = document.createElement("div");
     if (data.division === "income") {
@@ -110,6 +111,17 @@ async function displayTransactions(year, month, date) {
     div.append(memo);
     transactionDiv.append(div);
     transactionDiv.append(money);
+  });
+
+  function modifyTransaction(event) {
+    const transactonId = event.currentTarget.dataset.id;
+    window.location.pathname =
+      "users/{username}/modify/transaction/{transactionId}";
+  }
+
+  const transactionDivs = document.querySelectorAll(".transaction-div");
+  transactionDivs.forEach((transactionDiv) => {
+    transactionDiv.addEventListener("click", modifyTransaction);
   });
 }
 

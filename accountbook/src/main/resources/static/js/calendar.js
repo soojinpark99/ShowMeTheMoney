@@ -115,7 +115,7 @@ async function displayTransactions(year, month, date) {
   function modifyTransaction(event) {
     console.log("클릭");
     const transactionId = event.currentTarget.dataset.id;
-    window.location.pathname = `users/${username}/modify/transactions/${transactionId}`;
+    window.location.pathname = `users/${username}/transactions/${transactionId}`;
   }
 
   const transactionDivs = document.querySelectorAll(".transaction-div");

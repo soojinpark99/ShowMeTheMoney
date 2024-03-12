@@ -44,6 +44,29 @@ public class CalendarService {
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 내역을 찾을 수 없습니다. :" + calid));
     }
 
+    public void modifyCal(int calid, CalendarDTO calendarDTO, String username) {
+        Optional<Calendar> optionalCalendar = calendarRepository.findById(calid);
+
+        if(optionalCalendar.isPresent()) {
+            Calendar calendar = optionalCalendar.get();
+
+            String[] dates = calendarDTO.getDate().split("-");
+
+            calendar.setUsername(username);
+            calendar.setYear(Integer.parseInt(dates[0]));
+            calendar.setMonth(Integer.parseInt(dates[1]));
+            calendar.setDay(Integer.parseInt(dates[2]));
+            calendar.setDivision(calendarDTO.getDivision());
+            calendar.setMemo(calendarDTO.getMemo());
+            calendar.setMoney(calendarDTO.getMoney());
+            calendar.setCategory(calendarDTO.getCategory());
+
+            calendarRepository.save(calendar);
+        } else {
+            throw new NoSuchElementException("해당하는 내역을 찾을 수 없습니다: " + calid);
+        }
+    }
+
     // #DELETE 내역 삭제
     public void deleteCal(int calid) {
         calendarRepository.deleteById(calid);

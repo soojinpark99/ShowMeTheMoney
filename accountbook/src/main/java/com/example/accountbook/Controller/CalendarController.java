@@ -4,6 +4,7 @@ import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 public class CalendarController {
     private final CalendarService calendarService;
     @Autowired
@@ -26,7 +27,6 @@ public class CalendarController {
 
     //저장
     @PostMapping("/users/{username}/transactions")
-    @ResponseBody
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto,
                                                 @PathVariable("username") String username) {
         try {
@@ -40,7 +40,6 @@ public class CalendarController {
 
     //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
-    @ResponseBody
     public ResponseEntity<String> deleteCalendar(@PathVariable("calid") int calid) {
         calendarService.deleteCal(calid);
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
@@ -49,11 +48,11 @@ public class CalendarController {
 
     //조회
     @GetMapping("/users/{username}/transactions/{calid}")
-    @ResponseBody
-    public Map<String, Object> viewCalendar(@PathVariable("username") String username,
+    public ResponseEntity<CalendarDTO> viewCalendar(@PathVariable("username") String username,
                                             @PathVariable("calid") int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
         CalendarDTO dto = calendarService.toDTO(calendar);
+        /*
         Map<String,Object> response = new HashMap<>();
         response.put("division", dto.getDivision()); //지출 총계
         response.put("money",dto.getMoney()); //수입 총계
@@ -62,7 +61,9 @@ public class CalendarController {
         try {
             response.put("memo", dto.getMemo());
         }catch(NullPointerException e) {e.printStackTrace();}
-        return response;
+
+         */
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     //수정
@@ -83,23 +84,8 @@ public class CalendarController {
         }
     }
 
-
-    //수정작업을 수행하게 될 페이지로 리턴
-    @GetMapping("/users/{username}/modify/transactions/{calid}")
-    public String ModifyPage(@PathVariable("username") String username,
-                             @PathVariable("calid") Long calid) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        if (!username.equals(currentUsername)) {
-            return "redirect:/error";
-        }
-        return "modify";
-    }
-
-
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
-    @ResponseBody
     public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable("username") String username,
                                                              @RequestParam("date") String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -118,7 +104,6 @@ public class CalendarController {
 
     //한 유저의 월별 총 수입/지출 통계
     @GetMapping("/users/{username}/statics/total")
-    @ResponseBody
     public Map<String, Object> Monthlytotal(@PathVariable("username") String username,
                                            @RequestParam("year") int year,
                                            @RequestParam("month") int month,
@@ -143,7 +128,6 @@ public class CalendarController {
 
     //한 유저의 해당 월의 카테코리별 총 수입/지출 통계
     @GetMapping("/users/{username}/statics/category/{division}")
-    @ResponseBody
     public Map<String, Number> MonthlyCategoryTotal(@PathVariable("username") String username,
                                                      @RequestParam("year") int year,
                                                      @RequestParam("month") int month,

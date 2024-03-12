@@ -4,17 +4,14 @@
 }
 
 @font-face {
-  font-family: "Pretendard-Regular";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
-  font-weight: 500;
-  font-style: normal;
+  font-family: "NPSfontBold";
+  src: url("../assets/NPSfont_regular.ttf") format("truetype");
 }
 
 * {
   margin: 0;
   padding: 0;
-  font-family: "Pretendard-Regular";
+  font-family: "NPSfontBold";
   box-sizing: border-box;
 }
 
@@ -86,6 +83,7 @@
 .calendar {
   width: 400px;
   margin: 10px auto;
+  font-size: 14px;
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);

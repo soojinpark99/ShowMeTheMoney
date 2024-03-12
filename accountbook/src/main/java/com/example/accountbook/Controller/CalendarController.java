@@ -9,13 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 public class CalendarController {
     private final CalendarService calendarService;
     @Autowired
@@ -25,6 +26,7 @@ public class CalendarController {
 
     //저장
     @PostMapping("/users/{username}/transactions")
+    @ResponseBody
     public ResponseEntity<String> saveCalendar (@RequestBody CalendarDTO calendardto,
                                                 @PathVariable("username") String username) {
         try {
@@ -38,6 +40,7 @@ public class CalendarController {
 
     //삭제
     @DeleteMapping("/users/{username}/transactions/{calid}")
+    @ResponseBody
     public ResponseEntity<String> deleteCalendar(@PathVariable("calid") int calid) {
         calendarService.deleteCal(calid);
         return new ResponseEntity<>("삭제되었습니다", HttpStatus.OK);
@@ -46,27 +49,38 @@ public class CalendarController {
 
     //조회
     @GetMapping("/users/{username}/transactions/{calid}")
-    public ResponseEntity<Calendar> viewCalendar(@PathVariable("username") String username,
-                                                 @PathVariable("calid") int calid) {
+    @ResponseBody
+    public Map<String, Object> viewCalendar(@PathVariable("username") String username,
+                                            @PathVariable("calid") int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
-        return new ResponseEntity<>(calendar, HttpStatus.OK);
+        CalendarDTO dto = calendarService.toDTO(calendar);
+        Map<String,Object> response = new HashMap<>();
+        response.put("division", dto.getDivision()); //지출 총계
+        response.put("money",dto.getMoney()); //수입 총계
+        response.put("date",dto.getDate());
+        response.put("category",dto.getCategory());
+        try {
+            response.put("memo", dto.getMemo());
+        }catch(NullPointerException e) {e.printStackTrace();}
+        return response;
     }
 
     //수정
     @PutMapping("/users/{username}/transactions/{calid}")
-    public String modifyCalendar(@PathVariable("username") String username,
-                                 @PathVariable("calid") Long calid) {
+    public ResponseEntity<String> modifyCalendar(@RequestBody CalendarDTO calendarDTO,
+            @PathVariable("username") String username,
+                                 @PathVariable("calid") int calid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         if (!username.equals(currentUsername)) {
-            return "redirect:/error";
-        } return null;
-
-
-         //   calendarService.modifyCal(calid);
-           // return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
-
-
+            return new ResponseEntity<>("잘못된 접근입니다.",HttpStatus.BAD_REQUEST);
+        }
+        try {
+            calendarService.modifyCal(calid, calendarDTO, username);
+            return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("해당 내역을 찾을 수 없습니다", HttpStatus.NOT_FOUND);
+        }
     }
 
 
@@ -85,6 +99,7 @@ public class CalendarController {
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")
+    @ResponseBody
     public ResponseEntity<List<CalendarDTO>> loadUsersAllCal(@PathVariable("username") String username,
                                                              @RequestParam("date") String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -103,6 +118,7 @@ public class CalendarController {
 
     //한 유저의 월별 총 수입/지출 통계
     @GetMapping("/users/{username}/statics/total")
+    @ResponseBody
     public Map<String, Object> Monthlytotal(@PathVariable("username") String username,
                                            @RequestParam("year") int year,
                                            @RequestParam("month") int month,
@@ -127,6 +143,7 @@ public class CalendarController {
 
     //한 유저의 해당 월의 카테코리별 총 수입/지출 통계
     @GetMapping("/users/{username}/statics/category/{division}")
+    @ResponseBody
     public Map<String, Number> MonthlyCategoryTotal(@PathVariable("username") String username,
                                                      @RequestParam("year") int year,
                                                      @RequestParam("month") int month,

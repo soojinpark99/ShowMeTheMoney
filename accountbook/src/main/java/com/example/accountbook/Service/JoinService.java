@@ -16,7 +16,7 @@ public class JoinService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    //중복 회원 검사 로직
+    //중복 회원 검사 로직(true면 중복인거)
     public boolean isDuplicateUsername(String username) {
         return userRepository.existsByUsername(username);
     }

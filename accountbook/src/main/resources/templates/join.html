@@ -213,7 +213,7 @@
         const result = await res.text();
 
         // 아이디 중복값이 있으면 true, 없으면 false
-        const condition = !result;
+        const condition = result === false;
         const errMessage = document.querySelector(".duplication.message");
         showErrMessage(event, condition, errMessage);
       }

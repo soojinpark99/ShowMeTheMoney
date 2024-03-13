@@ -4,11 +4,13 @@ import com.example.accountbook.DAO.CalendarDTO;
 import com.example.accountbook.Entity.Calendar;
 import com.example.accountbook.Service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -46,42 +48,41 @@ public class CalendarController {
 
     //조회
     @GetMapping("/users/{username}/transactions/{calid}")
-    public ResponseEntity<Calendar> viewCalendar(@PathVariable("username") String username,
-                                                 @PathVariable("calid") int calid) {
+    public ResponseEntity<CalendarDTO> viewCalendar(@PathVariable("username") String username,
+                                            @PathVariable("calid") int calid) {
         Calendar calendar = calendarService.viewCal(calid, username);
-        return new ResponseEntity<>(calendar, HttpStatus.OK);
+        CalendarDTO dto = calendarService.toDTO(calendar);
+        /*
+        Map<String,Object> response = new HashMap<>();
+        response.put("division", dto.getDivision()); //지출 총계
+        response.put("money",dto.getMoney()); //수입 총계
+        response.put("date",dto.getDate());
+        response.put("category",dto.getCategory());
+        try {
+            response.put("memo", dto.getMemo());
+        }catch(NullPointerException e) {e.printStackTrace();}
+
+         */
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     //수정
     @PutMapping("/users/{username}/transactions/{calid}")
-    public String modifyCalendar(@PathVariable("username") String username,
-                                 @PathVariable("calid") Long calid) {
+    public ResponseEntity<String> modifyCalendar(@RequestBody CalendarDTO calendarDTO,
+            @PathVariable("username") String username,
+                                 @PathVariable("calid") int calid) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
         if (!username.equals(currentUsername)) {
-            return "redirect:/error";
-        } return null;
-
-
-         //   calendarService.modifyCal(calid);
-           // return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
-
-
-    }
-
-
-    //수정작업을 수행하게 될 페이지로 리턴
-    @GetMapping("/users/{username}/modify/transactions/{calid}")
-    public String ModifyPage(@PathVariable("username") String username,
-                             @PathVariable("calid") Long calid) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        if (!username.equals(currentUsername)) {
-            return "redirect:/error";
+            return new ResponseEntity<>("잘못된 접근입니다.",HttpStatus.BAD_REQUEST);
         }
-        return "modify";
+        try {
+            calendarService.modifyCal(calid, calendarDTO, username);
+            return new ResponseEntity<>("수정되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("해당 내역을 찾을 수 없습니다", HttpStatus.NOT_FOUND);
+        }
     }
-
 
     //한 사용자의 모든 내역을 여러개의 w제이슨데이터로 전송
     @GetMapping("/users/{username}/transactions")

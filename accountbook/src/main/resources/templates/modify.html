@@ -11,17 +11,18 @@
     }
 
     @font-face {
-      font-family: "Pretendard-Regular";
-      src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-        format("woff");
-      font-weight: 500;
+      font-family: "omyu_pretty";
+      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2")
+        format("woff2");
+      font-weight: normal;
       font-style: normal;
     }
 
     * {
       margin: 0;
       padding: 0;
-      font-family: "Pretendard-Regular";
+      font-family: "omyu_pretty";
+      font-size: 20px;
       box-sizing: border-box;
     }
 
@@ -96,7 +97,7 @@
     .memo {
       width: 250px;
       height: 50px;
-      font-size: 16px;
+      font-size: 18px;
     }
 
     .division {
@@ -128,7 +129,7 @@
     }
 
     .money {
-      font-size: 22px;
+      font-size: 24px;
     }
 
     input:focus,
@@ -142,7 +143,7 @@
       background-color: var(--maincolor);
       color: black;
       border: none;
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 600;
 
       display: flex;
@@ -176,7 +177,26 @@
           날짜
           <input class="date" type="date" name="date" />
         </div>
-        <div class="category-div"></div>
+        <div class="category-div">
+          카테고리<select class="category" name="category">
+            <option value="" selected disabled hidden>선택하세요.</option>
+            <option value="food">식비</option>
+            <option value="cafe">카페</option>
+            <option value="mart">마트/생필품</option>
+            <option value="culture">문화생활</option>
+            <option value="medical">의료비</option>
+            <option value="dues">공과금</option>
+            <option value="transportation">교통비</option>
+            <option value="communication">통신비</option>
+            <option value="subscription">구독료</option>
+            <option value="hobby">취미</option>
+            <option value="shopping">쇼핑</option>
+            <option value="beauty">미용</option>
+            <option value="gift">경조사/선물</option>
+            <option value="travel">여행</option>
+            <option value="etc">기타</option>
+          </select>
+        </div>
         <div>
           내용
           <input
@@ -209,10 +229,16 @@
       async function setForm() {
         getTransactionId();
         // 수정하려는 거래 내역 데이터 불러오기
-        const res = await fetch(
-          `/users/${username}/transactions/${transactionId}`
-        );
-        const data = await res.json();
+        let data;
+        try {
+          const res = await fetch(
+            `/users/${username}/transactions/${transactionId}`
+          );
+          data = await res.json();
+        } catch (error) {
+          alert("삭제된 내역입니다.");
+          window.location.pathname = `/calendar/users/${username}`;
+        }
 
         // 지출/수입 선택칸의 기본값을 선택한 거래내역의 데이터로 설정
         const divisions = document.querySelectorAll("input[name='division']");

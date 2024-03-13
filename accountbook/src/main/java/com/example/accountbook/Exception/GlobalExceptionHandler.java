@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(InvalidJoinProcException.class)
-    public String handleInvalidJoinProcException(InvalidJoinProcException e, Model model) {
+    @ExceptionHandler(InvalidUserAccessException.class)
+    public String handleInvalidJoinProcException(InvalidUserAccessException e, Model model) {
         String errorMessage = e.getMessage();
+        String redirectUrl = e.getRedirectUrl();
         model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("redirectUrl",redirectUrl);
         return "error";
     }
 }

@@ -35,9 +35,11 @@ async function renderMonthlyTotalData() {
 
   monthlyIncomeElement.textContent = `+${monthlyIncome.toLocaleString()}원`;
   monthlyExpenseElement.textContent = `-${monthlyExpense.toLocaleString()}원`;
-  monthlyTotalEmement.textContent = `${(
-    monthlyIncome - monthlyExpense
-  ).toLocaleString()}원`;
+  const monthlyTotal = monthlyIncome - monthlyExpense;
+  monthlyTotalEmement.textContent =
+    monthlyTotal > 0
+      ? `+${monthlyTotal.toLocaleString()}원`
+      : `${monthlyTotal.toLocaleString()}원`;
 }
 
 // --- 특정 날짜의 거래 내역 데이터를 렌더링하여 페이지에 추가 ---

@@ -4,15 +4,31 @@
 }
 
 @font-face {
+<<<<<<< Updated upstream
   font-family: "NPSfontBold";
   src: url("../assets/NPSfont_regular.ttf") format("truetype");
+=======
+  font-family: "omyu_pretty";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/omyu_pretty.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+>>>>>>> Stashed changes
 }
 
 * {
   margin: 0;
   padding: 0;
+<<<<<<< Updated upstream
   font-family: "NPSfontBold";
+=======
+>>>>>>> Stashed changes
   box-sizing: border-box;
+}
+
+body {
+  font-family: "omyu_pretty";
+  font-size: 19px;
 }
 
 .layout {
@@ -62,7 +78,7 @@
   justify-content: center;
   align-items: center;
 
-  font-size: 13.5px;
+  font-size: 15.5px;
 
   width: 50px;
   height: 25px;
@@ -76,7 +92,6 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-
   margin-top: 15px;
 }
 
@@ -128,6 +143,7 @@
   cursor: pointer;
   padding: 3px;
   overflow: hidden;
+  font-size: 17px;
 }
 
 .date:hover {
@@ -139,13 +155,13 @@
 }
 
 .daily-expense {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--expensecolor);
   padding-left: 2px;
 }
 
 .daily-income {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--incomecolor);
   padding-left: 2px;
 }
@@ -154,6 +170,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 
   color: black;
   text-decoration: none;
@@ -161,20 +178,21 @@
 
 .transactions {
   flex-grow: 1;
-  overflow: overlay;
+  overflow: auto;
 }
 
-.transaction::-webkit-scrollbar {
+.transactions::-webkit-scrollbar {
   width: 3px;
 }
 
-.transaction::-webkit-scrollbar-track {
+.transactions::-webkit-scrollbar-track {
   background-color: #fafaf9;
 }
-.transaction::-webkit-scrollbar-thumb {
+.transactions::-webkit-scrollbar-thumb {
   background-color: #b6b7bb;
+  border-radius: 1.5px;
 }
-.transaction::-webkit-scrollbar-button {
+.transactions::-webkit-scrollbar-button {
   display: none;
 }
 
@@ -203,12 +221,12 @@
 }
 
 .transaction-category {
-  font-size: 19px;
+  font-size: 22px;
 }
 
 .transaction-memo {
   color: #a0a1a6;
-  font-size: 14px;
+  font-size: 17px;
   margin-top: 3px;
 }
 

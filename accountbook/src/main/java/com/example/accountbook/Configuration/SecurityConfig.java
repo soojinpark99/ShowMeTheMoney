@@ -1,12 +1,20 @@
 package com.example.accountbook.Configuration;
 
+import com.example.accountbook.Exception.InvalidUserAccessException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import java.io.IOException;
 
 
 @Configuration
@@ -23,6 +31,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
         http.formLogin(auth->auth.loginPage("/login")
+                         .failureHandler(FailureHandler())
                         .defaultSuccessUrl("/calendar")
                         .loginProcessingUrl("/loginProc")
                         .permitAll());
@@ -30,6 +39,15 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/"));
         http.csrf((x)->x.disable());
         return http.build();
+    }
+    @Bean
+    public AuthenticationFailureHandler FailureHandler() {
+        return new AuthenticationFailureHandler() {
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                throw new InvalidUserAccessException("입력하신 아이디 또는 비밀번호가 일치하지 않습니다.", "/login");
+            }
+        };
     }
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

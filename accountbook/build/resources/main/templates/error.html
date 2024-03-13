@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+  <head>
     <title>Alert Page</title>
-</head>
-<body>
+  </head>
+  <body>
+    <!-- Thymeleaf 변수를 JavaScript로 전달 -->
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      const errorMessage = /*[[${errorMessage}]]*/ "잘못된 접근입니다.";
+      const redirectUrl = /*[[${redirectUrl}]]*/ "/join";
 
-
-<!-- Thymeleaf 변수를 JavaScript로 전달 -->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var errorMessage = /*[[${errorMessage}]]*/ '잘못된 접근입니다.';
-
-    // 페이지가 로드될 때 경고 메시지 표시
-    window.onload = function() {
+      // 페이지가 로드될 때 경고 메시지 표시
+      window.onload = function () {
         alert(errorMessage);
-    }
-    /*]]>*/
-</script>
-
-</body>
+        window.location.pathname = redirectUrl;
+      };
+      /*]]>*/
+    </script>
+  </body>
 </html>
-

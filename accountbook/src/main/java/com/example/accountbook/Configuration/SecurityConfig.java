@@ -24,33 +24,26 @@ public class SecurityConfig {
     //접근 권한 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authorize)->authorize
-                .requestMatchers("/","/login/**","/loginProc", "/join/**", "/joinProc").permitAll()//모든 사용자에게 오픈
-                .requestMatchers("/write/**","/calendar/**","/statics/**","/users/**").hasRole("USER") //USER role을 부여받았을떄만오픈
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/login/**", "/loginProc", "/join/**", "/joinProc").permitAll()//모든 사용자에게 오픈
+                .requestMatchers("/write/**", "/calendar/**", "/statics/**", "/users/**").hasRole("USER") //USER role을 부여받았을떄만오픈
                 .requestMatchers(HttpMethod.PUT, "/users/**").hasRole("USER")
                 .anyRequest().authenticated());
 
-        http.formLogin(auth->auth.loginPage("/login")
-                         .failureHandler(FailureHandler())
-                        .defaultSuccessUrl("/calendar")
-                        .loginProcessingUrl("/loginProc")
-                        .permitAll());
+        http.formLogin(auth -> auth.loginPage("/login")
+                .defaultSuccessUrl("/calendar")
+                .loginProcessingUrl("/loginProc")
+                .failureHandler(new MyFailureHandler())
+                .permitAll());
         http.logout(logout -> logout.logoutUrl("/logout")
                 .logoutSuccessUrl("/"));
-        http.csrf((x)->x.disable());
+        http.csrf((x) -> x.disable());
         return http.build();
     }
-    @Bean
-    public AuthenticationFailureHandler FailureHandler() {
-        return new AuthenticationFailureHandler() {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                throw new InvalidUserAccessException("입력하신 아이디 또는 비밀번호가 일치하지 않습니다.", "/login");
-            }
-        };
-    }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
+

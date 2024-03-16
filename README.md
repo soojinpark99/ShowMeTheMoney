@@ -17,7 +17,7 @@
 
 ### 회원가입, 로그인 기능
 
-![KakaoTalk_Video_2024-03-16-11-23-55-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/49f401e3-33c2-4b50-9d6b-0a1dd39c8256)
+![2024-03-162 13 18-ezgif com-speed](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/c2375350-dcb6-431b-b429-95040754e882)
 
 - 회원가입시 아이디, 비밀번호 조건에 맞도록 제어
 

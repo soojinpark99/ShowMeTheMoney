@@ -1,19 +1,19 @@
-## 프로젝트 소개
+## 💰 프로젝트 소개
 
-간단 가계부 프로젝트💰 Show me the Money입니다.
+간단 가계부 프로젝트 Show me the Money입니다.
 
-## 팀원 소개
+## 👥 팀원 소개
 
 - 박수진[FE] <https://github.com/soojinpark99>
 - 박영채[BE] <https://github.com/cree-per-com>
 - 이채화[BE] <https://github.com/chaehwa82>
 
-## 개발 환경
+## 🛠️ 개발 환경
 
 - Front-end: HTML5, CSS3, Javascript
 - Back-end : Spring Boot, Spring Security, MySQL
 
-## 주요 기능
+## 💡 주요 기능
 
 ### 회원가입, 로그인 기능
 
@@ -31,6 +31,6 @@
 - 거래 내역의 카테고리별 합계 금액을 도넛 차트로 보여주는 기능
 - 합계 금액이 높은 순서대로 정렬
 
-## 협업 규칙
+## ✅ 협업 규칙
 
-## 후기
+## 📝 후기

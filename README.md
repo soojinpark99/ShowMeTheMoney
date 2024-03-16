@@ -23,8 +23,7 @@
 
 ### 달력 페이지
 
-![KakaoTalk_Video_2024-03-16-10-34-15-ezgif com-resize1](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/df1df7e8-deee-4263-9fa4-caffce61bd35)
-![KakaoTalk_Video_2024-03-16-10-09-28-ezgif com-resize2](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/1dcf8b45-1c7d-450d-86d7-93e7b705d667)
+![1BB2B1AA-2E9A-43B0-8581-C4D13E6E62F5_2_0_a](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/d5f71cb4-5a4e-469c-a682-b4810fe83b2d)
 
 - 지출/수입 내역 작성 기능
 - 작성한 내역은 달력에 일별 합계 금액으로 표시/달력 상단에 월별 합계 금액으로 표시

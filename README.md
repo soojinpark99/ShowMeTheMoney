@@ -23,7 +23,7 @@
 
 ### 달력 페이지
 
-![KakaoTalk_Video_2024-03-16-10-34-15-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/688930f3-a262-470a-abc5-91ad2026cc58)
+![KakaoTalk_Video_2024-03-16-10-34-15-ezgif com-resize1](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/df1df7e8-deee-4263-9fa4-caffce61bd35)
 ![KakaoTalk_Video_2024-03-16-10-09-28-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/8b6754e8-9eb6-4d1c-93d9-ccd3acb797a5)
 
 - 지출/수입 내역 작성 기능

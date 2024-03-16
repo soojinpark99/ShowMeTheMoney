@@ -32,7 +32,7 @@
 
 ### 통계 페이지
 
-![KakaoTalk_Video_2024-03-16-10-09-34-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/85e7b6ac-e93b-440c-bc4a-49ae4e1e687f)
+![68461206-FE69-42EA-88E5-3A7A6C177873_2_0_a](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/1bef81b8-114f-4894-a876-330554d259e3)
 
 - 거래 내역의 카테고리별 합계 금액을 도넛 차트로 보여주는 기능
 - 합계 금액이 높은 순서대로 정렬

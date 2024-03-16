@@ -17,7 +17,7 @@
 
 ### 회원가입, 로그인 기능
 
-![회원가입_화면녹화](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/605b89a5-592a-4ecf-8862-61559a1bc742)
+![F9A4328F-1503-473D-83C4-366093792F5E_2_0_a](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/32d6399e-c15d-4871-8693-4a501161c564)
 
 - 회원가입시 아이디, 비밀번호 조건에 맞도록 제어
 

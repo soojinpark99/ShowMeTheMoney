@@ -17,14 +17,14 @@
 
 ### 회원가입, 로그인 기능
 
-![KakaoTalk_Video_2024-03-16-11-23-55-ezgif com-video-to-gif-converter](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/269cdcf5-7049-4da1-b6b0-fabe46ca2f5d)
+![KakaoTalk_Video_2024-03-16-11-23-55-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/49f401e3-33c2-4b50-9d6b-0a1dd39c8256)
 
 - 회원가입시 아이디, 비밀번호 조건에 맞도록 제어
 
 ### 달력 페이지
 
-![KakaoTalk_Video_2024-03-16-10-34-15-ezgif com-video-to-gif-converter](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/983f2dc7-a2b2-4dc1-98d6-014254758afc)
-![KakaoTalk_Video_2024-03-16-10-09-28-ezgif com-video-to-gif-converter](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/4e3151c9-1845-4c8d-98fa-848a300e3b6c)
+![KakaoTalk_Video_2024-03-16-10-34-15-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/688930f3-a262-470a-abc5-91ad2026cc58)
+![KakaoTalk_Video_2024-03-16-10-09-28-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/8b6754e8-9eb6-4d1c-93d9-ccd3acb797a5)
 
 - 지출/수입 내역 작성 기능
 - 작성한 내역은 달력에 일별 합계 금액으로 표시/달력 상단에 월별 합계 금액으로 표시
@@ -33,7 +33,7 @@
 
 ### 통계 페이지
 
-![KakaoTalk_Video_2024-03-16-10-09-34-ezgif com-video-to-gif-converter](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/f9b98219-45d9-40dc-b9ab-f04792083ead)
+![KakaoTalk_Video_2024-03-16-10-09-34-ezgif com-resize](https://github.com/soojinpark99/ShowMeTheMoney/assets/154590790/85e7b6ac-e93b-440c-bc4a-49ae4e1e687f)
 
 - 거래 내역의 카테고리별 합계 금액을 도넛 차트로 보여주는 기능
 - 합계 금액이 높은 순서대로 정렬
@@ -42,7 +42,7 @@
 
 ### 헙업 툴
 
-노션 페이지: <https://checker-grease-ccf.notion.site/2-339a8d7b474f4937854b2c8045c557cb?pvs=4>
+Notion: <https://www.notion.so/Show-me-the-Money-5f93b4b98620448f8f295b7774fc00ce?pvs=4>
 
 ### 커밋 메시지 규칙
 
